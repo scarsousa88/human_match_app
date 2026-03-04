@@ -2,33 +2,23 @@ import '../hd/swiss_ephemeris_service.dart';
 
 class AstrologyResult {
   final String sunSign;
-  final double sunLon;
   final String ascSign;
+  final double sunLon;
   final double ascLon;
 
   AstrologyResult({
     required this.sunSign,
-    required this.sunLon,
     required this.ascSign,
+    required this.sunLon,
     required this.ascLon,
   });
 
   Map<String, dynamic> toJson() => {
-    "sunSign": sunSign,
-    "sunLon": sunLon,
-    "ascSign": ascSign,
-    "ascLon": ascLon,
+    'sunSign': sunSign,
+    'ascSign': ascSign,
+    'sunLon': sunLon,
+    'ascLon': ascLon,
   };
-}
-
-String _signFromLon(double lon) {
-  final x = lon % 360.0;
-  final i = (x / 30.0).floor().clamp(0, 11);
-  const signs = [
-    "Carneiro","Touro","Gémeos","Caranguejo","Leão","Virgem",
-    "Balança","Escorpião","Sagitário","Capricórnio","Aquário","Peixes",
-  ];
-  return signs[i];
 }
 
 Future<AstrologyResult> computeAstrology({
@@ -37,17 +27,41 @@ Future<AstrologyResult> computeAstrology({
   required double lat,
   required double lon,
 }) async {
-  final sunLon = swe.calcSunLongitudeUtc(birthUtc);
-  final sunSign = _signFromLon(sunLon);
+  // Sol (lon eclíptica)
+  final sunLon = _norm360(swe.calcSunLongitudeUtc(birthUtc));
 
-  // ESTE método tens de expor no wrapper (Swiss houses)
-  final ascLon = swe.calcAscendantLongitudeUtc(birthUtc, lat: lat, lon: lon);
-  final ascSign = _signFromLon(ascLon);
+  // Ascendente real (casas)
+  final ascLon = _norm360(swe.calcAscendantLongitudeUtc(birthUtc, lat: lat, lon: lon));
 
   return AstrologyResult(
-    sunSign: sunSign,
+    sunSign: _zodiacFromLon(sunLon),
+    ascSign: _zodiacFromLon(ascLon),
     sunLon: sunLon,
-    ascSign: ascSign,
     ascLon: ascLon,
   );
+}
+
+double _norm360(double x) {
+  var v = x % 360.0;
+  if (v < 0) v += 360.0;
+  return v;
+}
+
+String _zodiacFromLon(double lon) {
+  const signs = [
+    'Áries',
+    'Touro',
+    'Gémeos',
+    'Caranguejo',
+    'Leão',
+    'Virgem',
+    'Balança',
+    'Escorpião',
+    'Sagitário',
+    'Capricórnio',
+    'Aquário',
+    'Peixes',
+  ];
+  final idx = (lon ~/ 30).clamp(0, 11);
+  return signs[idx];
 }

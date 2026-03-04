@@ -1,60 +1,31 @@
-import 'package:timezone/timezone.dart' as tz;
+// lib/calc/insights_bundle.dart
 
-import '../hd/swiss_ephemeris_service.dart';
-import 'numerology.dart';
-import 'astrology.dart';
-import 'human_design.dart';
+import 'human_design_base.dart';
 
+/// Bundle simples para juntares Human Design + outras camadas (numerologia/astrologia) depois.
 class InsightsBundle {
-  final HumanDesignBase hd;
-  final NumerologyResult numerology;
-  final AstrologyResult astrology;
+  final HumanDesignBase humanDesign;
 
-  InsightsBundle({
-    required this.hd,
-    required this.numerology,
-    required this.astrology,
+  const InsightsBundle({
+    required this.humanDesign,
   });
 
   Map<String, dynamic> toJson() => {
-    "humanDesign": hd.toJson(),
-    "numerology": numerology.toJson(),
-    "astrology": astrology.toJson(),
+    'humanDesignBase': humanDesign.toJson(),
   };
 }
 
 class InsightsCalculator {
-  final SwissEphemerisService swe;
-
-  InsightsCalculator(this.swe);
-
-  Future<void> init() => swe.init();
-
-  Future<InsightsBundle> compute({
-    required String fullName,
-    required DateTime birthLocal,
-    required String timezoneId,
+  /// Se já tinhas mais inputs (nome, numerologia, etc), adiciona aqui.
+  Future<InsightsBundle> build({
+    required DateTime birthUtc,
     required double lat,
     required double lon,
   }) async {
-    final loc = tz.getLocation(timezoneId);
-    final birthTz = tz.TZDateTime.from(birthLocal, loc);
-    final birthUtc = birthTz.toUtc();
+    final hd = await HumanDesignBase.compute(birthUtc: birthUtc, lat: lat, lon: lon);
 
-    // HD base (Sol/Terra + Profile) — precisa do swe + birthUtc
-    final hd = await computeHumanDesignBase(swe: swe, birthUtc: birthUtc);
-
-    // Numerologia (nome + data)
-    final num = computeNumerology(fullName: fullName, birthDate: birthLocal);
-
-    // Astrologia (Sol + Ascendente)
-    final astro = await computeAstrology(
-      swe: swe,
-      birthUtc: birthUtc,
-      lat: lat,
-      lon: lon,
+    return InsightsBundle(
+      humanDesign: hd,
     );
-
-    return InsightsBundle(hd: hd, numerology: num, astrology: astro);
   }
 }

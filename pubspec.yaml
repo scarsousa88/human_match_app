@@ -32,8 +32,8 @@ dependencies:
   path_provider: ^2.1.4
   flutter:
     sdk: flutter
-  timezone: ^0.10.0
-  google_mobile_ads: ^5.1.0
+  timezone: any
+  google_mobile_ads: ^7.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
