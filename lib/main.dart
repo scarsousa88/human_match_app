@@ -165,7 +165,6 @@ class ProfileGate extends StatelessWidget {
 
         if (!complete) return const ProfileInputScreen();
 
-        // Alterado: Remete para a navegação principal por Tabs
         return const MainNavigationScreen();
       },
     );
@@ -182,18 +181,20 @@ class MainNavigationScreen extends StatefulWidget {
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  int _currentIndex = 2; // Começa no Resumo (Direita)
+  int _currentIndex = 2; // Começa no Perfil (Direita)
 
   final List<Widget> _screens = [
     const ProfileSummaryScreen(),
-    const Center(child: Text('Explora perfis próximos e compativeis contigo\n(Brevemente)')),
-    const Center(child: Text('Compara perfis manualmente\n(Brevemente)')),
+    const Center(child: Text('\nExplora perfis próximos e compatíveis\n(Brevemente)', textAlign: TextAlign.center)),
+    const Center(child: Text('\nCompara perfis manualmente\n(Brevemente)', textAlign: TextAlign.center)),
   ];
 
   final List<String> _titles = ['O meu Perfil', 'Comunidade', 'Comparar'];
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(_titles[_currentIndex]),
@@ -209,17 +210,24 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) => setState(() => _currentIndex = index),
+        selectedItemColor: theme.colorScheme.primary,
+        unselectedItemColor: theme.colorScheme.onSurfaceVariant,
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w900),
+        type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
-            label: 'Meu perfil',
+            activeIcon: Icon(Icons.person),
+            label: 'O meu Perfil',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people_outline),
+            activeIcon: Icon(Icons.people),
             label: 'Comunidade',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.compare_arrows),
+            activeIcon: Icon(Icons.compare_arrows),
             label: 'Comparar',
           ),
         ],
@@ -453,7 +461,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
         try {
           final parts = birthTimeStr.split(':');
           birthTime = TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
-          _birthTimeController.text = birthTimeStr;
+          _birthDateController.text = birthTimeStr;
         } catch (_) {}
       }
       final place = data['place'];
@@ -702,7 +710,8 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                     const Center(child: Padding(padding: EdgeInsets.all(12), child: CircularProgressIndicator()))
                   else ...[
                     DropdownButtonFormField<String>(
-                      value: _country, 
+                      key: ValueKey('country_$_country'), // Resolve warnings e mantém sincronização
+                      initialValue: _country, 
                       decoration: const InputDecoration(labelText: 'País'),
                       items: countries.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
                       onChanged: (v) {
@@ -715,7 +724,8 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                     ),
                     const SizedBox(height: 12),
                     DropdownButtonFormField<Place>(
-                      value: _city, 
+                      key: ValueKey('city_$_city'), // Resolve warnings e mantém sincronização
+                      initialValue: _city, 
                       decoration: const InputDecoration(labelText: 'Cidade'),
                       items: cities.map((p) => DropdownMenuItem(value: p, child: Text(p.city))).toList(),
                       onChanged: (v) => setState(() => _city = v),
@@ -821,203 +831,200 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
     final user = FirebaseAuth.instance.currentUser!;
     final userRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
     final insightsRef = userRef.collection('aiInsights').doc('latest');
-    
-    // Obter dica mais recente para mostrar sempre algo
     final lastTipQuery = userRef.collection('dailyTips').orderBy('dateKey', descending: true).limit(1);
 
-    return _Shell(
-      child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-        stream: userRef.snapshots(),
-        builder: (context, userSnap) {
-          if (userSnap.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
-          final u = userSnap.data?.data() ?? {};
-          final fullName = (u['name'] ?? '').toString().trim();
-          final first = _firstName(fullName);
-          final birthDateStr = (u['birthDateStr'] ?? '').toString();
-          final birthTimeStr = (u['birthTimeStr'] ?? '').toString();
-          final birthDateText = [birthDateStr, birthTimeStr].where((s) => s.trim().isNotEmpty).join(' • ');
-          final placeLabel = (u['birthPlaceLabel'] ?? (u['place'] as Map?)?['label'] ?? '').toString();
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      stream: userRef.snapshots(),
+      builder: (context, userSnap) {
+        if (userSnap.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
+        
+        final u = userSnap.data?.data() ?? {};
+        final fullName = (u['name'] ?? '').toString().trim();
+        final first = _firstName(fullName);
+        final birthDateStr = (u['birthDateStr'] ?? '').toString();
+        final birthTimeStr = (u['birthTimeStr'] ?? '').toString();
+        final birthDateText = [birthDateStr, birthTimeStr].where((s) => s.trim().isNotEmpty).join(' • ');
+        final placeLabel = (u['birthPlaceLabel'] ?? (u['place'] as Map?)?['label'] ?? '').toString();
 
-          final hdBase = (u['humanDesignBase'] as Map?)?.cast<String, dynamic>();
-          final astro = (u['astro'] as Map?)?.cast<String, dynamic>() ?? {};
+        final hdBase = (u['humanDesignBase'] as Map?)?.cast<String, dynamic>();
+        final astro = (u['astro'] as Map?)?.cast<String, dynamic>() ?? {};
 
-          final sunSign = astro['sunSign'] ?? (findBodyLongitude(hdBase, true, 'Sun') != null ? getZodiacSign(findBodyLongitude(hdBase, true, 'Sun')!) : '—');
-          final ascSign = astro['ascendantSign'] ?? (astro['ascendantDeg'] != null ? getZodiacSign((astro['ascendantDeg'] as num).toDouble()) : '—');
+        final sunSign = astro['sunSign'] ?? (findBodyLongitude(hdBase, true, 'Sun') != null ? getZodiacSign(findBodyLongitude(hdBase, true, 'Sun')!) : '—');
+        final ascSign = astro['ascendantSign'] ?? (astro['ascendantDeg'] != null ? getZodiacSign((astro['ascendantDeg'] as num).toDouble()) : '—');
 
-          final storedNum = u['numerology'] as Map?;
-          final numerology = storedNum != null ? NumerologyResult(lifePath: storedNum['lifePath'], expression: storedNum['expression'], soul: storedNum['soul'], personality: storedNum['personality']) : (fullName.isNotEmpty && _birthDateFromStr(birthDateStr) != null) ? computeNumerology(fullName: fullName, birthDate: _birthDateFromStr(birthDateStr)!) : null;
+        final storedNum = u['numerology'] as Map?;
+        final numerology = storedNum != null ? NumerologyResult(lifePath: storedNum['lifePath'], expression: storedNum['expression'], soul: storedNum['soul'], personality: storedNum['personality']) : (fullName.isNotEmpty && _birthDateFromStr(birthDateStr) != null) ? computeNumerology(fullName: fullName, birthDate: _birthDateFromStr(birthDateStr)!) : null;
 
-          _autoGenerateDailyTip();
+        _autoGenerateDailyTip();
 
-          return ListView(
-            children: [
-              _PrimaryCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+        return ListView(
+          children: [
+            _PrimaryCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const CircleAvatar(
+                        radius: 22,
+                        child: Icon(Icons.person_outline),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          first.isEmpty ? 'Olá!' : 'Olá $first',
+                          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+                        ),
+                      ),
+                      IconButton(
+                        tooltip: 'Editar Perfil',
+                        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfileInputScreen())),
+                        icon: const Icon(Icons.edit_outlined),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  if (birthDateText.isNotEmpty) _InfoRow(icon: Icons.cake_outlined, label: 'Data de nascimento', value: birthDateText),
+                  if (birthDateText.isNotEmpty) const SizedBox(height: 8),
+                  if (placeLabel.isNotEmpty) _InfoRow(icon: Icons.place_outlined, label: 'Local de nascimento', value: placeLabel),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            _PrimaryCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Human Design', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                  const SizedBox(height: 12),
+                  if (hdBase == null) const Text('Ainda a calcular Human Design...') else HumanDesignSection(hd: hdBase),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            _PrimaryCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Astrologia', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                  const SizedBox(height: 12),
+                  _KeyValueRow(icon: Icons.wb_sunny_outlined, label: 'Signo', value: sunSign),
+                  const SizedBox(height: 8),
+                  _KeyValueRow(icon: Icons.north_outlined, label: 'Ascendente', value: ascSign),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            _PrimaryCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Numerologia', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                  const SizedBox(height: 12),
+                  if (numerology == null) const Text('—') else ...[
+                    _KeyValueRow(icon: Icons.tag_outlined, label: 'Caminho de Vida', value: numerology.lifePath.toString()),
+                    const SizedBox(height: 8),
+                    _KeyValueRow(icon: Icons.tag_outlined, label: 'Expressão', value: numerology.expression.toString()),
+                    const SizedBox(height: 8),
+                    _KeyValueRow(icon: Icons.tag_outlined, label: 'Alma', value: numerology.soul.toString()),
+                    const SizedBox(height: 8),
+                    _KeyValueRow(icon: Icons.tag_outlined, label: 'Personalidade', value: numerology.personality.toString()),
+                  ],
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+              stream: insightsRef.snapshots(),
+              builder: (context, insSnap) {
+                if (insSnap.connectionState == ConnectionState.waiting) return const _PrimaryCard(child: Center(child: CircularProgressIndicator()));
+                if (!insSnap.hasData || !insSnap.data!.exists) {
+                  return _PrimaryCard(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const CircleAvatar(
-                          radius: 22,
-                          child: Icon(Icons.person_outline),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            first.isEmpty ? 'Olá!' : 'Olá $first',
-                            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
-                          ),
-                        ),
-                        IconButton(
-                          tooltip: 'Editar Perfil',
-                          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfileInputScreen())),
-                          icon: const Icon(Icons.edit_outlined),
+                        const Text('Insights de Perfil', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                        const SizedBox(height: 10),
+                        const Text('Ainda não tens insights gerados.'),
+                        const SizedBox(height: 12),
+                        ElevatedButton(
+                          onPressed: () => _ai.runInsightsBehindRewardedAd(),
+                          child: const Text('Gerar Insights (Anúncio)'),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12),
-                    if (birthDateText.isNotEmpty) _InfoRow(icon: Icons.cake_outlined, label: 'Data de nascimento', value: birthDateText),
-                    if (birthDateText.isNotEmpty) const SizedBox(height: 8),
-                    if (placeLabel.isNotEmpty) _InfoRow(icon: Icons.place_outlined, label: 'Local de nascimento', value: placeLabel),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-              _PrimaryCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Human Design', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
-                    const SizedBox(height: 12),
-                    if (hdBase == null) const Text('Ainda a calcular Human Design...') else HumanDesignSection(hd: hdBase),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-              _PrimaryCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Astrologia', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
-                    const SizedBox(height: 12),
-                    _KeyValueRow(icon: Icons.wb_sunny_outlined, label: 'Signo', value: sunSign),
-                    const SizedBox(height: 8),
-                    _KeyValueRow(icon: Icons.north_outlined, label: 'Ascendente', value: ascSign),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-              _PrimaryCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Numerologia', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
-                    const SizedBox(height: 12),
-                    if (numerology == null) const Text('—') else ...[
-                      _KeyValueRow(icon: Icons.tag_outlined, label: 'Caminho de Vida', value: numerology.lifePath.toString()),
-                      const SizedBox(height: 8),
-                      _KeyValueRow(icon: Icons.tag_outlined, label: 'Expressão', value: numerology.expression.toString()),
-                      const SizedBox(height: 8),
-                      _KeyValueRow(icon: Icons.tag_outlined, label: 'Alma', value: numerology.soul.toString()),
-                      const SizedBox(height: 8),
-                      _KeyValueRow(icon: Icons.tag_outlined, label: 'Personalidade', value: numerology.personality.toString()),
-                    ],
-                  ],
-                ),
-              ),
-              const SizedBox(height: 12),
-              StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                stream: insightsRef.snapshots(),
-                builder: (context, insSnap) {
-                  if (insSnap.connectionState == ConnectionState.waiting) return const _PrimaryCard(child: Center(child: CircularProgressIndicator()));
-                  if (!insSnap.hasData || !insSnap.data!.exists) {
-                    return _PrimaryCard(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                  );
+                }
+                final ins = insSnap.data!.data() ?? {};
+                return _PrimaryCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
                         children: [
-                          const Text('Insights de Perfil', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
-                          const SizedBox(height: 10),
-                          const Text('Ainda não tens insights gerados.'),
-                          const SizedBox(height: 12),
-                          ElevatedButton(
+                          const Expanded(child: Text('Insights de Perfil', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900))),
+                          TextButton.icon(
                             onPressed: () => _ai.runInsightsBehindRewardedAd(),
-                            child: const Text('Gerar Insights (Anúncio)'),
+                            icon: const Icon(Icons.auto_awesome_outlined),
+                            label: const Text('Atualizar'),
                           ),
                         ],
                       ),
-                    );
-                  }
-                  final ins = insSnap.data!.data() ?? {};
-                  return _PrimaryCard(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Expanded(child: Text('Insights de Perfil', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900))),
-                            TextButton.icon(
-                              onPressed: () => _ai.runInsightsBehindRewardedAd(),
-                              icon: const Icon(Icons.auto_awesome_outlined),
-                              label: const Text('Atualizar'),
-                            ),
-                          ],
+                      const SizedBox(height: 10),
+                      Text(ins['summary']?.toString() ?? '—'),
+                      const SizedBox(height: 12),
+                      const Text('Pilares do teu Perfil', style: TextStyle(fontWeight: FontWeight.w900)),
+                      _bullets(ins['insights'] ?? []),
+                    ],
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 12),
+            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+              stream: lastTipQuery.snapshots(),
+              builder: (context, tipsSnap) {
+                if (tipsSnap.connectionState == ConnectionState.waiting) return const _PrimaryCard(child: Center(child: CircularProgressIndicator()));
+                
+                final tips = tipsSnap.data?.docs ?? [];
+                final hasTodayTip = tips.isNotEmpty && tips.first.id == _ai.todayKeyLocal();
+                final lastTipDoc = tips.isNotEmpty ? tips.first : null;
+                final lastTipData = lastTipDoc?.data() ?? {};
+                
+                final formattedDate = lastTipDoc != null 
+                    ? _formatDateStr(lastTipDoc.id) 
+                    : _formatDateStr(_ai.todayKeyLocal());
+
+                return _PrimaryCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Dica Diária', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                      const SizedBox(height: 10),
+                      Text(formattedDate, style: const TextStyle(fontWeight: FontWeight.w900)),
+                      const SizedBox(height: 8),
+                      
+                      if (!hasTodayTip) ...[
+                        ElevatedButton.icon(
+                          onPressed: () => _ai.runTipsBehindRewardedAd(),
+                          icon: const Icon(Icons.auto_awesome_outlined),
+                          label: const Text('Obter dica diária (Anúncio)'),
                         ),
-                        const SizedBox(height: 10),
-                        Text(ins['summary']?.toString() ?? '—'),
-                        const SizedBox(height: 12),
-                        const Text('Pilares do teu Perfil', style: TextStyle(fontWeight: FontWeight.w900)),
-                        _bullets(ins['insights'] ?? []),
+                        const SizedBox(height: 14),
                       ],
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(height: 12),
-              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                stream: lastTipQuery.snapshots(),
-                builder: (context, tipsSnap) {
-                  if (tipsSnap.connectionState == ConnectionState.waiting) return const _PrimaryCard(child: Center(child: CircularProgressIndicator()));
-                  
-                  final tips = tipsSnap.data?.docs ?? [];
-                  final hasTodayTip = tips.isNotEmpty && tips.first.id == _ai.todayKeyLocal();
-                  final lastTipDoc = tips.isNotEmpty ? tips.first : null;
-                  final lastTipData = lastTipDoc?.data() ?? {};
-                  
-                  final formattedDate = lastTipDoc != null 
-                      ? _formatDateStr(lastTipDoc.id) 
-                      : _formatDateStr(_ai.todayKeyLocal());
 
-                  return _PrimaryCard(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('Dica Diária', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
-                        const SizedBox(height: 10),
-                        Text(formattedDate, style: const TextStyle(fontWeight: FontWeight.w900)),
-                        const SizedBox(height: 8),
-                        
-                        if (!hasTodayTip) ...[
-                          ElevatedButton.icon(
-                            onPressed: () => _ai.runTipsBehindRewardedAd(),
-                            icon: const Icon(Icons.auto_awesome_outlined),
-                            label: const Text('Obter dica diária (Anúncio)'),
-                          ),
-                          const SizedBox(height: 14),
-                        ],
-
-                        if (lastTipDoc != null)
-                          Text(lastTipData['text']?.toString() ?? '—')
-                        else
-                          const Text('Vê o anúncio para obteres a tua dica diária'),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ],
-          );
-        },
-      ),
+                      if (lastTipDoc != null)
+                        Text(lastTipData['text']?.toString() ?? '—')
+                      else
+                        const Text('Vê o anúncio para obteres a tua dica diária'),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

@@ -16,26 +16,16 @@ class AiActions {
   final BuildContext context;
   final FirebaseFunctions _functions;
 
-  void _toast(String msg) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  void _toast(String msg) {
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  }
 
   String _p2(int n) => n.toString().padLeft(2, '0');
 
   String todayKeyLocal() {
     final now = DateTime.now();
     return '${now.year}-${_p2(now.month)}-${_p2(now.day)}';
-  }
-
-  String weekKeyLocal() {
-    final now = DateTime.now();
-    final week = _weekNumberManual(DateTime(now.year, now.month, now.day));
-    return '${now.year}-W${week.toString().padLeft(2, '0')}';
-  }
-
-  int _weekNumberManual(DateTime d) {
-    final start = DateTime(d.year, 1, 1);
-    final dayOfYear = d.difference(start).inDays + 1;
-    final weekday = d.weekday;
-    return ((dayOfYear - weekday + 10) / 7).floor();
   }
 
   Future<T?> _call<T>(String functionName, {Map<String, dynamic>? data}) async {
@@ -46,6 +36,9 @@ class AiActions {
     } on FirebaseFunctionsException catch (e) {
       debugPrint('$functionName error: ${e.code} | ${e.message}');
       rethrow;
+    } catch (e) {
+      debugPrint('$functionName unknown error: $e');
+      rethrow;
     }
   }
 
@@ -54,32 +47,45 @@ class AiActions {
       await onReward();
       return;
     }
-    bool ran = false;
+
     _toast('A carregar anúncio...');
+    
+    bool rewardEarned = false;
+
     await RewardedAd.load(
       adUnitId: kRewardedTestAdUnitId,
       request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
-          ad.show(onUserEarnedReward: (ad, reward) async {
-            if (!ran) {
-              ran = true;
-              await onReward();
-            }
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) async {
+              ad.dispose();
+              // Atraso de 500ms para permitir que a interface recupere o foco
+              // e evite o erro de "Width is zero" ou "Connection disposed"
+              await Future.delayed(const Duration(milliseconds: 500));
+              if (rewardEarned && context.mounted) {
+                onReward();
+              }
+            },
+            onAdFailedToShowFullScreenContent: (ad, error) {
+              debugPrint('Ad failed to show: $error');
+              ad.dispose();
+              onReward(); // Fallback imediato
+            },
+          );
+
+          ad.show(onUserEarnedReward: (ad, reward) {
+            rewardEarned = true;
           });
         },
-        onAdFailedToLoad: (error) async {
+        onAdFailedToLoad: (error) {
           debugPrint('Falha ao carregar anúncio: $error');
-          if (!ran) {
-            ran = true;
-            await onReward();
-          }
+          onReward(); // Fallback imediato
         },
       ),
     );
   }
 
-  /// 1) DESBLOQUEIA O CONTEÚDO (Gating)
   Future<void> _unlock(String type, String key) async {
     await _call('unlockAiContent', data: {
       'type': type,
@@ -87,16 +93,11 @@ class AiActions {
     });
   }
 
-  /// 2) GERA INSIGHTS DE PERFIL (Geral)
   Future<void> runInsightsBehindRewardedAd() async {
     await _showRewardedAdAndRun(() async {
       try {
-        // PASSO 1: Desbloquear o perfil usando o tipo 'profile'
         await _unlock('profile', '');
-
-        // PASSO 2: Chamar a nova função de geração de insights técnicos
         await _call('generateInsights');
-
         _toast('Insights atualizados ✅');
       } catch (e) {
         debugPrint('Erro runInsights: $e');
@@ -105,18 +106,12 @@ class AiActions {
     });
   }
 
-  /// 3) GERA DICA DIÁRIA
   Future<void> runTipsBehindRewardedAd() async {
     await _showRewardedAdAndRun(() async {
       try {
         final dk = todayKeyLocal();
-
-        // Desbloquear dica diária
         await _unlock('dailyTip', dk);
-
-        // Gerar conteúdos
         await _call('generateDailyTipIfNeeded', data: {'dateKey': dk});
-
         _toast('Dica atualizada ✅');
       } catch (e) {
         debugPrint('Erro runTips: $e');
