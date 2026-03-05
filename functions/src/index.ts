@@ -102,7 +102,6 @@ async function checkGate(uid: string, type: string, key: string): Promise<boolea
   if (type === "dailyTip") {
     return gates.dailyTip?.unlocked === true && gates.dailyTip?.dateKey === key;
   }
-  // Suportamos 'weekly' por retrocompatibilidade ou 'profile'
   return (gates.weekly?.unlocked === true) || (gates.profile?.unlocked === true);
 }
 
@@ -112,7 +111,7 @@ async function checkGate(uid: string, type: string, key: string): Promise<boolea
 
 export const unlockAiContent = onCall(async (request) => {
   const uid = requireAuth(request.auth?.uid);
-  const { type, dateKey, weekKey } = request.data;
+  const { type, dateKey } = request.data;
   const userRef = db.collection("users").doc(uid);
 
   if (type === "dailyTip") {
@@ -141,20 +140,20 @@ export const generateDailyTipIfNeeded = onCall(
 
     const tipRef = db.collection("users").doc(uid).collection("dailyTips").doc(dateKey);
 
-    // CORREÇÃO: Removida a trava de existência para permitir atualização (carregar novamente)
+    // CORREÇÃO: Permite atualização ao carregar novamente
     // const existing = await tipRef.get(); if (existing.exists) return { ok: true, reused: true };
 
     const unlocked = await checkGate(uid, "dailyTip", dateKey);
     if (!unlocked) return { ok: false, needsAd: true };
 
     const u = await getUserComputedData(uid);
-        const hd = u.humanDesignBase;
-        const num = u.numerology;
-        const astro = u.astro;
+    const hd = u.humanDesignBase;
+    const num = u.numerology;
+    const astro = u.astro;
 
     const prompt = `
 Gera uma dica diária (60-100 palavras) para ${u.name}.
-Dados: Tipo: ${hd.type} Perfil: ${hd.profile}, Estratégia: ${hd.strategy} Signo Solar: ${astro.sunSign} Ascendente: ${astro.ascendantSign} LP ${u.numerology.lifePath}.
+Dados: Tipo: ${hd.type} Perfil: ${hd.profile}, Estratégia: ${hd.strategy} Signo Solar: ${astro.sunSign} Ascendente: ${astro.ascendantSign} LP ${num.lifePath}.
 Foca-te numa micro-ação prática baseada no perfil.
 JSON: { "text": "..." }
     `.trim();
@@ -177,10 +176,6 @@ export const generateInsights = onCall(
   async (request) => {
     const uid = requireAuth(request.auth?.uid);
     const insightsRef = db.collection("users").doc(uid).collection("aiInsights").doc("latest");
-
-    // Removida a verificação de existência para permitir atualização (como solicitado)
-    // Se quiser manter a trava, descomente a linha abaixo:
-    // const existing = await insightsRef.get(); if (existing.exists) return { ok: true, reused: true };
 
     const unlocked = await checkGate(uid, "profile", "");
     if (!unlocked) return { ok: false, needsAd: true };
@@ -217,7 +212,7 @@ TAREFA:
 Cria um JSON com:
 - "summary": Um parágrafo de 6-8 frases que resume a essência deste perfil cruzando os 3 sistemas de forma técnica e profunda.
 - "insights": Uma lista com exatamente 3 pontos poderosos:
-  1. Human Design: Usa toda a informação que tens do human design e neste podes te alongar mais um pouto até 300 caracteres.
+  1. Human Design: Usa toda a informação que tens do human design e neste podes te alongar mais um pouco até 300 caracteres.
   2. Astrologia: Foca no Signo Solar (${astro.sunSign}) e Ascendente (${astro.ascendantSign}).
   3. Numerologia: Foca no Caminho de Vida (${num.lifePath}) e Expressão (${num.expression}).
 

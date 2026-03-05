@@ -732,14 +732,21 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
     return DateTime(y, m, d);
   }
 
+  String _formatDateStr(String? key) {
+    if (key == null || !key.contains('-')) return 'Dica Diária';
+    final parts = key.split('-');
+    if (parts.length != 3) return key;
+    return '${parts[2]}-${parts[1]}-${parts[0]}';
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser!;
     final userRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
-    final dailyRef = userRef.collection('dailyTips').doc(_ai.todayKeyLocal());
-    
-    // CORREÇÃO: Ler do documento 'latest' para insights de perfil gerais
     final insightsRef = userRef.collection('aiInsights').doc('latest');
+    
+    // Obter dica mais recente para mostrar sempre algo
+    final lastTipQuery = userRef.collection('dailyTips').orderBy('dateKey', descending: true).limit(1);
 
     return Scaffold(
       appBar: AppBar(
@@ -892,30 +899,47 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                   },
                 ),
                 const SizedBox(height: 12),
-                _PrimaryCard(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Dica diária', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
-                      const SizedBox(height: 10),
-                      ElevatedButton.icon(
-                        onPressed: () => _ai.runTipsBehindRewardedAd(),
-                        icon: const Icon(Icons.auto_awesome_outlined),
-                        label: const Text('Obter dica diária (Anúncio)'),
+                StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                  stream: lastTipQuery.snapshots(),
+                  builder: (context, tipsSnap) {
+                    if (tipsSnap.connectionState == ConnectionState.waiting) return const _PrimaryCard(child: Center(child: CircularProgressIndicator()));
+                    
+                    final tips = tipsSnap.data?.docs ?? [];
+                    final hasTodayTip = tips.isNotEmpty && tips.first.id == _ai.todayKeyLocal();
+                    final lastTipDoc = tips.isNotEmpty ? tips.first : null;
+                    final lastTipData = lastTipDoc?.data() ?? {};
+                    
+                    // Data a mostrar abaixo do título fixo
+                    final formattedDate = lastTipDoc != null 
+                        ? _formatDateStr(lastTipDoc.id) 
+                        : _formatDateStr(_ai.todayKeyLocal());
+
+                    return _PrimaryCard(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('Dica Diária', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                          const SizedBox(height: 10),
+                          Text(formattedDate, style: const TextStyle(fontWeight: FontWeight.w900)),
+                          const SizedBox(height: 8),
+                          
+                          if (!hasTodayTip) ...[
+                            ElevatedButton.icon(
+                              onPressed: () => _ai.runTipsBehindRewardedAd(),
+                              icon: const Icon(Icons.auto_awesome_outlined),
+                              label: const Text('Obter dica diária (Anúncio)'),
+                            ),
+                            const SizedBox(height: 14),
+                          ],
+
+                          if (lastTipDoc != null)
+                            Text(lastTipData['text']?.toString() ?? '—')
+                          else
+                            const Text('A preparar a tua primeira dica diária...'),
+                        ],
                       ),
-                      const SizedBox(height: 14),
-                      const Text('Dica de hoje', style: TextStyle(fontWeight: FontWeight.w900)),
-                      const SizedBox(height: 8),
-                      StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                        stream: dailyRef.snapshots(),
-                        builder: (context, tipSnap) {
-                          if (tipSnap.connectionState == ConnectionState.waiting) return const Padding(padding: EdgeInsets.symmetric(vertical: 10), child: Center(child: CircularProgressIndicator()));
-                          if (!tipSnap.hasData || !tipSnap.data!.exists) return const Text('A preparar a dica de hoje...');
-                          return Text(tipSnap.data!.data()?['text']?.toString() ?? '—');
-                        },
-                      ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
               ],
             );
