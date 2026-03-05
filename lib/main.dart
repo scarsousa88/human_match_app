@@ -737,7 +737,9 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
     final user = FirebaseAuth.instance.currentUser!;
     final userRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
     final dailyRef = userRef.collection('dailyTips').doc(_ai.todayKeyLocal());
-    final insightsRef = userRef.collection('aiInsights').doc(_ai.weekKeyLocal());
+    
+    // CORREÇÃO: Ler do documento 'latest' para insights de perfil gerais
+    final insightsRef = userRef.collection('aiInsights').doc('latest');
 
     return Scaffold(
       appBar: AppBar(
@@ -771,7 +773,6 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
             final hdBase = (u['humanDesignBase'] as Map?)?.cast<String, dynamic>();
             final astro = (u['astro'] as Map?)?.cast<String, dynamic>() ?? {};
 
-            // Priorizar dados salvos no Firestore
             final sunSign = astro['sunSign'] ?? (findBodyLongitude(hdBase, true, 'Sun') != null ? getZodiacSign(findBodyLongitude(hdBase, true, 'Sun')!) : '—');
             final ascSign = astro['ascendantSign'] ?? (astro['ascendantDeg'] != null ? getZodiacSign((astro['ascendantDeg'] as num).toDouble()) : '—');
 
@@ -853,9 +854,9 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('Insights Semanais', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                            const Text('Insights de Perfil', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                             const SizedBox(height: 10),
-                            const Text('Ainda não tens insights para esta semana.'),
+                            const Text('Ainda não tens insights gerados.'),
                             const SizedBox(height: 12),
                             ElevatedButton(
                               onPressed: () => _ai.runInsightsBehindRewardedAd(),
@@ -872,7 +873,7 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                         children: [
                           Row(
                             children: [
-                              const Expanded(child: Text('Insights Semanais', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900))),
+                              const Expanded(child: Text('Insights de Perfil', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900))),
                               TextButton.icon(
                                 onPressed: () => _ai.runInsightsBehindRewardedAd(),
                                 icon: const Icon(Icons.auto_awesome_outlined),
@@ -883,11 +884,8 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                           const SizedBox(height: 10),
                           Text(ins['summary']?.toString() ?? '—'),
                           const SizedBox(height: 12),
-                          const Text('Foco da Semana', style: TextStyle(fontWeight: FontWeight.w900)),
-                          _bullets(ins['focus'] ?? []),
-                          const SizedBox(height: 10),
-                          const Text('Desafios', style: TextStyle(fontWeight: FontWeight.w900)),
-                          _bullets(ins['challenges'] ?? []),
+                          const Text('Pilares do teu Perfil', style: TextStyle(fontWeight: FontWeight.w900)),
+                          _bullets(ins['insights'] ?? []),
                         ],
                       ),
                     );

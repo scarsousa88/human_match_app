@@ -85,21 +85,19 @@ class AiActions {
   Future<void> _unlock(String type, String key) async {
     await _call('unlockAiContent', data: {
       'type': type,
-      if (type == 'dailyTip') 'dateKey': key else 'weekKey': key,
+      if (type == 'dailyTip') 'dateKey': key,
     });
   }
 
-  /// 2) GERA INSIGHTS SEMANAIS
+  /// 2) GERA INSIGHTS DE PERFIL (Geral)
   Future<void> runInsightsBehindRewardedAd() async {
     await _showRewardedAdAndRun(() async {
       try {
-        final wk = weekKeyLocal();
+        // PASSO 1: Desbloquear o perfil usando o tipo 'profile'
+        await _unlock('profile', '');
         
-        // PASSO 1: Desbloquear no Firestore
-        await _unlock('weekly', wk);
-        
-        // PASSO 2: Chamar a geração (que agora passará no checkGate)
-        await _call('generateWeeklyInsightsIfNeeded', data: {'weekKey': wk});
+        // PASSO 2: Chamar a nova função de geração de insights técnicos
+        await _call('generateInsights');
         
         _toast('Insights atualizados ✅');
       } catch (e) {
@@ -114,20 +112,17 @@ class AiActions {
     await _showRewardedAdAndRun(() async {
       try {
         final dk = todayKeyLocal();
-        final wk = weekKeyLocal();
 
-        // Desbloquear ambos
+        // Desbloquear dica diária
         await _unlock('dailyTip', dk);
-        await _unlock('weekly', wk);
 
         // Gerar conteúdos
         await _call('generateDailyTipIfNeeded', data: {'dateKey': dk});
-        await _call('generateWeeklyInsightsIfNeeded', data: {'weekKey': wk});
 
-        _toast('Dicas atualizadas ✅');
+        _toast('Dica atualizada ✅');
       } catch (e) {
         debugPrint('Erro runTips: $e');
-        _toast('Erro ao atualizar dicas.');
+        _toast('Erro ao atualizar dica.');
       }
     });
   }

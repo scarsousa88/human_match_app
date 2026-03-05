@@ -7,7 +7,6 @@ import OpenAI from "openai";
 initializeApp();
 const db = getFirestore();
 
-// Certifica-te que configuraste esta secret com: firebase functions:secrets:set OPENAI_API_KEY
 const OPENAI_API_KEY = defineSecret("OPENAI_API_KEY");
 
 // ===============================
@@ -55,8 +54,8 @@ function safeJsonParse(raw: string) {
 function systemPrompt(): string {
   return `
 Responde em PT-PT. Tom moderno, prático e humano.
-NÃO inventes valores de Human Design / numerologia / astrologia.
-Vais receber dados calculados. Usa APENAS esses valores.
+És um analista sénior de sistemas de autoconhecimento integrados.
+NÃO inventes valores. Usa APENAS os dados técnicos recebidos.
 DEVOLVE SEMPRE JSON válido.
   `.trim();
 }
@@ -64,7 +63,6 @@ DEVOLVE SEMPRE JSON válido.
 async function callOpenAI_JSON(apiKey: string, prompt: string) {
   const client = new OpenAI({ apiKey });
 
-  // CORREÇÃO: Usar um modelo válido (ex: gpt-4o-mini ou gpt-3.5-turbo)
   const completion = await client.chat.completions.create({
     model: "gpt-4o-mini",
     messages: [
@@ -85,25 +83,18 @@ async function getUserComputedData(uid: string) {
 
   const data = snap.data() || {};
   const name = String(data.name || "").trim();
-  const birthLocation = String(data.birthPlaceLabel || "").trim();
-  const birthDateStr = String(data.birthDateStr || "").trim();
-  const birthTimeStr = String(data.birthTimeStr || "").trim();
-
   const humanDesignBase = data.humanDesignBase;
   const numerology = data.numerology;
   const astro = data.astro;
 
-  if (!name || !birthLocation || !birthDateStr || !birthTimeStr) {
-    throw new HttpsError("failed-precondition", "Missing birth data.");
-  }
   if (!humanDesignBase || !numerology || !astro) {
     throw new HttpsError("failed-precondition", "Missing computed blocks (HD/Num/Astro).");
   }
 
-  return { name, birthLocation, birthDateStr, birthTimeStr, humanDesignBase, numerology, astro };
+  return { name, humanDesignBase, numerology, astro };
 }
 
-async function checkGate(uid: string, type: "dailyTip" | "weekly", key: string): Promise<boolean> {
+async function checkGate(uid: string, type: string, key: string): Promise<boolean> {
   const snap = await db.collection("users").doc(uid).get();
   const data = snap.data() || {};
   const gates = data.aiGates || {};
@@ -111,7 +102,8 @@ async function checkGate(uid: string, type: "dailyTip" | "weekly", key: string):
   if (type === "dailyTip") {
     return gates.dailyTip?.unlocked === true && gates.dailyTip?.dateKey === key;
   }
-  return gates.weekly?.unlocked === true && gates.weekly?.weekKey === key;
+  // Suportamos 'weekly' por retrocompatibilidade ou 'profile'
+  return (gates.weekly?.unlocked === true) || (gates.profile?.unlocked === true);
 }
 
 // ===============================
@@ -131,12 +123,11 @@ export const unlockAiContent = onCall(async (request) => {
     return { ok: true, key: dk };
   }
 
-  if (type === "weekly") {
-    const wk = weekKey || isoWeekKey();
+  if (type === "weekly" || type === "profile") {
     await userRef.set({
-      aiGates: { weekly: { weekKey: wk, unlocked: true, unlockedAt: FieldValue.serverTimestamp() } }
+      aiGates: { profile: { unlocked: true, unlockedAt: FieldValue.serverTimestamp() } }
     }, { merge: true });
-    return { ok: true, key: wk };
+    return { ok: true };
   }
 
   throw new HttpsError("invalid-argument", "Invalid type.");
@@ -149,14 +140,24 @@ export const generateDailyTipIfNeeded = onCall(
     const dateKey = todayKey(request.data?.dateKey);
 
     const tipRef = db.collection("users").doc(uid).collection("dailyTips").doc(dateKey);
-    const existing = await tipRef.get();
-    if (existing.exists) return { ok: true, reused: true };
+
+    // CORREÇÃO: Removida a trava de existência para permitir atualização (carregar novamente)
+    // const existing = await tipRef.get(); if (existing.exists) return { ok: true, reused: true };
 
     const unlocked = await checkGate(uid, "dailyTip", dateKey);
     if (!unlocked) return { ok: false, needsAd: true };
 
     const u = await getUserComputedData(uid);
-    const prompt = `Gera uma dica diária curta para ${u.name}. HD: ${JSON.stringify(u.humanDesignBase)}, Num: ${JSON.stringify(u.numerology)}. Formato JSON: { "text": "..." }`;
+        const hd = u.humanDesignBase;
+        const num = u.numerology;
+        const astro = u.astro;
+
+    const prompt = `
+Gera uma dica diária (60-100 palavras) para ${u.name}.
+Dados: Tipo: ${hd.type} Perfil: ${hd.profile}, Estratégia: ${hd.strategy} Signo Solar: ${astro.sunSign} Ascendente: ${astro.ascendantSign} LP ${u.numerology.lifePath}.
+Foca-te numa micro-ação prática baseada no perfil.
+JSON: { "text": "..." }
+    `.trim();
 
     const raw = await callOpenAI_JSON(OPENAI_API_KEY.value(), prompt);
     const parsed = safeJsonParse(raw);
@@ -167,27 +168,75 @@ export const generateDailyTipIfNeeded = onCall(
   }
 );
 
-export const generateWeeklyInsightsIfNeeded = onCall(
+/**
+ * GERA INSIGHTS DE PERFIL (Geral)
+ * Substitui o generateWeeklyInsightsIfNeeded
+ */
+export const generateInsights = onCall(
   { secrets: [OPENAI_API_KEY] },
   async (request) => {
     const uid = requireAuth(request.auth?.uid);
-    const wk = request.data?.weekKey || isoWeekKey();
+    const insightsRef = db.collection("users").doc(uid).collection("aiInsights").doc("latest");
 
-    const insightsRef = db.collection("users").doc(uid).collection("aiInsights").doc(wk);
-    const existing = await insightsRef.get();
-    if (existing.exists) return { ok: true, reused: true };
+    // Removida a verificação de existência para permitir atualização (como solicitado)
+    // Se quiser manter a trava, descomente a linha abaixo:
+    // const existing = await insightsRef.get(); if (existing.exists) return { ok: true, reused: true };
 
-    const unlocked = await checkGate(uid, "weekly", wk);
+    const unlocked = await checkGate(uid, "profile", "");
     if (!unlocked) return { ok: false, needsAd: true };
 
     const u = await getUserComputedData(uid);
-    const prompt = `Gera insights semanais para ${u.name}. HD: ${JSON.stringify(u.humanDesignBase)}, Astro: ${JSON.stringify(u.astro)}. Formato JSON: { "summary": "...", "focus": ["..."], "challenges": ["..."] }`;
+    const hd = u.humanDesignBase;
+    const num = u.numerology;
+    const astro = u.astro;
+
+    const prompt = `
+Analisa o perfil holístico de ${u.name} e cria um resumo completo e integrativo.
+Evita usar o nome completo ou excessivo do utilizador.
+
+DADOS TÉCNICOS:
+1. HUMAN DESIGN:
+   - Tipo: ${hd.type}
+   - Perfil: ${hd.profile}
+   - Estratégia: ${hd.strategy}
+   - Cruz de Encarnação: ${hd.incarnationCross}
+   - Canais Definidos: ${JSON.stringify(hd.channels)}
+   - Portas (Gates) Ativas: ${JSON.stringify(hd.activeGates)}
+
+2. ASTROLOGIA:
+   - Signo Solar: ${astro.sunSign}
+   - Ascendente: ${astro.ascendantSign}
+
+3. NUMEROLOGIA:
+   - Caminho de Vida: ${num.lifePath}
+   - Expressão: ${num.expression}
+   - Alma: ${num.soul}
+   - Personalidade: ${num.personality}
+
+TAREFA:
+Cria um JSON com:
+- "summary": Um parágrafo de 6-8 frases que resume a essência deste perfil cruzando os 3 sistemas de forma técnica e profunda.
+- "insights": Uma lista com exatamente 3 pontos poderosos:
+  1. Human Design: Usa toda a informação que tens do human design e neste podes te alongar mais um pouto até 300 caracteres.
+  2. Astrologia: Foca no Signo Solar (${astro.sunSign}) e Ascendente (${astro.ascendantSign}).
+  3. Numerologia: Foca no Caminho de Vida (${num.lifePath}) e Expressão (${num.expression}).
+
+RESPOSTA APENAS EM JSON:
+{
+  "summary": "...",
+  "insights": ["...", "...", "..."]
+}
+    `.trim();
 
     const raw = await callOpenAI_JSON(OPENAI_API_KEY.value(), prompt);
     const parsed = safeJsonParse(raw);
     if (!parsed?.summary) throw new HttpsError("internal", "Invalid AI output.");
 
-    await insightsRef.set({ ...parsed, weekKey: wk, createdAt: FieldValue.serverTimestamp() });
+    await insightsRef.set({
+      ...parsed,
+      createdAt: FieldValue.serverTimestamp(),
+      type: "profile_integrative"
+    });
     return { ok: true };
   }
 );
