@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:941622874316:android:ca506cf7e7ed814ac67269",
+        "mobilesdk_app_id": "1:941622874316:android:4791a7a5294bb21ec67269",
         "android_client_info": {
-          "package_name": "com.example.human_match_app"
+          "package_name": "com.opinto.humanmatch"
         }
       },
       "oauth_client": [],

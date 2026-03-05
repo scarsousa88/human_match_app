@@ -181,7 +181,7 @@ class MainNavigationScreen extends StatefulWidget {
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  int _currentIndex = 2; // Começa no Perfil (Direita)
+  int _currentIndex = 0; // Começa no Perfil (Direita)
 
   final List<Widget> _screens = [
     const ProfileSummaryScreen(),
@@ -352,7 +352,7 @@ class _AuthScreenState extends State<AuthScreen> {
             ),
             const SizedBox(height: 10),
             Text(
-              'Autoconhecimento moderno (Human Design base + numerologia/astrologia via AI).',
+              'Conhece-te bem, relaciona-te melhor!',
               style: TextStyle(color: cs.onSurfaceVariant),
             ),
             const SizedBox(height: 18),

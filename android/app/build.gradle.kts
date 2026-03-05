@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -6,21 +9,24 @@ plugins {
     id("com.google.gms.google-services")
 }
 
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
+
 android {
-    namespace = "com.example.human_match_app"
-    // Nota: Se o build falhar com compileSdk 36, altera para 35,
-    // pois o 36 ainda é muito recente para alguns plugins de Ads.
+    namespace = "com.opinto.humanmatch"
+    // VOLTANDO PARA 36: Exigido pelos plugins de Ads e WebView
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.human_match_app"
+        applicationId = "com.opinto.humanmatch"
         minSdk = flutter.minSdkVersion
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
-        // ADICIONADO: Necessário para evitar o erro de limite de métodos (64k)
-        // comum ao usar Firebase + Ads juntos.
         multiDexEnabled = true
 
         externalNativeBuild {
@@ -49,9 +55,29 @@ android {
         jvmTarget = "1.8"
     }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = keystoreProperties["keyAlias"] as String
+            keyPassword = keystoreProperties["keyPassword"] as String
+            // Tentamos encontrar o ficheiro. Se o caminho no properties for apenas o nome, 
+            // assumimos que está dentro de android/app/
+            val storePath = keystoreProperties["storeFile"] as String
+            storeFile = if (file(storePath).exists()) {
+                file(storePath)
+            } else {
+                file("app/$storePath")
+            }
+            storePassword = keystoreProperties["storePassword"] as String
+        }
+    }
+
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
+            
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 }
@@ -60,7 +86,6 @@ flutter {
     source = "../.."
 }
 
-// ADICIONADO: Bloco de dependências para o MultiDex
 dependencies {
     implementation("androidx.multidex:multidex:2.0.1")
 }

@@ -49,7 +49,7 @@ class AiActions {
     }
 
     _toast('A carregar anúncio...');
-    
+
     bool rewardEarned = false;
 
     await RewardedAd.load(
@@ -60,9 +60,8 @@ class AiActions {
           ad.fullScreenContentCallback = FullScreenContentCallback(
             onAdDismissedFullScreenContent: (ad) async {
               ad.dispose();
-              // Atraso de 500ms para permitir que a interface recupere o foco
-              // e evite o erro de "Width is zero" ou "Connection disposed"
-              await Future.delayed(const Duration(milliseconds: 500));
+              // Atraso de segurança para estabilizar o motor gráfico
+              await Future.delayed(const Duration(milliseconds: 200));
               if (rewardEarned && context.mounted) {
                 onReward();
               }
@@ -80,7 +79,7 @@ class AiActions {
         },
         onAdFailedToLoad: (error) {
           debugPrint('Falha ao carregar anúncio: $error');
-          onReward(); // Fallback imediato
+          onReward(); // Fallback se não carregar
         },
       ),
     );
