@@ -568,7 +568,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
       // 1) Limpar insights de perfil
       await userRef.collection('aiInsights').doc('latest').delete();
       
-      // 2) CORREÇÃO: Limpar dica diária de HOJE (usando data atual, não de nascimento)
+      // 2) Limpar dica diária de HOJE (usando data atual, não de nascimento)
       final now = DateTime.now();
       final todayKey = '${now.year}-${_p2(now.month)}-${_p2(now.day)}';
       await userRef.collection('dailyTips').doc(todayKey).delete();
@@ -645,7 +645,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                     const Center(child: Padding(padding: EdgeInsets.all(12), child: CircularProgressIndicator()))
                   else ...[
                     DropdownButtonFormField<String>(
-                      value: _country, 
+                      initialValue: _country, 
                       decoration: const InputDecoration(labelText: 'País'),
                       items: countries.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
                       onChanged: (v) {
@@ -658,7 +658,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                     ),
                     const SizedBox(height: 12),
                     DropdownButtonFormField<Place>(
-                      value: _city, 
+                      initialValue: _city, 
                       decoration: const InputDecoration(labelText: 'Cidade'),
                       items: cities.map((p) => DropdownMenuItem(value: p, child: Text(p.city))).toList(),
                       onChanged: (v) => setState(() => _city = v),
@@ -773,11 +773,6 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
         title: const Text('Resumo'),
         actions: [
           IconButton(
-            tooltip: 'Editar',
-            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfileInputScreen())),
-            icon: const Icon(Icons.edit_outlined),
-          ),
-          IconButton(
             tooltip: 'Logout',
             onPressed: () async => FirebaseAuth.instance.signOut(),
             icon: const Icon(Icons.logout),
@@ -816,9 +811,22 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                     children: [
                       Row(
                         children: [
-                          CircleAvatar(radius: 22, child: Text(first.isEmpty ? '?' : first[0].toUpperCase(), style: const TextStyle(fontWeight: FontWeight.w900))),
+                          const CircleAvatar(
+                            radius: 22,
+                            child: Icon(Icons.person_outline),
+                          ),
                           const SizedBox(width: 12),
-                          Expanded(child: Text(first.isEmpty ? 'Olá!' : 'Olá $first', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900))),
+                          Expanded(
+                            child: Text(
+                              first.isEmpty ? 'Olá!' : 'Olá $first',
+                              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+                            ),
+                          ),
+                          IconButton(
+                            tooltip: 'Editar Perfil',
+                            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfileInputScreen())),
+                            icon: const Icon(Icons.edit_outlined),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 12),

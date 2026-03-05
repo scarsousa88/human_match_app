@@ -3,19 +3,27 @@
     package="com.example.human_match_app">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <queries>
+        <!-- Força visibilidade total para pacotes Google e Store -->
         <package android:name="com.google.android.gms" />
         <package android:name="com.android.vending" />
         <intent>
             <action android:name="com.google.android.gms.ads.IDENTIFIER_SERVICE" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
         </intent>
     </queries>
 
     <application
         android:name="${applicationName}"
         android:label="Human Match"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true">
 
         <!-- AdMob App ID (TEST) -->
         <meta-data
@@ -31,7 +39,6 @@
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
 
-            <!-- ESTA TAG DEVE ESTAR AQUI DENTRO DA ACTIVITY -->
             <meta-data
                 android:name="flutterEmbedding"
                 android:value="2" />
