@@ -334,7 +334,6 @@ class ProfileInputScreen extends StatefulWidget {
 class _ProfileInputScreenState extends State<ProfileInputScreen> {
   final nameCtrl = TextEditingController();
 
-  // Controladores para os campos de texto (Data e Hora) para evitar erros de "Undefined name"
   final _birthDateController = TextEditingController();
   final _birthTimeController = TextEditingController();
   final _placeController = TextEditingController();
@@ -350,15 +349,35 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
   String? _existingCountry;
   String? _existingCity;
 
+  // Variável para o anúncio
+  RewardedAd? _rewardedAd;
+
   @override
   void initState() {
     super.initState();
     _initData();
+    _loadRewardedAd(); // Carrega o anúncio assim que o ecrã abre
   }
 
   Future<void> _initData() async {
     await _loadExistingProfile();
     await _loadPlaces();
+  }
+
+  void _loadRewardedAd() {
+    if (kIsWeb) return;
+    RewardedAd.load(
+      adUnitId: kRewardedTestAdUnitId,
+      request: const AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          setState(() => _rewardedAd = ad);
+        },
+        onAdFailedToLoad: (error) {
+          _rewardedAd = null;
+        },
+      ),
+    );
   }
 
   @override
@@ -367,6 +386,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
     _birthDateController.dispose();
     _birthTimeController.dispose();
     _placeController.dispose();
+    _rewardedAd?.dispose();
     super.dispose();
   }
 
@@ -415,18 +435,23 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
       _places = list;
       final countries = _countries();
 
+      // Sincroniza o País
       if (_existingCountry != null && countries.contains(_existingCountry)) {
         _country = _existingCountry;
       } else {
         _country = countries.isNotEmpty ? countries.first : null;
       }
 
+      // Sincroniza a Cidade fazendo o match do Objeto com a String do Firebase
       final cities = _citiesForCountry(_country);
       if (_existingCity != null && cities.isNotEmpty) {
-        _city = cities.firstWhere(
-              (c) => c.label == _existingCity || c.city == _existingCity,
-          orElse: () => cities.first,
-        );
+        try {
+          _city = cities.firstWhere(
+                  (c) => c.label == _existingCity || c.city == _existingCity
+          );
+        } catch (_) {
+          _city = cities.first;
+        }
       } else {
         _city = cities.isNotEmpty ? cities.first : null;
       }
@@ -445,7 +470,6 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
       ..sort((a, b) => a.city.compareTo(b.city));
   }
 
-  // --- PICKER CUPERTINO PARA DATA ---
   void _pickDate() {
     showCupertinoModalPopup(
       context: context,
@@ -463,15 +487,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                   CupertinoButton(child: const Text('Cancelar'), onPressed: () => Navigator.pop(context)),
                   CupertinoButton(
                     child: const Text('OK'),
-                    onPressed: () {
-                      if (birthDate == null) {
-                        setState(() {
-                          birthDate = DateTime(2000, 1, 1);
-                          _birthDateController.text = _fmtDate(birthDate);
-                        });
-                      }
-                      Navigator.pop(context);
-                    },
+                    onPressed: () => Navigator.pop(context),
                   ),
                 ],
               ),
@@ -507,7 +523,28 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
     }
   }
 
-  // --- SALVAR E VOLTAR ---
+  // Função intermédia para mostrar anúncio antes de salvar
+  void _showAdAndSave() {
+    if (_rewardedAd == null) {
+      _saveProfile();
+      return;
+    }
+
+    _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdDismissedFullScreenContent: (ad) {
+        ad.dispose();
+        _loadRewardedAd();
+      },
+      onAdFailedToShowFullScreenContent: (ad, error) {
+        ad.dispose();
+        _saveProfile();
+      },
+    );
+
+    _rewardedAd!.show(onUserEarnedReward: (ad, reward) => _saveProfile());
+    _rewardedAd = null;
+  }
+
   Future<void> _saveProfile() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null || _city == null || birthDate == null || birthTime == null) {
@@ -534,10 +571,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
-      if (mounted) {
-        _toast('Perfil atualizado!');
-        Navigator.pop(context); // Volta para o resumo
-      }
+      if (mounted) Navigator.pop(context);
     } catch (e) {
       _toast('Erro ao guardar: $e');
     } finally {
@@ -555,7 +589,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
     final cities = _citiesForCountry(_country);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Editar Perfil')),
+      appBar: AppBar(title: const Text('Perfil')),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -576,12 +610,11 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
           ),
           const SizedBox(height: 16),
           DropdownButtonFormField<String>(
-            value: _country,
+            value: countries.contains(_country) ? _country : null,
             items: countries.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
             onChanged: (val) {
               setState(() {
                 _country = val;
-                _existingCity = null;
                 final newCities = _citiesForCountry(_country);
                 _city = newCities.isNotEmpty ? newCities.first : null;
               });
@@ -590,14 +623,14 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
           ),
           const SizedBox(height: 16),
           DropdownButtonFormField<Place>(
-            value: _city,
+            value: cities.contains(_city) ? _city : null,
             items: cities.map((c) => DropdownMenuItem(value: c, child: Text(c.label))).toList(),
             onChanged: (val) => setState(() => _city = val),
             decoration: const InputDecoration(labelText: 'Cidade'),
           ),
           const SizedBox(height: 32),
           ElevatedButton(
-            onPressed: saving ? null : _saveProfile,
+            onPressed: saving ? null : _showAdAndSave,
             child: Text(saving ? 'A guardar...' : 'Guardar Alterações'),
           ),
         ],
@@ -703,50 +736,42 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
 
   Future<void> _showRewardedAdAndRun(Future<void> Function() onReward) async {
     if (kIsWeb) {
-      _toast('Anúncios não suportados no Web. Corre no Android.');
+      _toast('Anúncios não suportados no Web.');
+      await onReward();
       return;
     }
 
-    RewardedAd? ad;
+    // Mostra um loading ou aviso enquanto carrega
+    _toast('A carregar anúncio...');
 
     await RewardedAd.load(
       adUnitId: kRewardedTestAdUnitId,
       request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
-        onAdLoaded: (a) => ad = a,
-        onAdFailedToLoad: (e) {
-          ad = null;
-          _toast('Falha a carregar anúncio: ${e.message}');
+        onAdLoaded: (ad) {
+          ad.fullScreenContentCallback = FullScreenContentCallback(
+            onAdDismissedFullScreenContent: (ad) => ad.dispose(),
+            onAdFailedToShowFullScreenContent: (ad, error) {
+              ad.dispose();
+              onReward(); // Se falhar a mostrar, executa a lógica para não prender o user
+            },
+          );
+
+          ad.show(onUserEarnedReward: (ad, reward) {
+            onReward(); // Executa a lógica (AI ou Dicas) após o anúncio
+          });
+        },
+        onAdFailedToLoad: (error) {
+          debugPrint('Falha ao carregar anúncio: $error');
+          onReward(); // Se o anúncio falhar o carregamento, deixa o utilizador avançar
         },
       ),
-    );
-
-    if (ad == null) return;
-
-    ad!.fullScreenContentCallback = FullScreenContentCallback(
-      onAdDismissedFullScreenContent: (a) => a.dispose(),
-      onAdFailedToShowFullScreenContent: (a, e) {
-        a.dispose();
-        _toast('Falha ao mostrar anúncio: ${e.message}');
-      },
-    );
-
-    ad!.show(
-      onUserEarnedReward: (ad, reward) async {
-        try {
-          await onReward();
-        } catch (e) {
-          _toast('Erro: $e');
-        }
-      },
     );
   }
 
   Future<void> _runAiInsightsBehindRewardedAd() async {
     await _showRewardedAdAndRun(() async {
-      final callable = FirebaseFunctions.instance.httpsCallable('generateAiInsights');
-      // Optional params: backend can ignore if not used
-      await callable.call({
+      final callable = FirebaseFunctions.instance.httpsCallable('generateAiInsights');await callable.call({
         'version': 2,
         'includeWeekPlan': false,
       });
@@ -756,13 +781,11 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
 
   Future<void> _generateTipsBehindRewardedAd() async {
     await _showRewardedAdAndRun(() async {
-      // Daily
       try {
         final daily = FirebaseFunctions.instance.httpsCallable('generateDailyTipIfNeeded');
         await daily.call({'dateKey': _todayKeyLocal()});
       } catch (_) {}
 
-      // Weekly (optional – if your backend doesn't have it yet, it will just fail silently)
       try {
         final weekly = FirebaseFunctions.instance.httpsCallable('generateWeeklyTipIfNeeded');
         await weekly.call({'weekKey': _weekKeyLocal()});
