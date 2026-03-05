@@ -3,8 +3,6 @@
 import 'package:flutter/foundation.dart' show kIsWeb, debugPrint;
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 
 const String kRewardedTestAdUnitId = 'ca-app-pub-3940256099942544/5224354917';
@@ -12,16 +10,10 @@ const String kRewardedTestAdUnitId = 'ca-app-pub-3940256099942544/5224354917';
 class AiActions {
   AiActions({
     required this.context,
-    FirebaseAuth? auth,
-    FirebaseFirestore? firestore,
     FirebaseFunctions? functions,
-  })  : _auth = auth ?? FirebaseAuth.instance,
-        _firestore = firestore ?? FirebaseFirestore.instance,
-        _functions = functions ?? FirebaseFunctions.instance;
+  }) : _functions = functions ?? FirebaseFunctions.instance;
 
   final BuildContext context;
-  final FirebaseAuth _auth;
-  final FirebaseFirestore _firestore;
   final FirebaseFunctions _functions;
 
   void _toast(String msg) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
@@ -42,7 +34,7 @@ class AiActions {
   int _weekNumberManual(DateTime d) {
     final start = DateTime(d.year, 1, 1);
     final dayOfYear = d.difference(start).inDays + 1;
-    final weekday = d.weekday; 
+    final weekday = d.weekday;
     return ((dayOfYear - weekday + 10) / 7).floor();
   }
 
@@ -70,12 +62,18 @@ class AiActions {
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
           ad.show(onUserEarnedReward: (ad, reward) async {
-            if (!ran) { ran = true; await onReward(); }
+            if (!ran) {
+              ran = true;
+              await onReward();
+            }
           });
         },
         onAdFailedToLoad: (error) async {
           debugPrint('Falha ao carregar anúncio: $error');
-          if (!ran) { ran = true; await onReward(); }
+          if (!ran) {
+            ran = true;
+            await onReward();
+          }
         },
       ),
     );
@@ -95,10 +93,10 @@ class AiActions {
       try {
         // PASSO 1: Desbloquear o perfil usando o tipo 'profile'
         await _unlock('profile', '');
-        
+
         // PASSO 2: Chamar a nova função de geração de insights técnicos
         await _call('generateInsights');
-        
+
         _toast('Insights atualizados ✅');
       } catch (e) {
         debugPrint('Erro runInsights: $e');
