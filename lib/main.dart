@@ -334,7 +334,7 @@ class ProfileInputScreen extends StatefulWidget {
 class _ProfileInputScreenState extends State<ProfileInputScreen> {
   final nameCtrl = TextEditingController();
 
-  // CORREÇÃO 1: Adicionar os controladores que faltavam para resolver os erros de "Undefined name"
+  // Controladores para os campos de texto (Data e Hora) para evitar erros de "Undefined name"
   final _birthDateController = TextEditingController();
   final _birthTimeController = TextEditingController();
   final _placeController = TextEditingController();
@@ -353,10 +353,9 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
   @override
   void initState() {
     super.initState();
-    _initData(); // CORREÇÃO 2: Ordem de carregamento controlada
+    _initData();
   }
 
-  // Função para garantir que os dados do perfil carregam ANTES dos lugares
   Future<void> _initData() async {
     await _loadExistingProfile();
     await _loadPlaces();
@@ -365,7 +364,6 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
   @override
   void dispose() {
     nameCtrl.dispose();
-    // CORREÇÃO 3: Limpar os novos controladores
     _birthDateController.dispose();
     _birthTimeController.dispose();
     _placeController.dispose();
@@ -388,7 +386,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
       if (birthDateStr.isNotEmpty) {
         try {
           birthDate = DateTime.parse(birthDateStr);
-          _birthDateController.text = _fmtDate(birthDate); // Atualiza o controlador
+          _birthDateController.text = _fmtDate(birthDate);
         } catch (_) {}
       }
 
@@ -397,7 +395,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
         try {
           final parts = birthTimeStr.split(':');
           birthTime = TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
-          _birthTimeController.text = birthTimeStr; // Atualiza o controlador
+          _birthTimeController.text = birthTimeStr;
         } catch (_) {}
       }
 
@@ -417,14 +415,12 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
       _places = list;
       final countries = _countries();
 
-      // CORREÇÃO 4: Lógica para manter o país ao editar
       if (_existingCountry != null && countries.contains(_existingCountry)) {
         _country = _existingCountry;
       } else {
         _country = countries.isNotEmpty ? countries.first : null;
       }
 
-      // CORREÇÃO 5: Lógica para manter a cidade (match por label ou city)
       final cities = _citiesForCountry(_country);
       if (_existingCity != null && cities.isNotEmpty) {
         _city = cities.firstWhere(
@@ -437,266 +433,174 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
     });
   }
 
-  // ... (mantenha os métodos _countries, _citiesForCountry, _fmtDate, etc., como estão)
-
-  // DICA: No seu build(), dentro do DropdownButton de PAÍS, adicione isto no onChanged:
-  // onChanged: (val) {
-  //   setState(() {
-  //     _country = val;
-  //     _existingCity = null; // IMPORTANTE: limpa a cidade anterior para não dar erro ao trocar de país
-  //     final cities = _citiesForCountry(_country);
-  //     _city = cities.isNotEmpty ? cities.first : null;
-  //   });
-  // },
-
-
-
-
-  
-
   List<String> _countries() {
     final s = <String>{};
-    for (final p in _places) {
-      s.add(p.country);
-    }
-    final out = s.toList()..sort();
-    return out;
+    for (final p in _places) s.add(p.country);
+    return s.toList()..sort();
   }
 
   List<Place> _citiesForCountry(String? country) {
     if (country == null) return [];
-    final out = _places.where((p) => p.country == country).toList()
+    return _places.where((p) => p.country == country).toList()
       ..sort((a, b) => a.city.compareTo(b.city));
-    return out;
   }
 
-  void _toast(String msg) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
-
-  String _p2(int n) => n.toString().padLeft(2, '0');
-
-  String _fmtDate(DateTime? d) {
-    if (d == null) return 'Selecionar data';
-    return '${_p2(d.day)}/${_p2(d.month)}/${d.year}';
-  }
-
-  String _fmtTime(TimeOfDay? t) {
-    if (t == null) return 'Selecionar hora';
-    return '${_p2(t.hour)}:${_p2(t.minute)}';
-  }
-
-  Future<void> _pickDateWheel() async {
-    final now = DateTime.now();
-    final initial = birthDate ?? DateTime(2000, 1, 1);
-    DateTime temp = initial;
-
-    final picked = await showModalBottomSheet<DateTime>(
+  // --- PICKER CUPERTINO PARA DATA ---
+  void _pickDate() {
+    showCupertinoModalPopup(
       context: context,
-      useSafeArea: true,
-      builder: (context) {
-        return _CupertinoPickerSheet(
-          title: 'Data de nascimento',
-          onCancel: () => Navigator.pop(context),
-          onDone: () => Navigator.pop(context, temp),
-          child: SizedBox(
-            height: 220,
-            child: CupertinoDatePicker(
-              mode: CupertinoDatePickerMode.date,
-              dateOrder: DatePickerDateOrder.dmy,
-              initialDateTime: initial,
-              minimumDate: DateTime(1900, 1, 1),
-              maximumDate: now,
-              onDateTimeChanged: (d) => temp = DateTime(d.year, d.month, d.day),
+      builder: (_) => Container(
+        height: 300,
+        color: Colors.white,
+        child: Column(
+          children: [
+            Container(
+              height: 50,
+              color: Colors.grey[200],
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CupertinoButton(child: const Text('Cancelar'), onPressed: () => Navigator.pop(context)),
+                  CupertinoButton(
+                    child: const Text('OK'),
+                    onPressed: () {
+                      if (birthDate == null) {
+                        setState(() {
+                          birthDate = DateTime(2000, 1, 1);
+                          _birthDateController.text = _fmtDate(birthDate);
+                        });
+                      }
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      },
+            Expanded(
+              child: CupertinoDatePicker(
+                mode: CupertinoDatePickerMode.date,
+                initialDateTime: birthDate ?? DateTime(2000, 1, 1),
+                onDateTimeChanged: (val) {
+                  setState(() {
+                    birthDate = val;
+                    _birthDateController.text = _fmtDate(val);
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
-
-    if (picked != null) setState(() => birthDate = picked);
   }
 
-  Future<void> _pickTimeWheel() async {
-    final initial = birthTime ?? TimeOfDay.now();
-
+  Future<void> _pickTime() async {
     final picked = await showTimePicker(
       context: context,
-      initialTime: initial,
-      initialEntryMode: TimePickerEntryMode.dialOnly,
-      builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-          child: child!,
-        );
-      },
+      initialTime: birthTime ?? const TimeOfDay(hour: 12, minute: 0),
     );
-
     if (picked != null) {
-      setState(() => birthTime = picked);
+      setState(() {
+        birthTime = picked;
+        _birthTimeController.text = '${_p2(picked.hour)}:${_p2(picked.minute)}';
+      });
     }
   }
 
-  tz.TZDateTime _toLocalTz(DateTime d, TimeOfDay t, String tzId) {
-    final loc = tz.getLocation(tzId);
-    return tz.TZDateTime(loc, d.year, d.month, d.day, t.hour, t.minute);
-  }
-
-  Future<void> _save() async {
-    FocusScope.of(context).unfocus();
-
-    final uid = FirebaseAuth.instance.currentUser!.uid;
-    final name = nameCtrl.text.trim();
-
-    if (name.isEmpty || birthDate == null || birthTime == null || _city == null) {
-      _toast('Preenche nome, data, hora e cidade.');
+  // --- SALVAR E VOLTAR ---
+  Future<void> _saveProfile() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null || _city == null || birthDate == null || birthTime == null) {
+      _toast('Preenche todos os campos.');
       return;
     }
 
-    final place = _city!;
-    final birthLocal = _toLocalTz(birthDate!, birthTime!, place.tzId);
-    final birthUtc = birthLocal.toUtc();
-
     setState(() => saving = true);
     try {
-      // Compute Human Design Base + Ascendant
-      final swe = SwissEphemerisService();
-      await swe.init();
+      final birthDateStr = birthDate!.toIso8601String().split('T')[0];
+      final birthTimeStr = '${_p2(birthTime!.hour)}:${_p2(birthTime!.minute)}';
 
-      final asc = swe.calcAscendantLongitudeUtc(birthUtc, lat: place.lat, lon: place.lon);
-
-      final hd = HumanDesignCalculator(swe);
-      final hdRes = await hd.calculate(birthUtc: birthUtc, lat: place.lat, lon: place.lon);
-
-      await FirebaseFirestore.instance.collection('users').doc(uid).set({
-        'name': name,
-
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+        'name': nameCtrl.text.trim(),
+        'birthDateStr': birthDateStr,
+        'birthTimeStr': birthTimeStr,
         'place': {
-          'country': place.country,
-          'city': place.city,
-          'label': place.label,
-          'lat': place.lat,
-          'lon': place.lon,
-          'tzId': place.tzId,
+          'country': _city!.country,
+          'city': _city!.city,
+          'label': _city!.label,
+          'lat': _city!.lat,
+          'lon': _city!.lon,
         },
-
-        'birthDateStr': '${birthDate!.year}-${_p2(birthDate!.month)}-${_p2(birthDate!.day)}',
-        'birthTimeStr': '${_p2(birthTime!.hour)}:${_p2(birthTime!.minute)}',
-        'birthUtc': birthUtc.toIso8601String(),
-
-        'astroBase': {
-          'ascendantDeg': asc,
-        },
-
-        'humanDesignBase': hdRes.toJson(),
-
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
       if (mounted) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const ProfileSummaryScreen()));
+        _toast('Perfil atualizado!');
+        Navigator.pop(context); // Volta para o resumo
       }
     } catch (e) {
-      _toast('Erro ao guardar/calcular: $e');
+      _toast('Erro ao guardar: $e');
     } finally {
       if (mounted) setState(() => saving = false);
     }
   }
 
+  void _toast(String msg) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  String _p2(int n) => n.toString().padLeft(2, '0');
+  String _fmtDate(DateTime? d) => d == null ? '' : '${_p2(d.day)}/${_p2(d.month)}/${d.year}';
+
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-
     final countries = _countries();
     final cities = _citiesForCountry(_country);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Criar perfil'),
-        actions: [
-          IconButton(
-            tooltip: 'Logout',
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
+      appBar: AppBar(title: const Text('Editar Perfil')),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Nome')),
+          const SizedBox(height: 16),
+          TextField(
+            controller: _birthDateController,
+            readOnly: true,
+            onTap: _pickDate,
+            decoration: const InputDecoration(labelText: 'Data de Nascimento', suffixIcon: Icon(Icons.calendar_today)),
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            controller: _birthTimeController,
+            readOnly: true,
+            onTap: _pickTime,
+            decoration: const InputDecoration(labelText: 'Hora de Nascimento', suffixIcon: Icon(Icons.access_time)),
+          ),
+          const SizedBox(height: 16),
+          DropdownButtonFormField<String>(
+            value: _country,
+            items: countries.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
+            onChanged: (val) {
+              setState(() {
+                _country = val;
+                _existingCity = null;
+                final newCities = _citiesForCountry(_country);
+                _city = newCities.isNotEmpty ? newCities.first : null;
+              });
             },
-            icon: const Icon(Icons.logout),
+            decoration: const InputDecoration(labelText: 'País'),
+          ),
+          const SizedBox(height: 16),
+          DropdownButtonFormField<Place>(
+            value: _city,
+            items: cities.map((c) => DropdownMenuItem(value: c, child: Text(c.label))).toList(),
+            onChanged: (val) => setState(() => _city = val),
+            decoration: const InputDecoration(labelText: 'Cidade'),
+          ),
+          const SizedBox(height: 32),
+          ElevatedButton(
+            onPressed: saving ? null : _saveProfile,
+            child: Text(saving ? 'A guardar...' : 'Guardar Alterações'),
           ),
         ],
-      ),
-      body: _Shell(
-        child: ListView(
-          children: [
-            _PrimaryCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Dados base', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
-                  const SizedBox(height: 8),
-                  Text('Isto permite calcular Human Design + ascendente.', style: TextStyle(color: cs.onSurfaceVariant)),
-                  const SizedBox(height: 14),
-
-                  TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Nome')),
-                  const SizedBox(height: 12),
-
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: _pickDateWheel,
-                          icon: const Icon(Icons.cake_outlined),
-                          label: Text(_fmtDate(birthDate)),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: _pickTimeWheel,
-                          icon: const Icon(Icons.schedule),
-                          label: Text(_fmtTime(birthTime)),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 12),
-
-                  if (_places.isEmpty)
-                    const Center(child: Padding(padding: EdgeInsets.all(12), child: CircularProgressIndicator()))
-                  else ...[
-                    DropdownButtonFormField<String>(
-                      initialValue: _country,
-                      decoration: const InputDecoration(labelText: 'País'),
-                      items: countries
-                          .map((c) => DropdownMenuItem(value: c, child: Text(c)))
-                          .toList(),
-                      onChanged: (v) {
-                        setState(() {
-                          _country = v;
-                          final newCities = _citiesForCountry(_country);
-                          _city = newCities.isNotEmpty ? newCities.first : null;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 12),
-                    DropdownButtonFormField<Place>(
-                      initialValue: _city,
-                      decoration: const InputDecoration(labelText: 'Cidade'),
-                      items: cities
-                          .map((p) => DropdownMenuItem(value: p, child: Text(p.city)))
-                          .toList(),
-                      onChanged: (v) => setState(() => _city = v),
-                    ),
-                  ],
-
-                  const SizedBox(height: 14),
-
-                  ElevatedButton(
-                    onPressed: saving ? null : _save,
-                    child: Text(saving ? 'A guardar...' : 'Guardar perfil'),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
