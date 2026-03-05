@@ -534,7 +534,9 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
       final hdData = hdRes.toJson();
       final sunLon = findBodyLongitude(hdData, true, 'Sun') ?? 0.0;
 
-      await FirebaseFirestore.instance.collection('users').doc(uid).set({
+      final userRef = FirebaseFirestore.instance.collection('users').doc(uid);
+
+      await userRef.set({
         'name': name,
         'birthPlaceLabel': place.label,
         'place': {
@@ -563,7 +565,14 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
-      if (mounted) Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const ProfileSummaryScreen()));
+      // Limpar insights antigos para forçar recálculo com novos dados
+      await userRef.collection('aiInsights').doc('latest').delete();
+
+      if (mounted) {
+        if (Navigator.canPop(context)) {
+          Navigator.pop(context);
+        }
+      }
     } catch (e) {
       _toast('Erro ao guardar/calcular: $e');
     } finally {
@@ -625,7 +634,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                     const Center(child: Padding(padding: EdgeInsets.all(12), child: CircularProgressIndicator()))
                   else ...[
                     DropdownButtonFormField<String>(
-                      initialValue: _country,
+                      value: _country, // Sincronização instantânea
                       decoration: const InputDecoration(labelText: 'País'),
                       items: countries.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
                       onChanged: (v) {
@@ -638,7 +647,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                     ),
                     const SizedBox(height: 12),
                     DropdownButtonFormField<Place>(
-                      initialValue: _city,
+                      value: _city, // Sincronização instantânea
                       decoration: const InputDecoration(labelText: 'Cidade'),
                       items: cities.map((p) => DropdownMenuItem(value: p, child: Text(p.city))).toList(),
                       onChanged: (v) => setState(() => _city = v),
@@ -745,7 +754,6 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
     final userRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
     final insightsRef = userRef.collection('aiInsights').doc('latest');
     
-    // Obter dica mais recente para mostrar sempre algo
     final lastTipQuery = userRef.collection('dailyTips').orderBy('dateKey', descending: true).limit(1);
 
     return Scaffold(
@@ -909,7 +917,6 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                     final lastTipDoc = tips.isNotEmpty ? tips.first : null;
                     final lastTipData = lastTipDoc?.data() ?? {};
                     
-                    // Data a mostrar abaixo do título fixo
                     final formattedDate = lastTipDoc != null 
                         ? _formatDateStr(lastTipDoc.id) 
                         : _formatDateStr(_ai.todayKeyLocal());
@@ -922,7 +929,7 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                           const SizedBox(height: 10),
                           Text(formattedDate, style: const TextStyle(fontWeight: FontWeight.w900)),
                           const SizedBox(height: 8),
-                          
+
                           if (!hasTodayTip) ...[
                             ElevatedButton.icon(
                               onPressed: () => _ai.runTipsBehindRewardedAd(),
