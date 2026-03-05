@@ -565,8 +565,19 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
-      // Limpar insights antigos para forçar recálculo com novos dados
+      // 1) Limpar insights de perfil
       await userRef.collection('aiInsights').doc('latest').delete();
+      
+      // 2) CORREÇÃO: Limpar dica diária de HOJE (usando data atual, não de nascimento)
+      final now = DateTime.now();
+      final todayKey = '${now.year}-${_p2(now.month)}-${_p2(now.day)}';
+      await userRef.collection('dailyTips').doc(todayKey).delete();
+
+      // 3) Limpar permissões de anúncios (gates) para forçar novo contexto
+      await userRef.update({
+        'aiGates.dailyTip': FieldValue.delete(),
+        'aiGates.profile': FieldValue.delete(),
+      });
 
       if (mounted) {
         if (Navigator.canPop(context)) {
@@ -634,7 +645,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                     const Center(child: Padding(padding: EdgeInsets.all(12), child: CircularProgressIndicator()))
                   else ...[
                     DropdownButtonFormField<String>(
-                      value: _country, // Sincronização instantânea
+                      value: _country, 
                       decoration: const InputDecoration(labelText: 'País'),
                       items: countries.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
                       onChanged: (v) {
@@ -647,7 +658,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                     ),
                     const SizedBox(height: 12),
                     DropdownButtonFormField<Place>(
-                      value: _city, // Sincronização instantânea
+                      value: _city, 
                       decoration: const InputDecoration(labelText: 'Cidade'),
                       items: cities.map((p) => DropdownMenuItem(value: p, child: Text(p.city))).toList(),
                       onChanged: (v) => setState(() => _city = v),
@@ -754,6 +765,7 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
     final userRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
     final insightsRef = userRef.collection('aiInsights').doc('latest');
     
+    // Obter dica mais recente para mostrar sempre algo
     final lastTipQuery = userRef.collection('dailyTips').orderBy('dateKey', descending: true).limit(1);
 
     return Scaffold(
@@ -942,7 +954,7 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                           if (lastTipDoc != null)
                             Text(lastTipData['text']?.toString() ?? '—')
                           else
-                            const Text('A preparar a tua primeira dica diária...'),
+                            const Text('Vê o anúncio para obteres a tua dica diária'),
                         ],
                       ),
                     );
