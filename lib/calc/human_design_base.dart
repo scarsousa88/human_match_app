@@ -26,7 +26,7 @@ class HumanDesignBase {
     await swe.init();
 
     final calc = HumanDesignCalculator(swe);
-    final HdResult res = await calc.calculate(birthUtc: birthUtc, lat: lat, lon: lon);
+    final  HdResult res = await calc.calculate(birthUtc: birthUtc, lat: lat, lon: lon);
 
     return HumanDesignBase(res.toJson());
   }

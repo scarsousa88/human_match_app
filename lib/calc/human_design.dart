@@ -3,7 +3,7 @@
 import 'dart:math';
 
 import '../hd/swiss_ephemeris_service.dart';
-import 'hd_constants.dart';
+import '../calc/hd_constants.dart';
 
 class HdGateLine {
   final int gate; // 1..64
@@ -33,42 +33,67 @@ class HdActivation {
   Map<String, dynamic> toJson() => {
     'body': body,
     'conscious': conscious,
-    'lon': lon,
     'gate': gl.gate,
     'line': gl.line,
+    'lon': lon,
   };
 }
 
-class HdChart {
+class HdResult {
   final DateTime birthUtc;
   final DateTime designUtc;
-  final List<HdActivation> activations;
-  final List<String> definedChannels;
-  final List<String> definedCenters;
-  final String type;
+
+  final HdType type;
   final String strategy;
   final String authority;
+  final String profile;
 
-  const HdChart({
+  // New derived fields (offline)
+  final String signature;
+  final String notSelfTheme;
+  final String definition;
+  /// Stored as a simple key like: "34/20 | 55/59"
+  /// (You can map this later to the official Cross name if you want.)
+  final String incarnationCross;
+  /// Center id used to highlight authority in the bodygraph (e.g. "solarPlexus").
+  final String authorityCenter;
+
+  final List<HdActivation> activations;
+  final List<String> definedChannels; // "34-20"
+  final List<String> definedCenters; // names
+
+  const HdResult({
     required this.birthUtc,
     required this.designUtc,
-    required this.activations,
-    required this.definedChannels,
-    required this.definedCenters,
     required this.type,
     required this.strategy,
     required this.authority,
+    required this.profile,
+    required this.signature,
+    required this.notSelfTheme,
+    required this.definition,
+    required this.incarnationCross,
+    required this.authorityCenter,
+    required this.activations,
+    required this.definedChannels,
+    required this.definedCenters,
   });
 
   Map<String, dynamic> toJson() => {
     'birthUtc': birthUtc.toIso8601String(),
     'designUtc': designUtc.toIso8601String(),
+    'type': type.name,
+    'strategy': strategy,
+    'authority': authority,
+    'profile': profile,
+    'signature': signature,
+    'notSelfTheme': notSelfTheme,
+    'definition': definition,
+    'incarnationCross': incarnationCross,
+    'authorityCenter': authorityCenter,
     'activations': activations.map((a) => a.toJson()).toList(),
     'definedChannels': definedChannels,
     'definedCenters': definedCenters,
-    'type': type,
-    'strategy': strategy,
-    'authority': authority,
   };
 }
 
@@ -77,7 +102,10 @@ class HumanDesignCalculator {
 
   HumanDesignCalculator(this.swe);
 
-  Future<HdChart> computeChart({
+  /// Public API:
+  /// - birthUtc: UTC date/time of birth
+  /// - lat/lon: geo coordinates of birthplace
+  Future<HdResult> calculate({
     required DateTime birthUtc,
     required double lat,
     required double lon,
@@ -129,62 +157,73 @@ class HumanDesignCalculator {
       centerSet.add(ch.c2);
     }
 
-    final definedCenters = centerSet.map((c) => c.name).toList()..sort();
+    final definedCenters = centerSet.map(_centerName).toList()..sort();
 
-    // Graph connections for motors-to-throat checks, etc.
-    final graph = <HdCenter, Set<HdCenter>>{};
-    for (final ch in defined) {
-      graph.putIfAbsent(ch.c1, () => <HdCenter>{}).add(ch.c2);
-      graph.putIfAbsent(ch.c2, () => <HdCenter>{}).add(ch.c1);
-    }
+    // Build connectivity graph between centers using defined channels
+    final graph = _buildCenterGraph(defined);
 
     final hasSacral = centerSet.contains(HdCenter.sacral);
     final hasAnyCenter = centerSet.isNotEmpty;
 
-    // Motor centers (HD): Ego/Heart, Solar Plexus, Sacral, Root.
-    final motorCenters = <HdCenter>{
+    final motors = <HdCenter>{
+      HdCenter.sacral,
       HdCenter.ego,
       HdCenter.solarPlexus,
-      HdCenter.sacral,
       HdCenter.root,
     };
 
-    final motorToThroat = _hasMotorToThroat(centerSet, graph, motorCenters);
+    final motorToThroat = _isConnectedToAnyMotor(
+      graph: graph,
+      motors: motors,
+      hasThroat: centerSet.contains(HdCenter.throat),
+    );
 
-    final hasAnyDefined = definedChannels.isNotEmpty;
-
-    final typeEnum = _computeType(
+    final type = _computeType(
       hasSacral: hasSacral,
       hasAnyCenter: hasAnyCenter,
       motorToThroat: motorToThroat,
-      hasAnyDefined: hasAnyDefined,
+      hasAnyDefined: defined.isNotEmpty,
     );
 
-    final typeStr = typeEnum.name;
-    final strategy = _strategyForType(typeEnum);
-    final authority = _authorityForCenters(typeEnum, centerSet, graph);
+    final strategy = _strategyForType(type);
+    final authority = _authorityForCenters(type, centerSet, graph);
 
-    return HdChart(
+    // Profile = Personality Sun line / Design Sun line
+    final pSun = activations.firstWhere((a) => a.conscious && a.body == 'Sun').gl.line;
+    final dSun = activations.firstWhere((a) => !a.conscious && a.body == 'Sun').gl.line;
+    final profile = '$pSun/$dSun';
+
+    final signature = _signatureForType(type);
+    final notSelfTheme = _notSelfThemeForType(type);
+    final definition = _definitionFromCenters(centerSet, graph);
+    final incarnationCross = _computeIncarnationCross(activations);
+    final authorityCenter = _authorityCenterId(authority);
+
+    return HdResult(
       birthUtc: birthUtc,
       designUtc: designUtc,
+      type: type,
+      strategy: strategy,
+      authority: authority,
+      profile: profile,
+      signature: signature,
+      notSelfTheme: notSelfTheme,
+      definition: definition,
+      incarnationCross: incarnationCross,
+      authorityCenter: authorityCenter,
       activations: activations,
       definedChannels: definedChannels,
       definedCenters: definedCenters,
-      type: typeStr,
-      strategy: strategy,
-      authority: authority,
     );
   }
 
   // -------------------------
-  // Planet activation builder
+  // Planet sets (HD bodies)
   // -------------------------
   List<HdActivation> _buildPlanetSet(DateTime utc, {required bool conscious}) {
-    final list = <HdActivation>[];
-
-    // Major bodies for HD (common): Sun, Earth, Moon, Nodes, Mercury..Pluto.
-    // Note: Earth and SouthNode are derived below.
-    final bodies = <String, int>{
+    // Swiss Ephemeris IDs: 0 Sun, 1 Moon, 2 Mercury, 3 Venus, 4 Mars, 5 Jupiter, 6 Saturn, 7 Uranus, 8 Neptune, 9 Pluto
+    // True Node = 10
+    const bodies = <String, int>{
       'Sun': 0,
       'Moon': 1,
       'Mercury': 2,
@@ -195,8 +234,9 @@ class HumanDesignCalculator {
       'Uranus': 7,
       'Neptune': 8,
       'Pluto': 9,
-      'TrueNode': 11,
     };
+
+    final list = <HdActivation>[];
 
     for (final e in bodies.entries) {
       final lon = _norm360(swe.calcPlanetLonUtc(utc, e.value));
@@ -218,16 +258,6 @@ class HumanDesignCalculator {
       gl: _gateLineFromLon(earthLon),
     ));
 
-    // South Node opposite True Node (approx; for HD this is acceptable for nodes axis)
-    final tnLon = list.firstWhere((a) => a.body == 'TrueNode').lon;
-    final snLon = _norm360(tnLon + 180.0);
-    list.add(HdActivation(
-      body: 'SouthNode',
-      conscious: conscious,
-      lon: snLon,
-      gl: _gateLineFromLon(snLon),
-    ));
-
     return list;
   }
 
@@ -235,25 +265,12 @@ class HumanDesignCalculator {
   // Gate + Line mapping
   // -------------------------
   HdGateLine _gateLineFromLon(double lonDeg) {
-    // Small epsilon avoids rare floating-point flips exactly on a boundary.
-    const eps = 1e-10;
-
-    final x = _norm360(lonDeg - hdStartDeg + eps);
-
-    // Gate index in [0..63]
-    int gateIndex = (x / hdGateSizeDeg).floor();
-    if (gateIndex < 0) gateIndex = 0;
-    if (gateIndex > 63) gateIndex = 63;
-
+    final x = _norm360(lonDeg - hdStartDeg);
+    final gateIndex = (x / hdGateSizeDeg).floor().clamp(0, 63);
     final gate = hdGateOrder[gateIndex];
 
-    // withinGateDeg in [0..gateSize)
-    final withinGateDeg = x - gateIndex * hdGateSizeDeg;
-
-    // Line in [1..6]
-    int line = (withinGateDeg / (hdGateSizeDeg / 6.0)).floor() + 1;
-    if (line < 1) line = 1;
-    if (line > 6) line = 6;
+    final withinGate = (x / hdGateSizeDeg) - gateIndex;
+    final line = (withinGate * 6).floor().clamp(0, 5) + 1;
 
     return HdGateLine(gate, line);
   }
@@ -266,95 +283,71 @@ class HumanDesignCalculator {
     required DateTime startGuessUtc,
     required DateTime maxUtc,
   }) {
-    // More accurate solver:
-    // - iterate in Julian Day UT (stable)
-    // - use Sun instantaneous speed (deg/day) when available via FFI
-    // - fallback to mean motion if speed is not available
-    //
-    // targetLon is expected in [0..360)
+    // Robust bisection in DateTime (UTC), using Swiss Ephemeris longitudes.
+    // We search for the moment when the Sun longitude equals targetLon (within tolerance),
+    // going backwards from birth time.
     final target = _norm360(targetLon);
 
-    // Work in JD and only convert back to DateTime once.
-    var jd = swe.jdUtc(startGuessUtc);
-    final jdMax = swe.jdUtc(maxUtc);
+    DateTime a = startGuessUtc.isAfter(maxUtc) ? maxUtc : startGuessUtc;
+    DateTime b = maxUtc;
 
-    const tolDeg = 1e-4; // ~0.36 arcsec
-
-    // Newton-like iterations
-    for (var i = 0; i < 10; i++) {
-      if (jd > jdMax) jd = jdMax;
-
-      final sun = swe.calcSunLonSpeedJdUt(jd);
-      final lonNow = _norm360(sun.lon);
-      var err = _shortestAngleDiff(lonNow, target); // [-180..180]
-
-      if (err.abs() <= tolDeg) {
-        final out = swe.utcFromJd(jd);
-        return out.isAfter(maxUtc) ? maxUtc : out;
-      }
-
-      var speed = sun.speedDegPerDay;
-      if (speed.abs() < 1e-6) speed = 0.985647; // fallback
-
-      // dt in days
-      var dt = err / speed;
-
-      // Clamp to avoid jumping too far in odd edge cases.
-      if (dt > 2.0) dt = 2.0;
-      if (dt < -2.0) dt = -2.0;
-
-      // We want lon(jd) -> target, so move opposite direction of error.
-      jd -= dt;
+    // Ensure a < b
+    if (!a.isBefore(b)) {
+      a = b.subtract(const Duration(days: 120));
     }
 
-    // Fallback: small bisection search around the current estimate (±5 days)
-    final outJd = _bisectSunLongitudeJd(
-      targetLon: target,
-      jdCenter: jd,
-      jdMax: jdMax,
-      windowDays: 5.0,
-      tolDeg: tolDeg,
-    );
+    double fa = _shortestAngleDiff(_norm360(swe.calcSunLongitudeUtc(a)), target);
+    double fb = _shortestAngleDiff(_norm360(swe.calcSunLongitudeUtc(b)), target);
 
-    final out = swe.utcFromJd(outJd);
-    return out.isAfter(maxUtc) ? maxUtc : out;
-  }
-
-  double _bisectSunLongitudeJd({
-    required double targetLon,
-    required double jdCenter,
-    required double jdMax,
-    required double windowDays,
-    required double tolDeg,
-  }) {
-    var a = jdCenter - windowDays;
-    var b = jdCenter + windowDays;
-    if (b > jdMax) b = jdMax;
-
-    var fa = _shortestAngleDiff(_norm360(swe.calcSunLongitudeJdUt(a)), targetLon);
-    var fb = _shortestAngleDiff(_norm360(swe.calcSunLongitudeJdUt(b)), targetLon);
-
-    // If no sign change, return the better endpoint.
+    // If we don't bracket the root, expand the window backwards until we do (or give up).
     if (fa.sign == fb.sign) {
-      return (fa.abs() < fb.abs()) ? a : b;
+      var back = a;
+      for (int i = 0; i < 120; i++) { // up to ~240 days
+        final prev = back.subtract(const Duration(days: 2));
+        final fprev = _shortestAngleDiff(_norm360(swe.calcSunLongitudeUtc(prev)), target);
+
+        if (fprev.sign != fb.sign) {
+          a = prev;
+          fa = fprev;
+          break;
+        }
+        back = prev;
+        a = prev;
+        fa = fprev;
+      }
     }
 
-    for (var i = 0; i < 40; i++) {
-      final m = (a + b) / 2.0;
-      final fm = _shortestAngleDiff(_norm360(swe.calcSunLongitudeJdUt(m)), targetLon);
+    // Bisection
+    for (int i = 0; i < 50; i++) {
+      final mid = DateTime.fromMillisecondsSinceEpoch(
+        (a.millisecondsSinceEpoch + b.millisecondsSinceEpoch) ~/ 2,
+        isUtc: true,
+      );
 
-      if (fm.abs() <= tolDeg) return m;
+      final fm = _shortestAngleDiff(_norm360(swe.calcSunLongitudeUtc(mid)), target);
+
+      if (fm.abs() < 1e-4) {
+        return mid.isAfter(maxUtc) ? maxUtc : mid;
+      }
 
       if (fa.sign == fm.sign) {
-        a = m;
+        a = mid;
         fa = fm;
       } else {
-        b = m;
+        b = mid;
         fb = fm;
+      }
+
+      if ((b.millisecondsSinceEpoch - a.millisecondsSinceEpoch).abs() < 1000) {
+        break;
       }
     }
 
-    return (a + b) / 2.0;
+    // Return the closer endpoint
+    final aErr = fa.abs();
+    final bErr = fb.abs();
+    final out = (aErr <= bErr) ? a : b;
+    return out.isAfter(maxUtc) ? maxUtc : out;
   }
 
   // -------------------------
@@ -409,70 +402,192 @@ class HumanDesignCalculator {
     return 'Lunar';
   }
 
-  // -------------------------
-  // Graph utilities
-  // -------------------------
-  bool _hasMotorToThroat(Set<HdCenter> centers, Map<HdCenter, Set<HdCenter>> graph, Set<HdCenter> motors) {
-    if (!centers.contains(HdCenter.throat)) return false;
-
-    // BFS from motors to throat
-    final q = <HdCenter>[];
-    final seen = <HdCenter>{};
+  // Motor-to-throat connectivity (through defined channels graph)
+  bool _isConnectedToAnyMotor({
+    required Map<HdCenter, Set<HdCenter>> graph,
+    required Set<HdCenter> motors,
+    required bool hasThroat,
+  }) {
+    if (!hasThroat) return false;
 
     for (final m in motors) {
-      if (centers.contains(m)) {
-        q.add(m);
-        seen.add(m);
-      }
+      if (_connected(graph, HdCenter.throat, m)) return true;
     }
+    return false;
+  }
+
+  Map<HdCenter, Set<HdCenter>> _buildCenterGraph(List<HdChannel> definedChannels) {
+    final g = <HdCenter, Set<HdCenter>>{};
+    void addEdge(HdCenter a, HdCenter b) {
+      g.putIfAbsent(a, () => <HdCenter>{}).add(b);
+      g.putIfAbsent(b, () => <HdCenter>{}).add(a);
+    }
+
+    for (final ch in definedChannels) {
+      addEdge(ch.c1, ch.c2);
+    }
+
+    return g;
+  }
+
+  bool _connected(Map<HdCenter, Set<HdCenter>> g, HdCenter start, HdCenter goal) {
+    if (start == goal) return true;
+    final visited = <HdCenter>{};
+    final q = <HdCenter>[start];
 
     while (q.isNotEmpty) {
       final cur = q.removeAt(0);
-      if (cur == HdCenter.throat) return true;
-
-      final next = graph[cur];
-      if (next == null) continue;
-
-      for (final n in next) {
-        if (seen.add(n)) q.add(n);
+      if (!visited.add(cur)) continue;
+      for (final nxt in g[cur] ?? const <HdCenter>{}) {
+        if (nxt == goal) return true;
+        if (!visited.contains(nxt)) q.add(nxt);
       }
     }
-
     return false;
   }
 
   // -------------------------
-  // Math helpers
+  // Utilities
   // -------------------------
-  double _norm360(double d) {
-    var x = d % 360.0;
-    if (x < 0) x += 360.0;
-    return x;
+  double _norm360(double x) {
+    var v = x % 360.0;
+    if (v < 0) v += 360.0;
+    return v;
   }
 
-  // Returns shortest signed angular difference from "a" to "b"
-  // i.e. result in [-180, +180]
   double _shortestAngleDiff(double a, double b) {
-    var d = (b - a) % 360.0;
-    if (d > 180.0) d -= 360.0;
-    if (d < -180.0) d += 360.0;
+    // returns a-b wrapped to [-180..180]
+    var d = (a - b) % 360.0;
+    if (d > 180) d -= 360;
+    if (d < -180) d += 360;
     return d;
   }
-}
-// -----------------------------------------------------------------------------
-// Backwards-compat layer (keeps your existing code compiling)
-// -----------------------------------------------------------------------------
 
-/// Keep old type name used in human_design_base.dart/main.dart
-typedef HdResult = HdChart;
-
-extension HumanDesignCalculatorCompat on HumanDesignCalculator {
-  /// Keep old method name used in the rest of the app.
-  Future<HdResult> calculate({
-    required DateTime birthUtc,
-    required double lat,
-    required double lon,
-  }) {
-    return computeChart(birthUtc: birthUtc, lat: lat, lon: lon);
+  String _centerName(HdCenter c) {
+    switch (c) {
+      case HdCenter.head:
+        return 'Head';
+      case HdCenter.ajna:
+        return 'Ajna';
+      case HdCenter.throat:
+        return 'Throat';
+      case HdCenter.g:
+        return 'G';
+      case HdCenter.ego:
+        return 'Ego';
+      case HdCenter.spleen:
+        return 'Spleen';
+      case HdCenter.solarPlexus:
+        return 'Solar Plexus';
+      case HdCenter.sacral:
+        return 'Sacral';
+      case HdCenter.root:
+        return 'Root';
+    }
   }
+
+  // -------------------------
+  // Derived HD fields (offline)
+  // -------------------------
+
+  String _signatureForType(HdType type) {
+    switch (type) {
+      case HdType.generator:
+      case HdType.manifestingGenerator:
+        return 'Satisfação';
+      case HdType.manifestor:
+        return 'Paz';
+      case HdType.projector:
+        return 'Sucesso';
+      case HdType.reflector:
+        return 'Surpresa';
+    }
+  }
+
+  String _notSelfThemeForType(HdType type) {
+    switch (type) {
+      case HdType.generator:
+      case HdType.manifestingGenerator:
+        return 'Frustração';
+      case HdType.manifestor:
+        return 'Raiva';
+      case HdType.projector:
+        return 'Amargura';
+      case HdType.reflector:
+        return 'Desapontamento';
+    }
+  }
+
+  /// "Definition" = number of connected components in the center graph.
+  /// 1 -> Single, 2 -> Split, 3 -> Triple Split, 4 -> Quadruple Split.
+  String _definitionFromCenters(
+    Set<HdCenter> centers,
+    Map<HdCenter, Set<HdCenter>> graph,
+  ) {
+    if (centers.isEmpty) return 'Nenhuma';
+
+    final visited = <HdCenter>{};
+    var components = 0;
+
+    for (final c in centers) {
+      if (visited.contains(c)) continue;
+      components++;
+      final stack = <HdCenter>[c];
+      while (stack.isNotEmpty) {
+        final cur = stack.removeLast();
+        if (!visited.add(cur)) continue;
+        for (final nxt in graph[cur] ?? const <HdCenter>{}) {
+          if (!visited.contains(nxt)) stack.add(nxt);
+        }
+      }
+    }
+
+    switch (components) {
+      case 1:
+        return 'Single Definition';
+      case 2:
+        return 'Split Definition';
+      case 3:
+        return 'Triple Split';
+      case 4:
+        return 'Quadruple Split';
+      default:
+        return 'Complexa';
+    }
+  }
+
+  /// Returns a simple key based on the 4 gates:
+  /// Personality Sun/Earth | Design Sun/Earth
+  String _computeIncarnationCross(List<HdActivation> activations) {
+    int? pSun, pEarth, dSun, dEarth;
+
+    for (final a in activations) {
+      if (a.body == 'Sun' && a.conscious) pSun = a.gl.gate;
+      if (a.body == 'Earth' && a.conscious) pEarth = a.gl.gate;
+      if (a.body == 'Sun' && !a.conscious) dSun = a.gl.gate;
+      if (a.body == 'Earth' && !a.conscious) dEarth = a.gl.gate;
+    }
+
+    if (pSun == null || pEarth == null || dSun == null || dEarth == null) {
+      return '';
+    }
+    return '$pSun/$pEarth | $dSun/$dEarth';
+  }
+
+  /// For highlighting on the bodygraph.
+  /// Returns center id used in your UI: head/ajna/throat/g/ego/spleen/solarPlexus/sacral/root
+  String _authorityCenterId(String authority) {
+    final a = authority.toLowerCase();
+
+    if (a.contains('emoc')) return 'solarPlexus';
+    if (a.contains('sacral')) return 'sacral';
+    if (a.contains('espl') || a.contains('splen')) return 'spleen';
+    if (a == 'ego' || a.contains('ego')) return 'ego';
+    if (a.contains('self-projected') || a.contains('auto')) return 'g';
+    if (a.contains('mental')) return 'ajna';
+    // Reflector / Lunar
+    if (a.contains('lunar')) return 'root'; // fallback highlight (optional)
+    return '';
+  }
+
 }

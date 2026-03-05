@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -20,6 +21,7 @@ import 'places/places.dart'; // PlacesRepository + Place
 import 'hd/swiss_ephemeris_service.dart';
 import 'calc/human_design.dart';
 import 'calc/numerology.dart';
+import 'hd/human_design_section.dart';
 
 const String kRewardedTestAdUnitId = 'ca-app-pub-3940256099942544/5224354917';
 
@@ -47,6 +49,16 @@ class HumanMatchApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Human Match',
+      locale: const Locale('pt', 'PT'),
+      supportedLocales: const [
+        Locale('pt', 'PT'),
+        Locale('en', 'US'),
+      ],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: colorScheme,
@@ -317,39 +329,130 @@ class ProfileInputScreen extends StatefulWidget {
   State<ProfileInputScreen> createState() => _ProfileInputScreenState();
 }
 
+// ... (mantenha os seus imports iguais)
+
 class _ProfileInputScreenState extends State<ProfileInputScreen> {
   final nameCtrl = TextEditingController();
 
+  // CORREÇÃO 1: Adicionar os controladores que faltavam para resolver os erros de "Undefined name"
+  final _birthDateController = TextEditingController();
+  final _birthTimeController = TextEditingController();
+  final _placeController = TextEditingController();
+
   DateTime? birthDate;
   TimeOfDay? birthTime;
-
   bool saving = false;
 
   List<Place> _places = [];
   String? _country;
   Place? _city;
 
-  @override
-  void dispose() {
-    nameCtrl.dispose();
-    super.dispose();
-  }
+  String? _existingCountry;
+  String? _existingCity;
 
   @override
   void initState() {
     super.initState();
-    _loadPlaces();
+    _initData(); // CORREÇÃO 2: Ordem de carregamento controlada
+  }
+
+  // Função para garantir que os dados do perfil carregam ANTES dos lugares
+  Future<void> _initData() async {
+    await _loadExistingProfile();
+    await _loadPlaces();
+  }
+
+  @override
+  void dispose() {
+    nameCtrl.dispose();
+    // CORREÇÃO 3: Limpar os novos controladores
+    _birthDateController.dispose();
+    _birthTimeController.dispose();
+    _placeController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadExistingProfile() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final snap = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+    if (!snap.exists) return;
+
+    final data = snap.data() ?? {};
+
+    setState(() {
+      nameCtrl.text = (data['name'] ?? '').toString().trim();
+
+      final birthDateStr = (data['birthDateStr'] ?? '').toString().trim();
+      if (birthDateStr.isNotEmpty) {
+        try {
+          birthDate = DateTime.parse(birthDateStr);
+          _birthDateController.text = _fmtDate(birthDate); // Atualiza o controlador
+        } catch (_) {}
+      }
+
+      final birthTimeStr = (data['birthTimeStr'] ?? '').toString().trim();
+      if (birthTimeStr.isNotEmpty) {
+        try {
+          final parts = birthTimeStr.split(':');
+          birthTime = TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+          _birthTimeController.text = birthTimeStr; // Atualiza o controlador
+        } catch (_) {}
+      }
+
+      final place = data['place'];
+      if (place is Map) {
+        _existingCountry = (place['country'] ?? '').toString().trim();
+        _existingCity = (place['label'] ?? place['city'] ?? '').toString().trim();
+      }
+    });
   }
 
   Future<void> _loadPlaces() async {
     final list = await PlacesRepository.loadEuropePlaces();
     if (!mounted) return;
+
     setState(() {
       _places = list;
-      _country = _countries().isNotEmpty ? _countries().first : null;
-      _city = _citiesForCountry(_country).isNotEmpty ? _citiesForCountry(_country).first : null;
+      final countries = _countries();
+
+      // CORREÇÃO 4: Lógica para manter o país ao editar
+      if (_existingCountry != null && countries.contains(_existingCountry)) {
+        _country = _existingCountry;
+      } else {
+        _country = countries.isNotEmpty ? countries.first : null;
+      }
+
+      // CORREÇÃO 5: Lógica para manter a cidade (match por label ou city)
+      final cities = _citiesForCountry(_country);
+      if (_existingCity != null && cities.isNotEmpty) {
+        _city = cities.firstWhere(
+              (c) => c.label == _existingCity || c.city == _existingCity,
+          orElse: () => cities.first,
+        );
+      } else {
+        _city = cities.isNotEmpty ? cities.first : null;
+      }
     });
   }
+
+  // ... (mantenha os métodos _countries, _citiesForCountry, _fmtDate, etc., como estão)
+
+  // DICA: No seu build(), dentro do DropdownButton de PAÍS, adicione isto no onChanged:
+  // onChanged: (val) {
+  //   setState(() {
+  //     _country = val;
+  //     _existingCity = null; // IMPORTANTE: limpa a cidade anterior para não dar erro ao trocar de país
+  //     final cities = _citiesForCountry(_country);
+  //     _city = cities.isNotEmpty ? cities.first : null;
+  //   });
+  // },
+
+
+
+
+  
 
   List<String> _countries() {
     final s = <String>{};
@@ -398,6 +501,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
             height: 220,
             child: CupertinoDatePicker(
               mode: CupertinoDatePickerMode.date,
+              dateOrder: DatePickerDateOrder.dmy,
               initialDateTime: initial,
               minimumDate: DateTime(1900, 1, 1),
               maximumDate: now,
@@ -412,33 +516,23 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
   }
 
   Future<void> _pickTimeWheel() async {
-    final initial = birthTime ?? const TimeOfDay(hour: 12, minute: 0);
-    final now = DateTime.now();
-    DateTime temp = DateTime(now.year, now.month, now.day, initial.hour, initial.minute);
+    final initial = birthTime ?? TimeOfDay.now();
 
-    final picked = await showModalBottomSheet<TimeOfDay>(
+    final picked = await showTimePicker(
       context: context,
-      useSafeArea: true,
-      builder: (context) {
-        return _CupertinoPickerSheet(
-          title: 'Hora de nascimento',
-          onCancel: () => Navigator.pop(context),
-          onDone: () => Navigator.pop(context, TimeOfDay(hour: temp.hour, minute: temp.minute)),
-          child: SizedBox(
-            height: 220,
-            child: CupertinoDatePicker(
-              mode: CupertinoDatePickerMode.time,
-              use24hFormat: true,
-              initialDateTime: temp,
-              minuteInterval: 1,
-              onDateTimeChanged: (d) => temp = d,
-            ),
-          ),
+      initialTime: initial,
+      initialEntryMode: TimePickerEntryMode.dialOnly,
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child!,
         );
       },
     );
 
-    if (picked != null) setState(() => birthTime = picked);
+    if (picked != null) {
+      setState(() => birthTime = picked);
+    }
   }
 
   tz.TZDateTime _toLocalTz(DateTime d, TimeOfDay t, String tzId) {
@@ -923,20 +1017,18 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                 const SizedBox(height: 12),
 
                 // -------------------
-                // Human Design (as is)
-                // -------------------
+// Human Design
+// -------------------
                 _PrimaryCard(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text('Human Design', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
-                      const SizedBox(height: 6),
-                      Text(
-                        'Mantemos “as is” por agora (vai mudar em breve).',
-                        style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
-                      ),
                       const SizedBox(height: 12),
-                      hdBase == null ? const Text('Ainda a calcular Human Design...') : _HumanDesignBaseView(hdBase: hdBase),
+                      if (hdBase == null)
+                        const Text('Ainda a calcular Human Design...')
+                      else
+                        HumanDesignSection(hd: hdBase),
                     ],
                   ),
                 ),
@@ -952,9 +1044,9 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                     children: [
                       const Text('Astrologia', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                       const SizedBox(height: 12),
-                      _InfoRow(icon: Icons.wb_sunny_outlined, label: 'Signo', value: sunSign),
+                      _KeyValueRow(icon: Icons.wb_sunny_outlined, label: 'Signo', value: sunSign),
                       const SizedBox(height: 8),
-                      _InfoRow(icon: Icons.north_outlined, label: 'Ascendente', value: ascSign),
+                      _KeyValueRow(icon: Icons.north_outlined, label: 'Ascendente', value: ascSign),
                     ],
                   ),
                 ),
@@ -973,13 +1065,13 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                       if (numerology == null)
                         const Text('—')
                       else ...[
-                        _InfoRow(icon: Icons.tag_outlined, label: 'Caminho de Vida', value: numerology.lifePath.toString()),
+                        _KeyValueRow(icon: Icons.tag_outlined, label: 'Caminho de Vida', value: numerology.lifePath.toString()),
                         const SizedBox(height: 8),
-                        _InfoRow(icon: Icons.tag_outlined, label: 'Expressão', value: numerology.expression.toString()),
+                        _KeyValueRow(icon: Icons.tag_outlined, label: 'Expressão', value: numerology.expression.toString()),
                         const SizedBox(height: 8),
-                        _InfoRow(icon: Icons.tag_outlined, label: 'Alma', value: numerology.soul.toString()),
+                        _KeyValueRow(icon: Icons.tag_outlined, label: 'Alma', value: numerology.soul.toString()),
                         const SizedBox(height: 8),
-                        _InfoRow(icon: Icons.tag_outlined, label: 'Personalidade', value: numerology.personality.toString()),
+                        _KeyValueRow(icon: Icons.tag_outlined, label: 'Personalidade', value: numerology.personality.toString()),
                       ],
                     ],
                   ),
@@ -1140,67 +1232,6 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
   }
 }
 
-class _HumanDesignBaseView extends StatelessWidget {
-  final Map<String, dynamic> hdBase;
-  const _HumanDesignBaseView({required this.hdBase});
-
-  @override
-  Widget build(BuildContext context) {
-    final type = (hdBase['type'] ?? '').toString();
-    final strategy = (hdBase['strategy'] ?? '').toString();
-    final authority = (hdBase['authority'] ?? '').toString();
-    final profile = (hdBase['profile'] ?? '').toString();
-
-    final centers = (hdBase['definedCenters'] ?? []) as List;
-    final channels = (hdBase['definedChannels'] ?? []) as List;
-    final acts = (hdBase['activations'] ?? []) as List;
-
-    Map<String, dynamic>? findAct(bool conscious, String body) {
-      for (final a in acts) {
-        final m = (a as Map).cast<String, dynamic>();
-        if ((m['conscious'] == conscious) && (m['body'] == body)) return m;
-      }
-      return null;
-    }
-
-    String gl(bool conscious, String body) {
-      final m = findAct(conscious, body);
-      if (m == null) return '—';
-      return '${m['gate']}.${m['line']}';
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Human Design (Base)', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
-        const SizedBox(height: 10),
-        Wrap(
-          spacing: 10,
-          runSpacing: 10,
-          children: [
-            _MiniChip(icon: Icons.bolt, label: 'Type: $type'),
-            _MiniChip(icon: Icons.route, label: 'Strategy: $strategy'),
-            _MiniChip(icon: Icons.favorite_border, label: 'Authority: $authority'),
-            _MiniChip(icon: Icons.person_outline, label: 'Profile: $profile'),
-          ],
-        ),
-        const SizedBox(height: 12),
-        const Text('Chaves', style: TextStyle(fontWeight: FontWeight.w900)),
-        const SizedBox(height: 6),
-        Text('Sol (P): ${gl(true, 'Sun')}  | Terra (P): ${gl(true, 'Earth')}  | Lua (P): ${gl(true, 'Moon')}'),
-        Text('Sol (D): ${gl(false, 'Sun')} | Terra (D): ${gl(false, 'Earth')} | Lua (D): ${gl(false, 'Moon')}'),
-        const SizedBox(height: 12),
-        const Text('Centros definidos', style: TextStyle(fontWeight: FontWeight.w900)),
-        const SizedBox(height: 6),
-        Text(centers.isEmpty ? '—' : centers.join(', ')),
-        const SizedBox(height: 12),
-        const Text('Canais definidos', style: TextStyle(fontWeight: FontWeight.w900)),
-        const SizedBox(height: 6),
-        Text(channels.isEmpty ? '—' : channels.join(', ')),
-      ],
-    );
-  }
-}
 
 /// ---------- UI helpers ----------
 
@@ -1235,32 +1266,6 @@ class _PrimaryCard extends StatelessWidget {
 }
 
 
-class _MiniChip extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  const _MiniChip({required this.icon, required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-      decoration: BoxDecoration(
-        color: cs.surfaceContainerHighest.withValues(alpha:0.7),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: cs.outlineVariant),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 16, color: cs.onSurfaceVariant),
-          const SizedBox(width: 8),
-          Text(label, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 12)),
-        ],
-      ),
-    );
-  }
-}
 class _InfoRow extends StatelessWidget {
   const _InfoRow({
     required this.icon,
@@ -1288,6 +1293,37 @@ class _InfoRow extends StatelessWidget {
               Text(value, style: Theme.of(context).textTheme.bodyMedium),
             ],
           ),
+        ),
+      ],
+    );
+  }
+}
+
+class _KeyValueRow extends StatelessWidget {
+  const _KeyValueRow({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
+
+  final IconData icon;
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, size: 18),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Text(label, style: Theme.of(context).textTheme.bodyMedium),
+        ),
+        const SizedBox(width: 12),
+        Text(
+          value,
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900),
+          textAlign: TextAlign.right,
         ),
       ],
     );

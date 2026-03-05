@@ -8,6 +8,8 @@ plugins {
 
 android {
     namespace = "com.example.human_match_app"
+    // Nota: Se o build falhar com compileSdk 36, altera para 35,
+    // pois o 36 ainda é muito recente para alguns plugins de Ads.
     compileSdk = 36
 
     defaultConfig {
@@ -16,6 +18,10 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
+
+        // ADICIONADO: Necessário para evitar o erro de limite de métodos (64k)
+        // comum ao usar Firebase + Ads juntos.
+        multiDexEnabled = true
 
         externalNativeBuild {
             cmake {
@@ -52,4 +58,9 @@ android {
 
 flutter {
     source = "../.."
+}
+
+// ADICIONADO: Bloco de dependências para o MultiDex
+dependencies {
+    implementation("androidx.multidex:multidex:2.0.1")
 }
