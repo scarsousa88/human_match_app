@@ -23,7 +23,7 @@ import 'calc/human_design.dart';
 import 'calc/numerology.dart';
 import 'hd/human_design_section.dart';
 import 'ai_actions.dart';
-import 'app_terms.dart'; // Novo import
+import 'app_terms.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -158,13 +158,13 @@ class ProfileGate extends StatelessWidget {
 
         final data = snap.data?.data() ?? {};
         
-        // 1. Verificar se aceitou a versão ATUAL dos termos
+        // 1. Verificar termos
         final acceptedVersion = data['acceptedTermsVersion']?.toString();
         if (acceptedVersion != AppTerms.currentVersion) {
           return const TermsConsentScreen();
         }
 
-        // 2. Verificar se o perfil está completo
+        // 2. Verificar perfil
         final hasName = (data['name'] ?? '').toString().trim().isNotEmpty;
         final hasPlace = (data['place'] is Map) && (data['place']['tzId'] != null);
         final hasBirthDate = (data['birthDateStr'] ?? '').toString().trim().isNotEmpty;
@@ -198,7 +198,7 @@ class _TermsConsentScreenState extends State<TermsConsentScreen> {
       final uid = FirebaseAuth.instance.currentUser!.uid;
       await FirebaseFirestore.instance.collection('users').doc(uid).update({
         'acceptTerms': true,
-        'acceptedTermsVersion': AppTerms.currentVersion, // Grava a versão aceite
+        'acceptedTermsVersion': AppTerms.currentVersion,
         'termsAcceptedAt': FieldValue.serverTimestamp(),
       });
     } catch (e) {
@@ -250,12 +250,12 @@ class MainNavigationScreen extends StatefulWidget {
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  int _currentIndex = 0; // Começa no Perfil
+  int _currentIndex = 0;
 
   final List<Widget> _screens = [
     const ProfileSummaryScreen(),
-    const _PlaceholderTab(icon: Icons.people_outline, text: 'Explora perfis próximos e compatíveis\n(Brevemente)'),
-    const _PlaceholderTab(icon: Icons.compare_arrows, text: 'Compara perfis manualmente\n(Brevemente)'),
+    const _PlaceholderTab(text: 'Explora perfis próximos e compatíveis\n(Brevemente)'),
+    const _PlaceholderTab(text: 'Compara perfis manualmente\n(Brevemente)'),
   ];
 
   final List<String> _titles = ['O meu Perfil', 'Comunidade', 'Comparar'];
@@ -306,9 +306,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 }
 
 class _PlaceholderTab extends StatelessWidget {
-  final IconData icon;
   final String text;
-  const _PlaceholderTab({required this.icon, required this.text});
+  const _PlaceholderTab({required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -316,9 +315,19 @@ class _PlaceholderTab extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 80, color: Theme.of(context).colorScheme.primary.withOpacity(0.2)),
-          const SizedBox(height: 16),
-          Text(text, textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
+          Image.asset('assets/icon/icon.png', width: 300), // Logótipo da App em tamanho grande
+          const SizedBox(height: 24),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Text(
+              text,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontSize: 16,
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -387,7 +396,7 @@ class _AuthScreenState extends State<AuthScreen> {
         await FirebaseFirestore.instance.collection('users').doc(uid).set({
           'email': email,
           'acceptTerms': true,
-          'acceptedTermsVersion': AppTerms.currentVersion, // Grava versão no registo
+          'acceptedTermsVersion': AppTerms.currentVersion,
           'termsAcceptedAt': FieldValue.serverTimestamp(),
           'createdAt': FieldValue.serverTimestamp(),
           'updatedAt': FieldValue.serverTimestamp(),
@@ -598,7 +607,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
         try {
           final parts = birthTimeStr.split(':');
           birthTime = TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
-          _birthDateController.text = birthTimeStr;
+          _birthTimeController.text = birthTimeStr;
         } catch (_) {}
       }
       final place = data['place'];
@@ -1004,7 +1013,8 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                     children: [
                       const CircleAvatar(
                         radius: 22,
-                        child: Icon(Icons.person_outline),
+                        backgroundColor: Colors.transparent,
+                        child: Image(image: AssetImage('assets/icon/card.png')),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
