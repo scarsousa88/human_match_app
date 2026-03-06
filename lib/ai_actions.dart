@@ -1,5 +1,6 @@
 // lib/ai_actions.dart
 
+import 'dart:async';
 import 'package:flutter/foundation.dart' show kIsWeb, debugPrint, kReleaseMode;
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -65,9 +66,10 @@ class AiActions {
 
     _toast('Loading ad...');
 
+    final completer = Completer<void>();
     bool rewardEarned = false;
 
-    await RewardedAd.load(
+    RewardedAd.load(
       adUnitId: _kRewardedAdUnitId,
       request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
@@ -77,13 +79,23 @@ class AiActions {
               ad.dispose();
               await Future.delayed(const Duration(milliseconds: 200));
               if (rewardEarned && context.mounted) {
-                onReward();
+                try {
+                  await onReward();
+                } finally {
+                  if (!completer.isCompleted) completer.complete();
+                }
+              } else {
+                if (!completer.isCompleted) completer.complete();
               }
             },
             onAdFailedToShowFullScreenContent: (ad, error) {
               debugPrint('Ad failed to show: $error');
               ad.dispose();
-              onReward();
+              onReward().then((_) {
+                if (!completer.isCompleted) completer.complete();
+              }).catchError((_) {
+                if (!completer.isCompleted) completer.complete();
+              });
             },
           );
 
@@ -93,10 +105,16 @@ class AiActions {
         },
         onAdFailedToLoad: (error) {
           debugPrint('Ad failed to load: $error');
-          onReward();
+          onReward().then((_) {
+            if (!completer.isCompleted) completer.complete();
+          }).catchError((_) {
+            if (!completer.isCompleted) completer.complete();
+          });
         },
       ),
     );
+
+    return completer.future;
   }
 
   Future<void> _unlock(String type, String key) async {
