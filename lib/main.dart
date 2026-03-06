@@ -477,26 +477,29 @@ class _AuthScreenState extends State<AuthScreen> {
             const SizedBox(height: 18),
             Row(
               children: [
-                Container(
-                  width: 46,
-                  height: 46,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: cs.primaryContainer,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.asset(
+                    'assets/icon/icon.png',
+                    width: 46,
+                    height: 46,
                   ),
-                  child: Icon(Icons.auto_awesome, color: cs.onPrimaryContainer),
                 ),
                 const SizedBox(width: 12),
-                const Expanded(
-                  child: Text(
-                    'Human Match',
-                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Human Match',
+                        style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900),
+                      ),
+                      Text(l10n.welcomeMessage, style: TextStyle(color: cs.onSurfaceVariant)),
+                    ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 10),
-            Text(l10n.welcomeMessage, style: TextStyle(color: cs.onSurfaceVariant)),
             const SizedBox(height: 18),
             _PrimaryCard(
               child: Column(
