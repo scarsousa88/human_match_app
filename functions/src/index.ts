@@ -44,7 +44,7 @@ function safeJsonParse(raw: string) {
 
 function getLanguageName(code: string): string {
   const langMap: { [key: string]: string } = {
-    "pt": "Portuguese (Portugal)",
+    "pt": "Portuguese",
     "en": "English",
     "es": "Spanish",
     "fr": "French"
@@ -57,7 +57,7 @@ function systemPrompt(language: string = "en"): string {
 
   return `
 You are a senior analyst of integrated self-knowledge systems, specializing in Human Design, psychological Astrology, and integrative Numerology.
-- LANGUAGE: You MUST respond exclusively in ${targetLang}.
+- LANGUAGE: You MUST respond exclusively in ${targetLang}. This is a strict requirement.
 - TONE: Professional, precise, and inspired.
 - DATA: Do NOT invent values. Use ONLY the provided technical data.
 - FORMAT: ALWAYS return valid JSON.
@@ -153,10 +153,13 @@ export const generateDailyTipIfNeeded = onCall(
     const num = u.numerology;
     const astro = u.astro;
 
+    const targetLang = getLanguageName(language);
     const prompt = `
 Generate a daily tip for ${u.name} by integrating Human Design, Astrology, and Numerology.
 Technical Data: Type: ${hd.type}, Profile: ${hd.profile}, Strategy: ${hd.strategy}, Sun: ${astro.sunSign}, Life Path: ${num.lifePath}.
 Focus on a practical micro-action for today that helps the user align with their authentic self.
+
+RESPONSE LANGUAGE: ${targetLang}
 JSON format: { "text": "..." }
     `.trim();
 
@@ -173,7 +176,7 @@ export const generateInsights = onCall(
   { secrets: [OPENAI_API_KEY] },
   async (request) => {
     const uid = requireAuth(request.auth?.uid);
-    const language = request.data?.language || "en";
+    const language = (request.data?.language || "en").toLowerCase();
     const insightsRef = db.collection("users").doc(uid).collection("aiInsights").doc("latest");
 
     const unlocked = await checkGate(uid, "profile", "");
@@ -185,12 +188,49 @@ export const generateInsights = onCall(
     const astro = u.astro;
 
     const targetLangName = getLanguageName(language);
+    const isPt = language === "pt";
 
-    const prompt = `
+    const prompt = isPt ? `
 Atua como um analista espiritual avançado que combina Human Design, astrologia psicológica e numerologia integrativa.
 A tua tarefa é criar uma interpretação profunda e coesa que revele a natureza essencial de ${u.name} — o seu modo de funcionar, aprender e relacionar-se, o seu papel no mundo e o propósito mais elevado da sua alma.
 
 Foca-te especialmente em identificar a narrativa central da alma: como o design, o mapa astrológico e os números convergem para revelar o caminho de maior autenticidade e expansão da consciência.
+
+TAREFAS ANALÍTICAS:
+1. HUMAN DESIGN:
+   - Fornece uma explicação tecnicamente sólida da mecânica energética do tipo (${hd.type}) e autoridade (${hd.authority}): como este indivíduo é desenhado para agir, decidir e interagir com o mundo.
+   - Descreve como a interação entre centros definidos (${JSON.stringify(hd.definedCenters)}) e centros não definidos molda a perceção, motivação e comunicação.
+   - Clarifica a assinatura e o tema do não-ser, dando estratégias práticas claras para regressar à coerência energética.
+   - Interpreta o perfil (${hd.profile}) e a cruz de encarnação (${hd.incarnationCross}) como expressões do papel arquetípico e propósito evolutivo da pessoa.
+
+2. ASTROLOGIA:
+   - Interpreta o Sol (${astro.sunSign}), Lua (infere das ativações: ${JSON.stringify(hd.activations)}) e Ascendente (${astro.ascendantSign}) como a tríade central de identidade, emoção e crescimento da consciência.
+   - Observa equilíbrios elementares e padrões gerais do mapa para descrever o temperamento, ciclos de crescimento e temas existenciais.
+
+3. NUMEROLOGIA:
+   - Analisa os números principais (Caminho de Vida: ${num.lifePath}, Expressão: ${num.expression}, Alma: ${num.soul}, Personalidade: ${num.personality}) para revelar motivação interna, expressão externa e lições da alma.
+   - Integra-os com o design e o mapa para realçar ressonâncias ou tensões que apoiam a maturidade espiritual e material.
+
+4. INTEGRAÇÃO HOLÍSTICA:
+   - Sintetiza insights de todos os três sistemas para identificar o tema evolutivo central — a fusão única de energia, personalidade e intenção da alma.
+   - Oferece orientação prática e consciente sobre alinhamento na tomada de decisões, relacionamentos e expressão autêntica de vida.
+
+ESTILO E ESTRUTURA DA RESPOSTA (Obrigatório em Português):
+- Escreve em Português profissional, preciso e inspirado.
+- Organiza a resposta com estes cabeçalhos de secção: "Essência Central e Estrutura Energética", "Ritmo Emocional", "Propósito e Missão", "Desafios e Integração". (Usa quebras de linha \\n entre as secções).
+- Usa metáforas simbólicas ou imagens arquetípicas quando útil, mas mantém o rigor conceptual.
+- Termina com exatamente três frases de síntese que resumem a essência, movimento e apelo evolutivo da pessoa.
+
+RETORNA APENAS JSON:
+{
+  "summary": "O texto completo da análise estruturado pelas secções especificadas",
+  "insights": ["Frase de síntese 1", "Frase de síntese 2", "Frase de síntese 3"]
+}
+    `.trim() : `
+Act as an advanced spiritual analyst combining Human Design, psychological Astrology, and integrative Numerology.
+Your task is to create a deep and cohesive interpretation that reveals the essential nature of ${u.name} — their way of functioning, learning, and relating, their role in the world, and their soul's highest purpose.
+
+Focus especially on identifying the central soul narrative: how design, astrological chart, and numbers converge to reveal the path of greatest authenticity and consciousness expansion.
 
 ANALYTICAL TASKS:
 1. HUMAN DESIGN:
@@ -211,13 +251,13 @@ ANALYTICAL TASKS:
    - Synthesize insights from all three systems to identify the central evolutionary theme — the unique fusion of energy, personality, and soul intent.
    - Offer practical and conscious guidance on alignment in decision‑making, relationships, and authentic life expression.
 
-STYLE AND STRUCTURE OF THE RESPONSE (Obrigatório em ${targetLangName}):
+STYLE AND STRUCTURE OF THE RESPONSE (Mandatory in ${targetLangName}):
 - Write in professional, precise, and inspired ${targetLangName}.
-- Organize the answer with these section headers (translated to ${targetLangName}): "Core Essence & Energy Structure", "Emotional Rhythm", "Purpose & Mission", "Challenges & Integration". (Usa quebras de linha \\n entre as seções).
+- Organize the answer with these section headers (translated to ${targetLangName}): "Core Essence & Energy Structure", "Emotional Rhythm", "Purpose & Mission", "Challenges & Integration". (Use line breaks \\n between the sections).
 - Use symbolic metaphors or archetypal imagery when helpful, but keep conceptual rigor.
 - End with exactly three synthesis sentences that summarize the essence, movement, and evolutionary calling of the person.
 
-RETORNA APENAS JSON:
+RETURN ONLY JSON:
 {
   "summary": "The full analysis text structured by the specified sections",
   "insights": ["Synthesis sentence 1", "Synthesis sentence 2", "Synthesis sentence 3"]
