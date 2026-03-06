@@ -1011,9 +1011,16 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                     ],
                   ),
                   const SizedBox(height: 12),
-                  if (birthDateText.isNotEmpty) _InfoRow(icon: Icons.cake_outlined, label: l10n.birthDate, value: birthDateText),
-                  if (birthDateText.isNotEmpty) const SizedBox(height: 8),
-                  if (placeLabel.isNotEmpty) _InfoRow(icon: Icons.place_outlined, label: l10n.birthPlace, value: placeLabel),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (birthDateText.isNotEmpty)
+                        Expanded(child: _InfoRow(icon: Icons.cake_outlined, label: l10n.birthDate, value: birthDateText)),
+                      if (birthDateText.isNotEmpty && placeLabel.isNotEmpty) const SizedBox(width: 12),
+                      if (placeLabel.isNotEmpty)
+                        Expanded(child: _InfoRow(icon: Icons.place_outlined, label: l10n.birthPlace, value: placeLabel, isRightAligned: true)),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -1202,11 +1209,28 @@ class _PrimaryCard extends StatelessWidget {
 }
 
 class _InfoRow extends StatelessWidget {
-  const _InfoRow({required this.icon, required this.label, required this.value});
-  final IconData icon; final String label; final String value;
+  const _InfoRow({required this.icon, required this.label, required this.value, this.isRightAligned = false});
+  final IconData icon; final String label; final String value; final bool isRightAligned;
   @override
   Widget build(BuildContext context) {
-    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [Icon(icon, size: 18), const SizedBox(width: 10), Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(label, style: Theme.of(context).textTheme.bodySmall), const SizedBox(height: 2), Text(value, style: Theme.of(context).textTheme.bodyMedium)]))]);
+    final textCol = Column(
+      crossAxisAlignment: isRightAligned ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      children: [
+        Text(label, style: Theme.of(context).textTheme.bodySmall),
+        const SizedBox(height: 2),
+        Text(value, style: Theme.of(context).textTheme.bodyMedium, textAlign: isRightAligned ? TextAlign.right : TextAlign.left),
+      ],
+    );
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: isRightAligned ? MainAxisAlignment.end : MainAxisAlignment.start,
+      children: [
+        Icon(icon, size: 18),
+        const SizedBox(width: 10),
+        if (isRightAligned) textCol else Expanded(child: textCol),
+      ],
+    );
   }
 }
 
