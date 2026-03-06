@@ -42,21 +42,23 @@ function safeJsonParse(raw: string) {
   }
 }
 
-function systemPrompt(language: string = "en"): string {
+function getLanguageName(code: string): string {
   const langMap: { [key: string]: string } = {
     "pt": "Portuguese (Portugal)",
     "en": "English",
     "es": "Spanish",
     "fr": "French"
   };
+  return langMap[code.toLowerCase()] || "English";
+}
 
-  // Default to English if the language is not supported or not provided
-  const targetLang = langMap[language] || "English";
+function systemPrompt(language: string = "en"): string {
+  const targetLang = getLanguageName(language);
 
   return `
-You are a senior analyst of integrated self-knowledge systems.
+You are a senior analyst of integrated self-knowledge systems, specializing in Human Design, psychological Astrology, and integrative Numerology.
 - LANGUAGE: You MUST respond exclusively in ${targetLang}.
-- TONE: Modern, practical, and human.
+- TONE: Professional, precise, and inspired.
 - DATA: Do NOT invent values. Use ONLY the provided technical data.
 - FORMAT: ALWAYS return valid JSON.
   `.trim();
@@ -152,9 +154,9 @@ export const generateDailyTipIfNeeded = onCall(
     const astro = u.astro;
 
     const prompt = `
-Generate a daily tip (60-100 words) for ${u.name}.
-Technical Data: Type: ${hd.type}, Profile: ${hd.profile}, Strategy: ${hd.strategy}, Sun Sign: ${astro.sunSign}, Ascendant: ${astro.ascendantSign}, Life Path: ${num.lifePath}.
-Focus on a practical micro-action based on the profile.
+Generate a daily tip for ${u.name} by integrating Human Design, Astrology, and Numerology.
+Technical Data: Type: ${hd.type}, Profile: ${hd.profile}, Strategy: ${hd.strategy}, Sun: ${astro.sunSign}, Life Path: ${num.lifePath}.
+Focus on a practical micro-action for today that helps the user align with their authentic self.
 JSON format: { "text": "..." }
     `.trim();
 
@@ -182,41 +184,43 @@ export const generateInsights = onCall(
     const num = u.numerology;
     const astro = u.astro;
 
-    const prompt = `
-Analyze the holistic profile of ${u.name} and create a comprehensive and integrative summary.
-Do not use the full name or excessive use of the user's name.
+    const targetLangName = getLanguageName(language);
 
-TECHNICAL DATA:
+    const prompt = `
+Atua como um analista espiritual avançado que combina Human Design, astrologia psicológica e numerologia integrativa.
+A tua tarefa é criar uma interpretação profunda e coesa que revele a natureza essencial de ${u.name} — o seu modo de funcionar, aprender e relacionar-se, o seu papel no mundo e o propósito mais elevado da sua alma.
+
+Foca-te especialmente em identificar a narrativa central da alma: como o design, o mapa astrológico e os números convergem para revelar o caminho de maior autenticidade e expansão da consciência.
+
+ANALYTICAL TASKS:
 1. HUMAN DESIGN:
-   - Type: ${hd.type}
-   - Profile: ${hd.profile}
-   - Strategy: ${hd.strategy}
-   - Incarnation Cross: ${hd.incarnationCross}
-   - Defined Channels: ${JSON.stringify(hd.channels)}
-   - Active Gates: ${JSON.stringify(hd.activeGates)}
+   - Provide a technically sound explanation of the energy mechanics of the type (${hd.type}) and authority (${hd.authority}): how this individual is designed to act, decide, and engage with the world.
+   - Describe how the interplay between defined (${JSON.stringify(hd.definedCenters)}) and undefined centers shapes perception, motivation, and communication.
+   - Clarify the signature and not‑self theme, giving clear practical strategies for returning to energetic coherence.
+   - Interpret the profile (${hd.profile}) and incarnation cross (${hd.incarnationCross}) as expressions of the person’s archetypal role and evolutionary purpose.
 
 2. ASTROLOGY:
-   - Sun Sign: ${astro.sunSign}
-   - Ascendant: ${astro.ascendantSign}
+   - Interpret the Sun (${astro.sunSign}), Moon (infer from HD activations: ${JSON.stringify(hd.activations)}), and Ascendant (${astro.ascendantSign}) as the core triad of identity, emotion, and consciousness growth.
+   - Note elemental balances and overall chart patterns to describe temperament, growth cycles, and existential themes.
 
 3. NUMEROLOGY:
-   - Life Path: ${num.lifePath}
-   - Expression: ${num.expression}
-   - Soul: ${num.soul}
-   - Personality: ${num.personality}
+   - Analyze the main numbers (Life Path: ${num.lifePath}, Expression: ${num.expression}, Soul: ${num.soul}, Personality: ${num.personality}) to reveal internal motivation, external expression, and soul lessons.
+   - Integrate them with the design and chart to highlight resonances or tensions that support spiritual and material maturity.
 
-TASK:
-Create a JSON object with:
-- "summary": A paragraph of 6-8 sentences summarizing the essence of this profile crossing the 3 systems technically and deeply.
-- "insights": A list of exactly 3 powerful points:
-  1. Human Design: Use all HD information, up to 300 characters.
-  2. Astrology: Focus on Sun Sign (${astro.sunSign}) and Ascendant (${astro.ascendantSign}).
-  3. Numerology: Focus on Life Path (${num.lifePath}) and Expression (${num.expression}).
+4. HOLISTIC INTEGRATION:
+   - Synthesize insights from all three systems to identify the central evolutionary theme — the unique fusion of energy, personality, and soul intent.
+   - Offer practical and conscious guidance on alignment in decision‑making, relationships, and authentic life expression.
 
-RESPONSE ONLY IN JSON:
+STYLE AND STRUCTURE OF THE RESPONSE (Obrigatório em ${targetLangName}):
+- Write in professional, precise, and inspired ${targetLangName}.
+- Organize the answer with these section headers (translated to ${targetLangName}): "Core Essence & Energy Structure", "Emotional Rhythm", "Purpose & Mission", "Challenges & Integration". (Usa quebras de linha \\n entre as seções).
+- Use symbolic metaphors or archetypal imagery when helpful, but keep conceptual rigor.
+- End with exactly three synthesis sentences that summarize the essence, movement, and evolutionary calling of the person.
+
+RETORNA APENAS JSON:
 {
-  "summary": "...",
-  "insights": ["...", "...", "..."]
+  "summary": "The full analysis text structured by the specified sections",
+  "insights": ["Synthesis sentence 1", "Synthesis sentence 2", "Synthesis sentence 3"]
 }
     `.trim();
 
