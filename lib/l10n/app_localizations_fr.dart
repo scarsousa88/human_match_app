@@ -261,4 +261,210 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get signPisces => 'Poissons';
+
+  @override
+  String get hdType => 'Type';
+
+  @override
+  String get hdAuthority => 'Autorité';
+
+  @override
+  String get hdStrategy => 'Stratégie';
+
+  @override
+  String get hdProfile => 'Profil';
+
+  @override
+  String get hdSignature => 'Signature';
+
+  @override
+  String get hdNotSelf => 'Non-soi';
+
+  @override
+  String get hdDefinition => 'Définition';
+
+  @override
+  String get hdIncarnationCross => 'Croix';
+
+  @override
+  String get hdDefinedCenters => 'Centres définis';
+
+  @override
+  String get hdChannels => 'Canaux';
+
+  @override
+  String get hdNoData => 'Aucune donnée disponible.';
+
+  @override
+  String hdAuthorityNotice(String center) {
+    return '* $center est le centre d\'autorité';
+  }
+
+  @override
+  String get hdDesign => 'Design';
+
+  @override
+  String get hdUnconscious => '(Inconscient)';
+
+  @override
+  String get hdPlanets => 'Planètes';
+
+  @override
+  String get hdPersonality => 'Personnalité';
+
+  @override
+  String get hdConscious => '(Conscient)';
+
+  @override
+  String get hdGen => 'Générateur';
+
+  @override
+  String get hdMG => 'Générateur Manifesteur';
+
+  @override
+  String get hdMan => 'Manifesteur';
+
+  @override
+  String get hdProj => 'Projecteur';
+
+  @override
+  String get hdRef => 'Réflecteur';
+
+  @override
+  String get hdAuthEmo => 'Émotionnelle';
+
+  @override
+  String get hdAuthSac => 'Sacrale';
+
+  @override
+  String get hdAuthSpl => 'Splénique';
+
+  @override
+  String get hdAuthEgo => 'Ego';
+
+  @override
+  String get hdAuthSelf => 'Auto-projetée';
+
+  @override
+  String get hdAuthMen => 'Mentale';
+
+  @override
+  String get hdStrInf => 'Informer';
+
+  @override
+  String get hdStrResp => 'Attendre pour répondre';
+
+  @override
+  String get hdStrInv => 'Attendre l\'invitation';
+
+  @override
+  String get hdStrLun => 'Attendre um cycle lunaire';
+
+  @override
+  String get hdSigSat => 'Satisfaction';
+
+  @override
+  String get hdSigSuc => 'Succès';
+
+  @override
+  String get hdSigPea => 'Paix';
+
+  @override
+  String get hdSigSur => 'Surprise';
+
+  @override
+  String get hdNotFru => 'Frustration';
+
+  @override
+  String get hdNotBit => 'Amertume';
+
+  @override
+  String get hdNotAng => 'Colère';
+
+  @override
+  String get hdNotDis => 'Déception';
+
+  @override
+  String get hdDefSin => 'Définition Simple';
+
+  @override
+  String get hdDefSpl => 'Définition Partagée';
+
+  @override
+  String get hdDefTri => 'Triple Définition';
+
+  @override
+  String get hdDefQua => 'Quadruple Définition';
+
+  @override
+  String get hdCrossRight => 'Angle Droit';
+
+  @override
+  String get hdCrossLeft => 'Angle Gauche';
+
+  @override
+  String get hdCrossJuxta => 'Juxtaposition';
+
+  @override
+  String get hdCrossOf => 'Croix de';
+
+  @override
+  String get hdCenterHead => 'Tête';
+
+  @override
+  String get hdCenterAjna => 'Ajna';
+
+  @override
+  String get hdCenterThroat => 'Gorge';
+
+  @override
+  String get hdCenterG => 'Centre G';
+
+  @override
+  String get hdCenterEgo => 'Ego (Cœur)';
+
+  @override
+  String get hdCenterSpleen => 'Rate';
+
+  @override
+  String get hdCenterSolar => 'Plexus Solaire';
+
+  @override
+  String get hdCenterSacral => 'Sacrum';
+
+  @override
+  String get hdCenterRoot => 'Racine';
+
+  @override
+  String get hdPlanetSun => 'Soleil';
+
+  @override
+  String get hdPlanetEarth => 'Terre';
+
+  @override
+  String get hdPlanetMoon => 'Lune';
+
+  @override
+  String get hdPlanetMercury => 'Mercure';
+
+  @override
+  String get hdPlanetVenus => 'Vénus';
+
+  @override
+  String get hdPlanetMars => 'Mars';
+
+  @override
+  String get hdPlanetJupiter => 'Jupiter';
+
+  @override
+  String get hdPlanetSaturn => 'Saturne';
+
+  @override
+  String get hdPlanetUranus => 'Uranus';
+
+  @override
+  String get hdPlanetNeptune => 'Neptune';
+
+  @override
+  String get hdPlanetPluto => 'Pluton';
 }

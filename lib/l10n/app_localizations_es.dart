@@ -64,7 +64,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get termsContent =>
-      'Bienvenido a Human Match.\n\n1. Protección de Datos: Al utilizar esta aplicación, acepta el procesamiento de sus datos de nacimiento (fecha, hora y lugar) para el cálculo de su perfil de Human Design, Astrología y Numerología.\n\n2. Inteligencia Artificial: Los insights y consejos generados son producidos por modelos de IA y deben interpretarse como sugerencias de autoconocimiento, no como asesoramiento profesional o médico.\n\n3. Anuncios: La aplicación utiliza anuncios premiados para desbloquear contenidos gratuitos. Los datos anónimos de publicidad pueden ser procesados por Google AdMob.\n\n4. Privacidad: No compartimos sus datos personales con terceros. Puede eliminar su cuenta en cualquier momento en los ajustes.\n\nAl aceptar, confirma que tiene más de 18 años o autorización parental.';
+      'Bienvenido a Human Match.\n\n1. Protección de Datos: Al utilizar esta aplicación, acepta el procesamiento de sus datos de nacimiento (fecha, hora y lugar) para el cálculo de su perfil de Human Design, Astrología y Numerología.\n\n2. Inteligencia Artificial: Los insights y consejos generados son producidos por modelos de IA y deben interpretarse como sugerencias de autoconecimiento, no como asesoramiento profesional o médico.\n\n3. Anuncios: La aplicación utiliza anuncios premiados para desbloquear contenidos gratuitos. Los datos anónimos de publicidad pueden ser procesados por Google AdMob.\n\n4. Privacidad: No compartimos sus datos personales con terceros. Puede eliminar su cuenta en cualquier momento en los ajustes.\n\nAl aceptar, confirma que tiene más de 18 años o autorización parental.';
 
   @override
   String get processing => 'Procesando...';
@@ -257,4 +257,210 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get signPisces => 'Piscis';
+
+  @override
+  String get hdType => 'Tipo';
+
+  @override
+  String get hdAuthority => 'Autoridad';
+
+  @override
+  String get hdStrategy => 'Estrategia';
+
+  @override
+  String get hdProfile => 'Perfil';
+
+  @override
+  String get hdSignature => 'Firma';
+
+  @override
+  String get hdNotSelf => 'No-ser';
+
+  @override
+  String get hdDefinition => 'Definición';
+
+  @override
+  String get hdIncarnationCross => 'Cruz';
+
+  @override
+  String get hdDefinedCenters => 'Centros definidos';
+
+  @override
+  String get hdChannels => 'Canales';
+
+  @override
+  String get hdNoData => 'No hay datos disponibles.';
+
+  @override
+  String hdAuthorityNotice(String center) {
+    return '* $center es el centro de autoridad';
+  }
+
+  @override
+  String get hdDesign => 'Diseño';
+
+  @override
+  String get hdUnconscious => '(Inconsciente)';
+
+  @override
+  String get hdPlanets => 'Astros';
+
+  @override
+  String get hdPersonality => 'Personalidad';
+
+  @override
+  String get hdConscious => '(Consciente)';
+
+  @override
+  String get hdGen => 'Generador';
+
+  @override
+  String get hdMG => 'Generador Manifestante';
+
+  @override
+  String get hdMan => 'Manifestador';
+
+  @override
+  String get hdProj => 'Proyector';
+
+  @override
+  String get hdRef => 'Reflector';
+
+  @override
+  String get hdAuthEmo => 'Emocional';
+
+  @override
+  String get hdAuthSac => 'Sacral';
+
+  @override
+  String get hdAuthSpl => 'Esplénica';
+
+  @override
+  String get hdAuthEgo => 'Ego';
+
+  @override
+  String get hdAuthSelf => 'Autoproyectada';
+
+  @override
+  String get hdAuthMen => 'Mental';
+
+  @override
+  String get hdStrInf => 'Informar';
+
+  @override
+  String get hdStrResp => 'Esperar para responder';
+
+  @override
+  String get hdStrInv => 'Esperar la invitación';
+
+  @override
+  String get hdStrLun => 'Esperar un ciclo lunar';
+
+  @override
+  String get hdSigSat => 'Satisfacción';
+
+  @override
+  String get hdSigSuc => 'Éxito';
+
+  @override
+  String get hdSigPea => 'Paz';
+
+  @override
+  String get hdSigSur => 'Sorpresa';
+
+  @override
+  String get hdNotFru => 'Frustración';
+
+  @override
+  String get hdNotBit => 'Amargura';
+
+  @override
+  String get hdNotAng => 'Rabia';
+
+  @override
+  String get hdNotDis => 'Desilusión';
+
+  @override
+  String get hdDefSin => 'Definición Única';
+
+  @override
+  String get hdDefSpl => 'Definición Partida';
+
+  @override
+  String get hdDefTri => 'Triple Partida';
+
+  @override
+  String get hdDefQua => 'Cuádruple Partida';
+
+  @override
+  String get hdCrossRight => 'Ángulo Derecho';
+
+  @override
+  String get hdCrossLeft => 'Ángulo Izquierdo';
+
+  @override
+  String get hdCrossJuxta => 'Yuxtaposición';
+
+  @override
+  String get hdCrossOf => 'Cruz de';
+
+  @override
+  String get hdCenterHead => 'Cabeza';
+
+  @override
+  String get hdCenterAjna => 'Ajna';
+
+  @override
+  String get hdCenterThroat => 'Garganta';
+
+  @override
+  String get hdCenterG => 'Centro G';
+
+  @override
+  String get hdCenterEgo => 'Ego (Corazón)';
+
+  @override
+  String get hdCenterSpleen => 'Bazo';
+
+  @override
+  String get hdCenterSolar => 'Plexo Solar';
+
+  @override
+  String get hdCenterSacral => 'Sacral';
+
+  @override
+  String get hdCenterRoot => 'Raíz';
+
+  @override
+  String get hdPlanetSun => 'Sol';
+
+  @override
+  String get hdPlanetEarth => 'Tierra';
+
+  @override
+  String get hdPlanetMoon => 'Luna';
+
+  @override
+  String get hdPlanetMercury => 'Mercurio';
+
+  @override
+  String get hdPlanetVenus => 'Venus';
+
+  @override
+  String get hdPlanetMars => 'Marte';
+
+  @override
+  String get hdPlanetJupiter => 'Júpiter';
+
+  @override
+  String get hdPlanetSaturn => 'Saturno';
+
+  @override
+  String get hdPlanetUranus => 'Urano';
+
+  @override
+  String get hdPlanetNeptune => 'Neptuno';
+
+  @override
+  String get hdPlanetPluto => 'Plutón';
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:human_match_app/l10n/app_localizations.dart';
 
 /// UI presenter for Human Design base data coming from Firestore.
 /// Expects a map like: data['humanDesignBase'].
@@ -18,19 +19,22 @@ class HumanDesignSection extends StatelessWidget {
   final Map<String, dynamic> hd;
 
   // Keep table alignment consistent between header and rows.
-  static const int _flexPlanet = 6;
-  static const int _flexPill = 4;
+  // We give more space to the side columns (Design/Personality) to avoid clipping and allow more detail.
+  static const int _flexPlanet = 2;
+  static const int _flexPill = 3;
 
   @override
   Widget build(BuildContext context) {
-    final type = _translateType((hd['type'] ?? '—').toString());
-    final authority = _translateAuthority((hd['authority'] ?? '—').toString());
-    final strategy = _translateStrategy((hd['strategy'] ?? '—').toString());
+    final l10n = AppLocalizations.of(context)!;
 
-    final signature = _titleCase((hd['signature'] ?? '—').toString());
-    final notSelfTheme = _titleCase((hd['notSelfTheme'] ?? '—').toString());
-    final definition = (hd['definition'] ?? '—').toString();
-    final incarnationCross = (hd['incarnationCross'] ?? '—').toString();
+    final type = _translateType(context, (hd['type'] ?? '—').toString());
+    final authority = _translateAuthority(context, (hd['authority'] ?? '—').toString());
+    final strategy = _translateStrategy(context, (hd['strategy'] ?? '—').toString());
+
+    final signature = _translateSignature(context, (hd['signature'] ?? '—').toString());
+    final notSelfTheme = _translateNotSelf(context, (hd['notSelfTheme'] ?? '—').toString());
+    final definition = _translateDefinition(context, (hd['definition'] ?? '—').toString());
+    final incarnationCross = _translateCross(context, (hd['incarnationCross'] ?? '—').toString());
 
     final authorityCenterRaw = (hd['authorityCenter'] ?? '').toString().trim();
     final authorityCenter = authorityCenterRaw.isEmpty ? null : authorityCenterRaw;
@@ -66,21 +70,21 @@ class HumanDesignSection extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             child: Column(
               children: [
-                _InfoLine(icon: Icons.person_outline, label: 'Tipo', value: type),
+                _InfoLine(icon: Icons.person_outline, label: l10n.hdType, value: type),
                 const SizedBox(height: 10),
-                _InfoLine(icon: Icons.favorite_outline, label: 'Autoridade', value: authority),
+                _InfoLine(icon: Icons.favorite_outline, label: l10n.hdAuthority, value: authority),
                 const SizedBox(height: 10),
-                _InfoLine(icon: Icons.alt_route_outlined, label: 'Estratégia', value: strategy),
+                _InfoLine(icon: Icons.alt_route_outlined, label: l10n.hdStrategy, value: strategy),
                 const SizedBox(height: 10),
-                _InfoLine(icon: Icons.badge_outlined, label: 'Perfil', value: profile),
+                _InfoLine(icon: Icons.badge_outlined, label: l10n.hdProfile, value: profile),
                 const SizedBox(height: 10),
-                _InfoLine(icon: Icons.auto_awesome_outlined, label: 'Signature', value: signature),
+                _InfoLine(icon: Icons.auto_awesome_outlined, label: l10n.hdSignature, value: signature),
                 const SizedBox(height: 10),
-                _InfoLine(icon: Icons.warning_amber_outlined, label: 'Not‑self', value: notSelfTheme),
+                _InfoLine(icon: Icons.warning_amber_outlined, label: l10n.hdNotSelf, value: notSelfTheme),
                 const SizedBox(height: 10),
-                _InfoLine(icon: Icons.hub_outlined, label: 'Definition', value: definition),
+                _InfoLine(icon: Icons.hub_outlined, label: l10n.hdDefinition, value: definition),
                 const SizedBox(height: 10),
-                _InfoLine(icon: Icons.add_road_outlined, label: 'Cross', value: incarnationCross),
+                _InfoLine(icon: Icons.add_road_outlined, label: l10n.hdIncarnationCross, value: incarnationCross),
               ],
             ),
           ),
@@ -152,7 +156,7 @@ class HumanDesignSection extends StatelessWidget {
   }
 
   // -------------------------
-  // Compare table
+  // Design / Astros / Personality table
   // -------------------------
 
   static List<_CompareRow> _buildCompareRows(
@@ -236,107 +240,176 @@ class HumanDesignSection extends StatelessWidget {
   // Translations
   // -------------------------
 
-  static String _translateType(String type) {
+  static String _translateType(BuildContext context, String type) {
+    final l10n = AppLocalizations.of(context)!;
     switch (type.trim().toLowerCase()) {
       case 'generator':
-        return 'Gerador';
+        return l10n.hdGen;
       case 'manifesting generator':
-        return 'Gerador Manifestante';
+        return l10n.hdMG;
       case 'manifestor':
-        return 'Manifestador';
+        return l10n.hdMan;
       case 'projector':
-        return 'Projetor';
+        return l10n.hdProj;
       case 'reflector':
-        return 'Refletor';
+        return l10n.hdRef;
       default:
         return _titleCase(type);
     }
   }
 
-  static String _translateAuthority(String s) {
+  static String _translateAuthority(BuildContext context, String s) {
+    final l10n = AppLocalizations.of(context)!;
     final t = s.trim();
     if (t.isEmpty || t == '—') return '—';
     switch (t.toLowerCase()) {
       case 'emotional':
       case 'emocional':
-        return 'Emocional';
+        return l10n.hdAuthEmo;
       case 'sacral':
-        return 'Sacral';
+        return l10n.hdAuthSac;
       case 'splenic':
       case 'esplénica':
       case 'esplenica':
-        return 'Esplénica';
+        return l10n.hdAuthSpl;
       case 'ego':
       case 'egoic':
-        return 'Ego';
+        return l10n.hdAuthEgo;
       case 'self-projected':
       case 'auto-projetada':
       case 'auto projetada':
-        return 'Auto-projetada';
+      case 'autoproyectada':
+        return l10n.hdAuthSelf;
       case 'mental':
-        return 'Mental';
+        return l10n.hdAuthMen;
       default:
         return _titleCase(t);
     }
   }
 
-  static String _translateStrategy(String s) {
+  static String _translateStrategy(BuildContext context, String s) {
+    final l10n = AppLocalizations.of(context)!;
     final t = s.trim();
     if (t.isEmpty || t == '—') return '—';
     switch (t.toLowerCase()) {
       case 'informar':
       case 'to inform':
-        return 'Informar';
+        return l10n.hdStrInf;
       case 'esperar para responder':
       case 'wait to respond':
-        return 'Esperar para responder';
+        return l10n.hdStrResp;
       case 'esperar convite':
       case 'esperar pelo convite':
       case 'wait for the invitation':
-        return 'Esperar pelo convite';
+      case 'esperar la invitación':
+      case 'attendre l\'invitation':
+        return l10n.hdStrInv;
       case 'esperar ciclo lunar':
       case 'wait a lunar cycle':
-        return 'Esperar ciclo lunar';
+      case 'esperar un ciclo lunar':
+      case 'attendre um cycle lunaire':
+        return l10n.hdStrLun;
       default:
         return _titleCase(t);
     }
   }
 
-  static String _centerPt(String s) {
-    final k = s.trim();
+  static String _translateSignature(BuildContext context, String s) {
+    final l10n = AppLocalizations.of(context)!;
+    final t = s.trim().toLowerCase();
+    if (t.isEmpty || t == '—') return '—';
+    switch (t) {
+      case 'satisfaction':
+        return l10n.hdSigSat;
+      case 'success':
+        return l10n.hdSigSuc;
+      case 'peace':
+        return l10n.hdSigPea;
+      case 'surprise':
+        return l10n.hdSigSur;
+      default:
+        return _titleCase(s);
+    }
+  }
+
+  static String _translateNotSelf(BuildContext context, String s) {
+    final l10n = AppLocalizations.of(context)!;
+    final t = s.trim().toLowerCase();
+    if (t.isEmpty || t == '—') return '—';
+    switch (t) {
+      case 'frustration':
+        return l10n.hdNotFru;
+      case 'bitterness':
+        return l10n.hdNotBit;
+      case 'anger':
+        return l10n.hdNotAng;
+      case 'disappointment':
+        return l10n.hdNotDis;
+      default:
+        return _titleCase(s);
+    }
+  }
+
+  static String _translateDefinition(BuildContext context, String s) {
+    final l10n = AppLocalizations.of(context)!;
+    final t = s.trim().toLowerCase();
+    if (t.isEmpty || t == '—') return '—';
+    switch (t) {
+      case 'single':
+      case 'single definition':
+        return l10n.hdDefSin;
+      case 'split':
+      case 'split definition':
+        return l10n.hdDefSpl;
+      case 'triple split':
+      case 'triple split definition':
+        return l10n.hdDefTri;
+      case 'quadruple split':
+      case 'quadruple split definition':
+        return l10n.hdDefQua;
+      default:
+        return _titleCase(s);
+    }
+  }
+
+  static String _translateCross(BuildContext context, String s) {
+    final l10n = AppLocalizations.of(context)!;
+    var t = s.trim();
+    if (t.isEmpty || t == '—') return '—';
+    t = t.replaceFirst('Right Angle', l10n.hdCrossRight);
+    t = t.replaceFirst('Left Angle', l10n.hdCrossLeft);
+    t = t.replaceFirst('Juxtaposition', l10n.hdCrossJuxta);
+    t = t.replaceFirst('Cross of', l10n.hdCrossOf);
+    return t;
+  }
+
+  static String centerL10n(BuildContext context, String s) {
+    final l10n = AppLocalizations.of(context)!;
+    final k = s.trim().toLowerCase();
     switch (k) {
       case 'head':
-      case 'Head':
-        return 'Cabeça';
+        return l10n.hdCenterHead;
       case 'ajna':
-      case 'Ajna':
-        return 'Ajna';
+        return l10n.hdCenterAjna;
       case 'throat':
-      case 'Throat':
-        return 'Garganta';
+        return l10n.hdCenterThroat;
       case 'g':
-      case 'G':
-        return 'Identidade (G)';
+        return l10n.hdCenterG;
       case 'ego':
-      case 'Ego':
-      case 'Heart':
-      case 'Will':
-        return 'Ego (Coração)';
+      case 'heart':
+      case 'will':
+        return l10n.hdCenterEgo;
       case 'spleen':
-      case 'Spleen':
-        return 'Baço';
-      case 'solarPlexus':
-      case 'Solar Plexus':
-      case 'SolarPlexus':
-        return 'Plexo Solar';
+        return l10n.hdCenterSpleen;
+      case 'solarplexus':
+      case 'solar plexus':
+        return l10n.hdCenterSolar;
       case 'sacral':
-      case 'Sacral':
-        return 'Sacral';
+        return l10n.hdCenterSacral;
       case 'root':
-      case 'Root':
-        return 'Raiz';
+        return l10n.hdCenterRoot;
       default:
-        return k;
+        return s;
     }
   }
 
@@ -414,11 +487,12 @@ class _CentersChannelsTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final centerItems = definedCenters.map(HumanDesignSection._centerPt).toList()..sort();
+    final l10n = AppLocalizations.of(context)!;
+    final centerItems = definedCenters.map((s) => HumanDesignSection.centerL10n(context, s)).toList()..sort();
     final channelItems = definedChannels;
 
     final maxLen = centerItems.length > channelItems.length ? centerItems.length : channelItems.length;
-    final authorityLabel = authorityCenter == null ? null : HumanDesignSection._centerPt(authorityCenter!);
+    final authorityLabel = authorityCenter == null ? null : HumanDesignSection.centerL10n(context, authorityCenter!);
 
     final titleStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
           fontSize: (Theme.of(context).textTheme.titleSmall?.fontSize ?? 14) + 1,
@@ -432,9 +506,9 @@ class _CentersChannelsTable extends StatelessWidget {
           children: [
             Row(
               children: [
-                Expanded(child: Center(child: Text('Centros definidos', style: titleStyle))),
+                Expanded(child: Center(child: Text(l10n.hdDefinedCenters, style: titleStyle))),
                 const SizedBox(width: 10),
-                Expanded(child: Center(child: Text('Canais', style: titleStyle))),
+                Expanded(child: Center(child: Text(l10n.hdChannels, style: titleStyle))),
               ],
             ),
             const SizedBox(height: 10),
@@ -444,7 +518,7 @@ class _CentersChannelsTable extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Text(
-                  'Nenhum dado disponível.',
+                  l10n.hdNoData,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontSize: (Theme.of(context).textTheme.bodyMedium?.fontSize ?? 14) + 1,
                       ),
@@ -487,7 +561,7 @@ class _CentersChannelsTable extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  '* $authorityLabel é o centro autoritário (Authority)',
+                  l10n.hdAuthorityNotice(authorityLabel),
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         fontSize: (Theme.of(context).textTheme.bodySmall?.fontSize ?? 12) + 1,
                       ),
@@ -521,6 +595,7 @@ class _ActivationHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final titleStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
           fontSize: (Theme.of(context).textTheme.titleSmall?.fontSize ?? 14) + 1,
         );
@@ -554,23 +629,23 @@ class _ActivationHeader extends StatelessWidget {
           flex: _flexPill,
           child: Align(
             alignment: Alignment.center,
-            child: headerCell('Design', '(Inconsciente)'),
+            child: headerCell(l10n.hdDesign, l10n.hdUnconscious),
           ),
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 12),
         Flexible(
           flex: _flexPlanet,
           child: Align(
             alignment: Alignment.center,
-            child: Text('Astros', style: titleStyle),
+            child: Text(l10n.hdPlanets, style: titleStyle),
           ),
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 12),
         Flexible(
           flex: _flexPill,
           child: Align(
             alignment: Alignment.center,
-            child: headerCell('Personalidade', '(Consciente)'),
+            child: headerCell(l10n.hdPersonality, l10n.hdConscious),
           ),
         ),
       ],
@@ -588,7 +663,7 @@ class _ActivationCompareRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sym = _planetSymbol(row.body);
-    final namePt = _planetNamePt(row.body);
+    final name = _planetName(context, row.body);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
@@ -599,16 +674,16 @@ class _ActivationCompareRow extends StatelessWidget {
             flex: _flexPill,
             child: _Pill(text: row.designGL, tone: _PillTone.design),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 12),
           Flexible(
             flex: _flexPlanet,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(sym, style: const TextStyle(fontSize: 17)),
-                const SizedBox(width: 6),
+                const SizedBox(width: 4),
                 Text(
-                  namePt,
+                  name,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontSize: (Theme.of(context).textTheme.bodyMedium?.fontSize ?? 14) + 1,
                       ),
@@ -616,7 +691,7 @@ class _ActivationCompareRow extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 12),
           Flexible(
             flex: _flexPill,
             child: _Pill(text: row.consciousGL, tone: _PillTone.conscious),
@@ -626,19 +701,20 @@ class _ActivationCompareRow extends StatelessWidget {
     );
   }
 
-  String _planetNamePt(String body) {
+  String _planetName(BuildContext context, String body) {
+    final l10n = AppLocalizations.of(context)!;
     switch (body) {
-      case 'Sun': return 'Sol';
-      case 'Earth': return 'Terra';
-      case 'Moon': return 'Lua';
-      case 'Mercury': return 'Mercúrio';
-      case 'Venus': return 'Vénus';
-      case 'Mars': return 'Marte';
-      case 'Jupiter': return 'Júpiter';
-      case 'Saturn': return 'Saturno';
-      case 'Uranus': return 'Urano';
-      case 'Neptune': return 'Neptuno';
-      case 'Pluto': return 'Plutão';
+      case 'Sun': return l10n.hdPlanetSun;
+      case 'Earth': return l10n.hdPlanetEarth;
+      case 'Moon': return l10n.hdPlanetMoon;
+      case 'Mercury': return l10n.hdPlanetMercury;
+      case 'Venus': return l10n.hdPlanetVenus;
+      case 'Mars': return l10n.hdPlanetMars;
+      case 'Jupiter': return l10n.hdPlanetJupiter;
+      case 'Saturn': return l10n.hdPlanetSaturn;
+      case 'Uranus': return l10n.hdPlanetUranus;
+      case 'Neptune': return l10n.hdPlanetNeptune;
+      case 'Pluto': return l10n.hdPlanetPluto;
       default: return body;
     }
   }

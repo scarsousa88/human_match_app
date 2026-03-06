@@ -581,6 +581,414 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Peixes'**
   String get signPisces;
+
+  /// No description provided for @hdType.
+  ///
+  /// In pt, this message translates to:
+  /// **'Tipo'**
+  String get hdType;
+
+  /// No description provided for @hdAuthority.
+  ///
+  /// In pt, this message translates to:
+  /// **'Autoridade'**
+  String get hdAuthority;
+
+  /// No description provided for @hdStrategy.
+  ///
+  /// In pt, this message translates to:
+  /// **'Estratégia'**
+  String get hdStrategy;
+
+  /// No description provided for @hdProfile.
+  ///
+  /// In pt, this message translates to:
+  /// **'Perfil'**
+  String get hdProfile;
+
+  /// No description provided for @hdSignature.
+  ///
+  /// In pt, this message translates to:
+  /// **'Assinatura'**
+  String get hdSignature;
+
+  /// No description provided for @hdNotSelf.
+  ///
+  /// In pt, this message translates to:
+  /// **'Não-ser'**
+  String get hdNotSelf;
+
+  /// No description provided for @hdDefinition.
+  ///
+  /// In pt, this message translates to:
+  /// **'Definição'**
+  String get hdDefinition;
+
+  /// No description provided for @hdIncarnationCross.
+  ///
+  /// In pt, this message translates to:
+  /// **'Cruz'**
+  String get hdIncarnationCross;
+
+  /// No description provided for @hdDefinedCenters.
+  ///
+  /// In pt, this message translates to:
+  /// **'Centros definidos'**
+  String get hdDefinedCenters;
+
+  /// No description provided for @hdChannels.
+  ///
+  /// In pt, this message translates to:
+  /// **'Canais'**
+  String get hdChannels;
+
+  /// No description provided for @hdNoData.
+  ///
+  /// In pt, this message translates to:
+  /// **'Nenhum dado disponível.'**
+  String get hdNoData;
+
+  /// No description provided for @hdAuthorityNotice.
+  ///
+  /// In pt, this message translates to:
+  /// **'* {center} é o centro autoritário (Autoridade)'**
+  String hdAuthorityNotice(String center);
+
+  /// No description provided for @hdDesign.
+  ///
+  /// In pt, this message translates to:
+  /// **'Design'**
+  String get hdDesign;
+
+  /// No description provided for @hdUnconscious.
+  ///
+  /// In pt, this message translates to:
+  /// **'(Inconsciente)'**
+  String get hdUnconscious;
+
+  /// No description provided for @hdPlanets.
+  ///
+  /// In pt, this message translates to:
+  /// **'Astros'**
+  String get hdPlanets;
+
+  /// No description provided for @hdPersonality.
+  ///
+  /// In pt, this message translates to:
+  /// **'Personalidade'**
+  String get hdPersonality;
+
+  /// No description provided for @hdConscious.
+  ///
+  /// In pt, this message translates to:
+  /// **'(Consciente)'**
+  String get hdConscious;
+
+  /// No description provided for @hdGen.
+  ///
+  /// In pt, this message translates to:
+  /// **'Gerador'**
+  String get hdGen;
+
+  /// No description provided for @hdMG.
+  ///
+  /// In pt, this message translates to:
+  /// **'Gerador Manifestante'**
+  String get hdMG;
+
+  /// No description provided for @hdMan.
+  ///
+  /// In pt, this message translates to:
+  /// **'Manifestador'**
+  String get hdMan;
+
+  /// No description provided for @hdProj.
+  ///
+  /// In pt, this message translates to:
+  /// **'Projetor'**
+  String get hdProj;
+
+  /// No description provided for @hdRef.
+  ///
+  /// In pt, this message translates to:
+  /// **'Refletor'**
+  String get hdRef;
+
+  /// No description provided for @hdAuthEmo.
+  ///
+  /// In pt, this message translates to:
+  /// **'Emocional'**
+  String get hdAuthEmo;
+
+  /// No description provided for @hdAuthSac.
+  ///
+  /// In pt, this message translates to:
+  /// **'Sacral'**
+  String get hdAuthSac;
+
+  /// No description provided for @hdAuthSpl.
+  ///
+  /// In pt, this message translates to:
+  /// **'Esplénica'**
+  String get hdAuthSpl;
+
+  /// No description provided for @hdAuthEgo.
+  ///
+  /// In pt, this message translates to:
+  /// **'Ego'**
+  String get hdAuthEgo;
+
+  /// No description provided for @hdAuthSelf.
+  ///
+  /// In pt, this message translates to:
+  /// **'Auto-projetada'**
+  String get hdAuthSelf;
+
+  /// No description provided for @hdAuthMen.
+  ///
+  /// In pt, this message translates to:
+  /// **'Mental'**
+  String get hdAuthMen;
+
+  /// No description provided for @hdStrInf.
+  ///
+  /// In pt, this message translates to:
+  /// **'Informar'**
+  String get hdStrInf;
+
+  /// No description provided for @hdStrResp.
+  ///
+  /// In pt, this message translates to:
+  /// **'Esperar para responder'**
+  String get hdStrResp;
+
+  /// No description provided for @hdStrInv.
+  ///
+  /// In pt, this message translates to:
+  /// **'Esperar pelo convite'**
+  String get hdStrInv;
+
+  /// No description provided for @hdStrLun.
+  ///
+  /// In pt, this message translates to:
+  /// **'Esperar ciclo lunar'**
+  String get hdStrLun;
+
+  /// No description provided for @hdSigSat.
+  ///
+  /// In pt, this message translates to:
+  /// **'Satisfação'**
+  String get hdSigSat;
+
+  /// No description provided for @hdSigSuc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Sucesso'**
+  String get hdSigSuc;
+
+  /// No description provided for @hdSigPea.
+  ///
+  /// In pt, this message translates to:
+  /// **'Paz'**
+  String get hdSigPea;
+
+  /// No description provided for @hdSigSur.
+  ///
+  /// In pt, this message translates to:
+  /// **'Surpresa'**
+  String get hdSigSur;
+
+  /// No description provided for @hdNotFru.
+  ///
+  /// In pt, this message translates to:
+  /// **'Frustração'**
+  String get hdNotFru;
+
+  /// No description provided for @hdNotBit.
+  ///
+  /// In pt, this message translates to:
+  /// **'Amargura'**
+  String get hdNotBit;
+
+  /// No description provided for @hdNotAng.
+  ///
+  /// In pt, this message translates to:
+  /// **'Raiva'**
+  String get hdNotAng;
+
+  /// No description provided for @hdNotDis.
+  ///
+  /// In pt, this message translates to:
+  /// **'Desilusão'**
+  String get hdNotDis;
+
+  /// No description provided for @hdDefSin.
+  ///
+  /// In pt, this message translates to:
+  /// **'Definição Única'**
+  String get hdDefSin;
+
+  /// No description provided for @hdDefSpl.
+  ///
+  /// In pt, this message translates to:
+  /// **'Definição Partida'**
+  String get hdDefSpl;
+
+  /// No description provided for @hdDefTri.
+  ///
+  /// In pt, this message translates to:
+  /// **'Definição Tripla'**
+  String get hdDefTri;
+
+  /// No description provided for @hdDefQua.
+  ///
+  /// In pt, this message translates to:
+  /// **'Definição Quádrupla'**
+  String get hdDefQua;
+
+  /// No description provided for @hdCrossRight.
+  ///
+  /// In pt, this message translates to:
+  /// **'Ângulo Direito'**
+  String get hdCrossRight;
+
+  /// No description provided for @hdCrossLeft.
+  ///
+  /// In pt, this message translates to:
+  /// **'Ângulo Esquerdo'**
+  String get hdCrossLeft;
+
+  /// No description provided for @hdCrossJuxta.
+  ///
+  /// In pt, this message translates to:
+  /// **'Justaposição'**
+  String get hdCrossJuxta;
+
+  /// No description provided for @hdCrossOf.
+  ///
+  /// In pt, this message translates to:
+  /// **'Cruz de'**
+  String get hdCrossOf;
+
+  /// No description provided for @hdCenterHead.
+  ///
+  /// In pt, this message translates to:
+  /// **'Cabeça'**
+  String get hdCenterHead;
+
+  /// No description provided for @hdCenterAjna.
+  ///
+  /// In pt, this message translates to:
+  /// **'Ajna'**
+  String get hdCenterAjna;
+
+  /// No description provided for @hdCenterThroat.
+  ///
+  /// In pt, this message translates to:
+  /// **'Garganta'**
+  String get hdCenterThroat;
+
+  /// No description provided for @hdCenterG.
+  ///
+  /// In pt, this message translates to:
+  /// **'Identidade (G)'**
+  String get hdCenterG;
+
+  /// No description provided for @hdCenterEgo.
+  ///
+  /// In pt, this message translates to:
+  /// **'Ego (Coração)'**
+  String get hdCenterEgo;
+
+  /// No description provided for @hdCenterSpleen.
+  ///
+  /// In pt, this message translates to:
+  /// **'Baço'**
+  String get hdCenterSpleen;
+
+  /// No description provided for @hdCenterSolar.
+  ///
+  /// In pt, this message translates to:
+  /// **'Plexo Solar'**
+  String get hdCenterSolar;
+
+  /// No description provided for @hdCenterSacral.
+  ///
+  /// In pt, this message translates to:
+  /// **'Sacral'**
+  String get hdCenterSacral;
+
+  /// No description provided for @hdCenterRoot.
+  ///
+  /// In pt, this message translates to:
+  /// **'Raiz'**
+  String get hdCenterRoot;
+
+  /// No description provided for @hdPlanetSun.
+  ///
+  /// In pt, this message translates to:
+  /// **'Sol'**
+  String get hdPlanetSun;
+
+  /// No description provided for @hdPlanetEarth.
+  ///
+  /// In pt, this message translates to:
+  /// **'Terra'**
+  String get hdPlanetEarth;
+
+  /// No description provided for @hdPlanetMoon.
+  ///
+  /// In pt, this message translates to:
+  /// **'Lua'**
+  String get hdPlanetMoon;
+
+  /// No description provided for @hdPlanetMercury.
+  ///
+  /// In pt, this message translates to:
+  /// **'Mercúrio'**
+  String get hdPlanetMercury;
+
+  /// No description provided for @hdPlanetVenus.
+  ///
+  /// In pt, this message translates to:
+  /// **'Vénus'**
+  String get hdPlanetVenus;
+
+  /// No description provided for @hdPlanetMars.
+  ///
+  /// In pt, this message translates to:
+  /// **'Marte'**
+  String get hdPlanetMars;
+
+  /// No description provided for @hdPlanetJupiter.
+  ///
+  /// In pt, this message translates to:
+  /// **'Júpiter'**
+  String get hdPlanetJupiter;
+
+  /// No description provided for @hdPlanetSaturn.
+  ///
+  /// In pt, this message translates to:
+  /// **'Saturno'**
+  String get hdPlanetSaturn;
+
+  /// No description provided for @hdPlanetUranus.
+  ///
+  /// In pt, this message translates to:
+  /// **'Urano'**
+  String get hdPlanetUranus;
+
+  /// No description provided for @hdPlanetNeptune.
+  ///
+  /// In pt, this message translates to:
+  /// **'Neptuno'**
+  String get hdPlanetNeptune;
+
+  /// No description provided for @hdPlanetPluto.
+  ///
+  /// In pt, this message translates to:
+  /// **'Plutão'**
+  String get hdPlanetPluto;
 }
 
 class _AppLocalizationsDelegate

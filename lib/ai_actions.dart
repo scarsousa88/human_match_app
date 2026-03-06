@@ -1,11 +1,14 @@
 // lib/ai_actions.dart
 
-import 'package:flutter/foundation.dart' show kIsWeb, debugPrint;
+import 'package:flutter/foundation.dart' show kIsWeb, debugPrint, kReleaseMode;
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 
-const String kRewardedTestAdUnitId = 'ca-app-pub-3940256099942544/5224354917';
+/// ID do Bloco de Anúncio Recompensado (Rewarded Ad Unit ID)
+const String _kRewardedAdUnitId = kReleaseMode
+    ? 'ca-app-pub-2243336683300353/7259794170' // ID Real de Produção
+    : 'ca-app-pub-3940256099942544/5224354917'; // ID de Teste da Google
 
 class AiActions {
   AiActions({
@@ -53,7 +56,7 @@ class AiActions {
     bool rewardEarned = false;
 
     await RewardedAd.load(
-      adUnitId: kRewardedTestAdUnitId,
+      adUnitId: _kRewardedAdUnitId,
       request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
@@ -69,7 +72,7 @@ class AiActions {
             onAdFailedToShowFullScreenContent: (ad, error) {
               debugPrint('Ad failed to show: $error');
               ad.dispose();
-              onReward(); // Fallback imediato
+              onReward(); // Fallback imediato se falhar ao mostrar
             },
           );
 
@@ -79,7 +82,7 @@ class AiActions {
         },
         onAdFailedToLoad: (error) {
           debugPrint('Falha ao carregar anúncio: $error');
-          onReward(); // Fallback se não carregar
+          onReward(); // Fallback se não conseguir carregar o anúncio
         },
       ),
     );
