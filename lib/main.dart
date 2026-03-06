@@ -79,10 +79,10 @@ class HumanMatchApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Human Match',
-      locale: const Locale('pt', 'PT'),
+      // Definimos Inglês como o primeiro da lista para ser o idioma padrão (fallback)
       supportedLocales: const [
-        Locale('pt', 'PT'),
         Locale('en', 'US'),
+        Locale('pt', 'PT'),
         Locale('es', 'ES'),
         Locale('fr', 'FR'),
       ],
@@ -127,6 +127,9 @@ class HumanMatchApp extends StatelessWidget {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
             textStyle: const TextStyle(fontWeight: FontWeight.w700),
           ),
+        ),
+        snackBarTheme: const SnackBarThemeData(
+          behavior: SnackBarBehavior.floating,
         ),
       ),
       home: const RootGate(),
