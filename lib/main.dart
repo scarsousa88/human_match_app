@@ -24,6 +24,7 @@ import 'calc/numerology.dart';
 import 'hd/human_design_section.dart';
 import 'ai_actions.dart';
 import 'app_terms.dart';
+import 'l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,12 +41,15 @@ void main() async {
 }
 
 /// Helpers globais para Astrologia
-String getZodiacSign(double lon) {
-  const signs = [
-    'Carneiro', 'Touro', 'Gémeos', 'Caranguejo', 'Leão', 'Virgem',
-    'Balança', 'Escorpião', 'Sagitário', 'Capricórnio', 'Aquário', 'Peixes'
+String getZodiacSign(BuildContext context, double lon) {
+  final l10n = AppLocalizations.of(context)!;
+  final index = (lon ~/ 30).clamp(0, 11);
+  final signs = [
+    l10n.signAries, l10n.signTaurus, l10n.signGemini, l10n.signCancer,
+    l10n.signLeo, l10n.signVirgo, l10n.signLibra, l10n.signScorpio,
+    l10n.signSagittarius, l10n.signCapricorn, l10n.signAquarius, l10n.signPisces
   ];
-  return signs[(lon ~/ 30).clamp(0, 11)];
+  return signs[index];
 }
 
 double? findBodyLongitude(Map<String, dynamic>? hdBase, bool conscious, String body) {
@@ -75,8 +79,11 @@ class HumanMatchApp extends StatelessWidget {
       supportedLocales: const [
         Locale('pt', 'PT'),
         Locale('en', 'US'),
+        Locale('es', 'ES'),
+        Locale('fr', 'FR'),
       ],
-      localizationsDelegates: const [
+      localizationsDelegates: [
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
@@ -158,13 +165,11 @@ class ProfileGate extends StatelessWidget {
 
         final data = snap.data?.data() ?? {};
         
-        // 1. Verificar termos
         final acceptedVersion = data['acceptedTermsVersion']?.toString();
         if (acceptedVersion != AppTerms.currentVersion) {
           return const TermsConsentScreen();
         }
 
-        // 2. Verificar perfil
         final hasName = (data['name'] ?? '').toString().trim().isNotEmpty;
         final hasPlace = (data['place'] is Map) && (data['place']['tzId'] != null);
         final hasBirthDate = (data['birthDateStr'] ?? '').toString().trim().isNotEmpty;
@@ -180,7 +185,7 @@ class ProfileGate extends StatelessWidget {
   }
 }
 
-/// ---------------- TERMS CONSENT (FOR EXISTING USERS) ----------------
+/// ---------------- TERMS CONSENT ----------------
 
 class TermsConsentScreen extends StatefulWidget {
   const TermsConsentScreen({super.key});
@@ -202,7 +207,7 @@ class _TermsConsentScreenState extends State<TermsConsentScreen> {
         'termsAcceptedAt': FieldValue.serverTimestamp(),
       });
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao aceitar: $e')));
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
     } finally {
       if (mounted) setState(() => loading = false);
     }
@@ -211,27 +216,29 @@ class _TermsConsentScreenState extends State<TermsConsentScreen> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Termos e Condições')),
+      appBar: AppBar(title: Text(l10n.termsTitle)),
       body: _Shell(
         child: Column(
           children: [
             Expanded(
               child: _PrimaryCard(
                 child: SingleChildScrollView(
-                  child: Text(AppTerms.termsText, style: TextStyle(color: cs.onSurface)),
+                  child: Text(l10n.termsContent, style: TextStyle(color: cs.onSurface)),
                 ),
               ),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: loading ? null : _accept,
-              child: Text(loading ? 'A processar...' : 'Aceito e desejo continuar'),
+              child: Text(loading ? l10n.processing : l10n.acceptAndContinue),
             ),
             const SizedBox(height: 8),
             TextButton(
               onPressed: () => FirebaseAuth.instance.signOut(),
-              child: const Text('Cancelar e sair'),
+              child: Text(l10n.cancelAndExit),
             ),
           ],
         ),
@@ -240,7 +247,7 @@ class _TermsConsentScreenState extends State<TermsConsentScreen> {
   }
 }
 
-/// ---------------- NAVIGATION (TABS) ----------------
+/// ---------------- NAVIGATION ----------------
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -254,22 +261,21 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   final List<Widget> _screens = [
     const ProfileSummaryScreen(),
-    const _PlaceholderTab(text: 'Explora perfis próximos e compatíveis\n(Brevemente)'),
-    const _PlaceholderTab(text: 'Compara perfis manualmente\n(Brevemente)'),
+    const _PlaceholderTab(textKey: 'communitySoon'),
+    const _PlaceholderTab(textKey: 'compareSoon'),
   ];
-
-  final List<String> _titles = ['O meu Perfil', 'Comunidade', 'Comparar'];
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_titles[_currentIndex]),
+        title: Text(_currentIndex == 0 ? l10n.tabProfile : (_currentIndex == 1 ? l10n.tabCommunity : l10n.tabCompare)),
         actions: [
           IconButton(
-            tooltip: 'Logout',
+            tooltip: l10n.logout,
             onPressed: () async => FirebaseAuth.instance.signOut(),
             icon: const Icon(Icons.logout),
           ),
@@ -283,21 +289,21 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         unselectedItemColor: theme.colorScheme.onSurfaceVariant,
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w900),
         type: BottomNavigationBarType.fixed,
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Perfil',
+            icon: const Icon(Icons.person_outline),
+            activeIcon: const Icon(Icons.person),
+            label: l10n.tabProfile,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.people_outline),
-            activeIcon: Icon(Icons.people),
-            label: 'Comunidade',
+            icon: const Icon(Icons.people_outline),
+            activeIcon: const Icon(Icons.people),
+            label: l10n.tabCommunity,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.compare_arrows),
-            activeIcon: Icon(Icons.compare_arrows),
-            label: 'Comparar',
+            icon: const Icon(Icons.compare_arrows),
+            activeIcon: const Icon(Icons.compare_arrows),
+            label: l10n.tabCompare,
           ),
         ],
       ),
@@ -306,21 +312,28 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 }
 
 class _PlaceholderTab extends StatelessWidget {
-  final String text;
-  const _PlaceholderTab({required this.text});
+  final String textKey;
+  const _PlaceholderTab({required this.textKey});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    String getMsg() {
+      if (textKey == 'communitySoon') return l10n.communitySoon;
+      if (textKey == 'compareSoon') return l10n.compareSoon;
+      return '';
+    }
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset('assets/icon/icon.png', width: 300), // Logótipo da App em tamanho grande
+          Image.asset('assets/icon/icon.png', width: 300),
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Text(
-              text,
+              '${getMsg()}\n(${l10n.soonMessage})',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -360,29 +373,31 @@ class _AuthScreenState extends State<AuthScreen> {
 
   void _toast(String msg) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
 
-  String _authMsg(FirebaseAuthException e) {
+  String _authMsg(BuildContext context, FirebaseAuthException e) {
+    final l10n = AppLocalizations.of(context)!;
     switch (e.code) {
-      case 'user-not-found': return 'Utilizador não encontrado.';
-      case 'wrong-password': return 'Password incorreta.';
-      case 'invalid-email': return 'Email inválido.';
-      case 'email-already-in-use': return 'Este email já está a ser usado.';
-      case 'weak-password': return 'Password fraca (mín. 6 caracteres).';
-      default: return e.message ?? e.code;
+      case 'user-not-found': return l10n.errorUserNotFound;
+      case 'wrong-password': return l10n.errorWrongPassword;
+      case 'invalid-email': return l10n.errorInvalidEmail;
+      case 'email-already-in-use': return l10n.errorEmailAlreadyInUse;
+      case 'weak-password': return l10n.errorWeakPassword;
+      default: return l10n.errorGeneral(e.message ?? e.code);
     }
   }
 
   Future<void> _submit() async {
+    final l10n = AppLocalizations.of(context)!;
     FocusScope.of(context).unfocus();
     final email = emailCtrl.text.trim();
     final pass = passCtrl.text;
 
     if (email.isEmpty || pass.isEmpty) {
-      _toast('Preenche email e password.');
+      _toast(l10n.errorFillEmailPassword);
       return;
     }
 
     if (!isLogin && !acceptTerms) {
-      _toast('Precisas de aceitar os Termos e Condições.');
+      _toast(l10n.errorAcceptTerms);
       return;
     }
 
@@ -403,41 +418,41 @@ class _AuthScreenState extends State<AuthScreen> {
         }, SetOptions(merge: true));
       }
     } on FirebaseAuthException catch (e) {
-      _toast(_authMsg(e));
+      if (mounted) _toast(_authMsg(context, e));
     } catch (e) {
-      _toast('Erro: $e');
+      if (mounted) _toast(l10n.errorGeneral(e.toString()));
     } finally {
       if (mounted) setState(() => loading = false);
     }
   }
 
   Future<void> _resetPassword() async {
+    final l10n = AppLocalizations.of(context)!;
     FocusScope.of(context).unfocus();
     final email = emailCtrl.text.trim();
     if (email.isEmpty) {
-      _toast('Escreve o email acima e tenta novamente.');
+      _toast(l10n.resetEmailError);
       return;
     }
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-      _toast('Email enviado. (Vê spam também)');
+      if (mounted) _toast(l10n.resetEmailSent);
     } on FirebaseAuthException catch (e) {
-      _toast(_authMsg(e));
+      if (mounted) _toast(_authMsg(context, e));
     } catch (e) {
-      _toast('Erro: $e');
+      if (mounted) _toast(l10n.errorGeneral(e.toString()));
     }
   }
 
   void _showTerms() {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Termos e Condições'),
-        content: const SingleChildScrollView(
-          child: Text(AppTerms.termsText),
-        ),
+        title: Text(l10n.termsTitle),
+        content: SingleChildScrollView(child: Text(l10n.termsContent)),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Fechar')),
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.ok)),
         ],
       ),
     );
@@ -446,6 +461,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: _Shell(
@@ -473,10 +489,7 @@ class _AuthScreenState extends State<AuthScreen> {
               ],
             ),
             const SizedBox(height: 10),
-            Text(
-              'Conhece-te bem, relaciona-te melhor!',
-              style: TextStyle(color: cs.onSurfaceVariant),
-            ),
+            Text(l10n.welcomeMessage, style: TextStyle(color: cs.onSurfaceVariant)),
             const SizedBox(height: 18),
             _PrimaryCard(
               child: Column(
@@ -484,13 +497,13 @@ class _AuthScreenState extends State<AuthScreen> {
                   TextField(
                     controller: emailCtrl,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(labelText: 'Email'),
+                    decoration: InputDecoration(labelText: l10n.email),
                   ),
                   const SizedBox(height: 12),
                   TextField(
                     controller: passCtrl,
                     obscureText: true,
-                    decoration: const InputDecoration(labelText: 'Password'),
+                    decoration: InputDecoration(labelText: l10n.password),
                   ),
                   if (!isLogin) ...[
                     const SizedBox(height: 12),
@@ -504,7 +517,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           child: GestureDetector(
                             onTap: _showTerms,
                             child: Text(
-                              'Aceito os Termos e Condições',
+                              l10n.acceptTerms,
                               style: TextStyle(
                                 fontSize: 13,
                                 color: cs.primary,
@@ -519,20 +532,21 @@ class _AuthScreenState extends State<AuthScreen> {
                   const SizedBox(height: 14),
                   ElevatedButton(
                     onPressed: loading ? null : _submit,
-                    child: Text(loading ? 'Aguarda...' : (isLogin ? 'Entrar' : 'Criar conta')),
+                    child: Text(loading ? l10n.loading : (isLogin ? l10n.login : l10n.register)),
                   ),
                   const SizedBox(height: 8),
-                  TextButton(
-                    onPressed: loading ? null : _resetPassword,
-                    child: const Text('Esqueci-me da password'),
-                  ),
+                  if (isLogin)
+                    TextButton(
+                      onPressed: loading ? null : _resetPassword,
+                      child: Text(l10n.forgotPassword),
+                    ),
                 ],
               ),
             ),
             const SizedBox(height: 10),
             TextButton(
               onPressed: loading ? null : () => setState(() => isLogin = !isLogin),
-              child: Text(isLogin ? 'Não tens conta? Criar' : 'Já tens conta? Entrar'),
+              child: Text(isLogin ? l10n.noAccount : l10n.hasAccount),
             ),
           ],
         ),
@@ -563,9 +577,6 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
   String? _country;
   Place? _city;
 
-  String? _existingCountry;
-  String? _existingCity;
-
   @override
   void initState() {
     super.initState();
@@ -593,29 +604,26 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
     if (!snap.exists) return;
 
     final data = snap.data() ?? {};
-    setState(() {
-      nameCtrl.text = (data['name'] ?? '').toString().trim();
-      final birthDateStr = (data['birthDateStr'] ?? '').toString().trim();
-      if (birthDateStr.isNotEmpty) {
-        try {
-          birthDate = DateTime.parse(birthDateStr);
-          _birthDateController.text = _fmtDate(birthDate);
-        } catch (_) {}
-      }
-      final birthTimeStr = (data['birthTimeStr'] ?? '').toString().trim();
-      if (birthTimeStr.isNotEmpty) {
-        try {
-          final parts = birthTimeStr.split(':');
-          birthTime = TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
-          _birthTimeController.text = birthTimeStr;
-        } catch (_) {}
-      }
-      final place = data['place'];
-      if (place is Map) {
-        _existingCountry = (place['country'] ?? '').toString().trim();
-        _existingCity = (place['label'] ?? place['city'] ?? '').toString().trim();
-      }
-    });
+    if (mounted) {
+      setState(() {
+        nameCtrl.text = (data['name'] ?? '').toString().trim();
+        final birthDateStr = (data['birthDateStr'] ?? '').toString().trim();
+        if (birthDateStr.isNotEmpty) {
+          try {
+            birthDate = DateTime.parse(birthDateStr);
+            _birthDateController.text = _fmtDate(birthDate);
+          } catch (_) {}
+        }
+        final birthTimeStr = (data['birthTimeStr'] ?? '').toString().trim();
+        if (birthTimeStr.isNotEmpty) {
+          try {
+            final parts = birthTimeStr.split(':');
+            birthTime = TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+            _birthTimeController.text = birthTimeStr;
+          } catch (_) {}
+        }
+      });
+    }
   }
 
   Future<void> _loadPlaces() async {
@@ -624,20 +632,9 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
     setState(() {
       _places = list;
       final countries = _countries();
-      if (_existingCountry != null && countries.contains(_existingCountry)) {
-        _country = _existingCountry;
-      } else {
-        _country = countries.isNotEmpty ? countries.first : null;
-      }
+      _country = countries.isNotEmpty ? countries.first : null;
       final cities = _citiesForCountry(_country);
-      if (_existingCity != null && cities.isNotEmpty) {
-        _city = cities.firstWhere(
-          (c) => c.label == _existingCity || c.city == _existingCity,
-          orElse: () => cities.first,
-        );
-      } else {
-        _city = cities.isNotEmpty ? cities.first : null;
-      }
+      _city = cities.isNotEmpty ? cities.first : null;
     });
   }
 
@@ -659,12 +656,12 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
   String _p2(int n) => n.toString().padLeft(2, '0');
 
   String _fmtDate(DateTime? d) {
-    if (d == null) return 'Selecionar data';
+    if (d == null) return '...';
     return '${_p2(d.day)}/${_p2(d.month)}/${d.year}';
   }
 
   String _fmtTime(TimeOfDay? t) {
-    if (t == null) return 'Selecionar hora';
+    if (t == null) return '...';
     return '${_p2(t.hour)}:${_p2(t.minute)}';
   }
 
@@ -672,12 +669,13 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
     final now = DateTime.now();
     final initial = birthDate ?? DateTime(2000, 1, 1);
     DateTime temp = initial;
+    final l10n = AppLocalizations.of(context)!;
     final picked = await showModalBottomSheet<DateTime>(
       context: context,
       useSafeArea: true,
       builder: (context) {
         return _CupertinoPickerSheet(
-          title: 'Data de nascimento',
+          title: l10n.birthDate,
           onCancel: () => Navigator.pop(context),
           onDone: () => Navigator.pop(context, temp),
           child: SizedBox(
@@ -719,12 +717,13 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
   }
 
   Future<void> _save() async {
+    final l10n = AppLocalizations.of(context)!;
     FocusScope.of(context).unfocus();
     final uid = FirebaseAuth.instance.currentUser!.uid;
     final name = nameCtrl.text.trim();
 
     if (name.isEmpty || birthDate == null || birthTime == null || _city == null) {
-      _toast('Preenche nome, data, hora e cidade.');
+      _toast(l10n.errorFillProfile);
       return;
     }
 
@@ -741,7 +740,6 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
       final hdRes = await hd.calculate(birthUtc: birthUtc, lat: place.lat, lon: place.lon);
       final numRes = computeNumerology(fullName: name, birthDate: birthDate!);
 
-      // Cálculo de signos para salvar
       final hdData = hdRes.toJson();
       final sunLon = findBodyLongitude(hdData, true, 'Sun') ?? 0.0;
 
@@ -762,29 +760,21 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
         'birthTimeStr': '${_p2(birthTime!.hour)}:${_p2(birthTime!.minute)}',
         'birthUtc': birthUtc.toIso8601String(),
         'birthTzId': place.tzId,
-
-        // Estrutura Astro Única
         'astro': {
           'ascendantDeg': asc,
-          'ascendantSign': getZodiacSign(asc),
-          'sunSign': getZodiacSign(sunLon),
+          'ascendantSign': getZodiacSign(context, asc),
+          'sunSign': getZodiacSign(context, sunLon),
           'sunDeg': sunLon,
         },
-
         'humanDesignBase': hdData,
         'numerology': numRes.toJson(),
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
-      // 1) Limpar insights de perfil
       await userRef.collection('aiInsights').doc('latest').delete();
-      
-      // 2) Limpar dica diária de HOJE (usando data atual, não de nascimento)
       final now = DateTime.now();
       final todayKey = '${now.year}-${_p2(now.month)}-${_p2(now.day)}';
       await userRef.collection('dailyTips').doc(todayKey).delete();
-
-      // 3) Limpar permissões de anúncios (gates) para forçar novo contexto
       await userRef.update({
         'aiGates.dailyTip': FieldValue.delete(),
         'aiGates.profile': FieldValue.delete(),
@@ -796,7 +786,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
         }
       }
     } catch (e) {
-      _toast('Erro ao guardar/calcular: $e');
+      if (mounted) _toast(l10n.errorSavingProfile(e.toString()));
     } finally {
       if (mounted) setState(() => saving = false);
     }
@@ -805,20 +795,12 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     final countries = _countries();
     final cities = _citiesForCountry(_country);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Criar perfil'),
-        actions: [
-          IconButton(
-            tooltip: 'Logout',
-            onPressed: () async => FirebaseAuth.instance.signOut(),
-            icon: const Icon(Icons.logout),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: Text(l10n.createProfile)),
       body: _Shell(
         child: ListView(
           children: [
@@ -826,11 +808,11 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Dados base', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                  Text(l10n.baseData, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                   const SizedBox(height: 8),
-                  Text('Isto permite calcular Human Design + ascendente.', style: TextStyle(color: cs.onSurfaceVariant)),
+                  Text(l10n.baseDataDesc, style: TextStyle(color: cs.onSurfaceVariant)),
                   const SizedBox(height: 14),
-                  TextField(controller: nameCtrl, decoration: const InputDecoration(labelText: 'Nome')),
+                  TextField(controller: nameCtrl, decoration: InputDecoration(labelText: l10n.name)),
                   const SizedBox(height: 12),
                   Row(
                     children: [
@@ -838,7 +820,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                         child: OutlinedButton.icon(
                           onPressed: _pickDateWheel,
                           icon: const Icon(Icons.cake_outlined),
-                          label: Text(_fmtDate(birthDate)),
+                          label: Text(birthDate == null ? l10n.selectDate : _fmtDate(birthDate)),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -846,7 +828,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                         child: OutlinedButton.icon(
                           onPressed: _pickTimeWheel,
                           icon: const Icon(Icons.schedule),
-                          label: Text(_fmtTime(birthTime)),
+                          label: Text(birthTime == null ? l10n.selectTime : _fmtTime(birthTime)),
                         ),
                       ),
                     ],
@@ -856,9 +838,9 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                     const Center(child: Padding(padding: EdgeInsets.all(12), child: CircularProgressIndicator()))
                   else ...[
                     DropdownButtonFormField<String>(
-                      key: ValueKey('country_$_country'), // Resolve warnings e mantém sincronização
+                      key: ValueKey('country_$_country'),
                       initialValue: _country, 
-                      decoration: const InputDecoration(labelText: 'País'),
+                      decoration: InputDecoration(labelText: l10n.country),
                       items: countries.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
                       onChanged: (v) {
                         setState(() {
@@ -870,9 +852,9 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                     ),
                     const SizedBox(height: 12),
                     DropdownButtonFormField<Place>(
-                      key: ValueKey('city_$_city'), // Resolve warnings e mantém sincronização
+                      key: ValueKey('city_$_city'),
                       initialValue: _city, 
-                      decoration: const InputDecoration(labelText: 'Cidade'),
+                      decoration: InputDecoration(labelText: l10n.city),
                       items: cities.map((p) => DropdownMenuItem(value: p, child: Text(p.city))).toList(),
                       onChanged: (v) => setState(() => _city = v),
                     ),
@@ -880,7 +862,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                   const SizedBox(height: 14),
                   ElevatedButton(
                     onPressed: saving ? null : _save,
-                    child: Text(saving ? 'A guardar...' : 'Guardar perfil'),
+                    child: Text(saving ? l10n.processing : l10n.saveProfile),
                   ),
                 ],
               ),
@@ -902,6 +884,7 @@ class _CupertinoPickerSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     return Material(
       color: cs.surface,
       child: Column(
@@ -911,9 +894,9 @@ class _CupertinoPickerSheet extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(14, 10, 14, 8),
             child: Row(
               children: [
-                TextButton(onPressed: onCancel, child: const Text('Cancelar')),
+                TextButton(onPressed: onCancel, child: Text(l10n.cancel)),
                 Expanded(child: Text(title, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w900))),
-                TextButton(onPressed: onDone, child: const Text('OK')),
+                TextButton(onPressed: onDone, child: Text(l10n.ok)),
               ],
             ),
           ),
@@ -957,16 +940,8 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
     return parts.isEmpty ? '' : parts.first;
   }
 
-  DateTime? _birthDateFromStr(String s) {
-    final parts = s.trim().split('-');
-    if (parts.length != 3) return null;
-    final y = int.tryParse(parts[0]), m = int.tryParse(parts[1]), d = int.tryParse(parts[2]);
-    if (y == null || m == null || d == null) return null;
-    return DateTime(y, m, d);
-  }
-
-  String _formatDateStr(String? key) {
-    if (key == null || !key.contains('-')) return 'Dica Diária';
+  String _formatDateStr(String? key, String defaultTitle) {
+    if (key == null || !key.contains('-')) return defaultTitle;
     final parts = key.split('-');
     if (parts.length != 3) return key;
     return '${parts[2]}-${parts[1]}-${parts[0]}';
@@ -978,6 +953,7 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
     final userRef = FirebaseFirestore.instance.collection('users').doc(user.uid);
     final insightsRef = userRef.collection('aiInsights').doc('latest');
     final lastTipQuery = userRef.collection('dailyTips').orderBy('dateKey', descending: true).limit(1);
+    final l10n = AppLocalizations.of(context)!;
 
     return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
       stream: userRef.snapshots(),
@@ -995,11 +971,11 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
         final hdBase = (u['humanDesignBase'] as Map?)?.cast<String, dynamic>();
         final astro = (u['astro'] as Map?)?.cast<String, dynamic>() ?? {};
 
-        final sunSign = astro['sunSign'] ?? (findBodyLongitude(hdBase, true, 'Sun') != null ? getZodiacSign(findBodyLongitude(hdBase, true, 'Sun')!) : '—');
-        final ascSign = astro['ascendantSign'] ?? (astro['ascendantDeg'] != null ? getZodiacSign((astro['ascendantDeg'] as num).toDouble()) : '—');
+        final sunSign = astro['sunSign'] ?? (findBodyLongitude(hdBase, true, 'Sun') != null ? getZodiacSign(context, findBodyLongitude(hdBase, true, 'Sun')!) : '—');
+        final ascSign = astro['ascendantSign'] ?? (astro['ascendantDeg'] != null ? getZodiacSign(context, (astro['ascendantDeg'] as num).toDouble()) : '—');
 
         final storedNum = u['numerology'] as Map?;
-        final numerology = storedNum != null ? NumerologyResult(lifePath: storedNum['lifePath'], expression: storedNum['expression'], soul: storedNum['soul'], personality: storedNum['personality']) : (fullName.isNotEmpty && _birthDateFromStr(birthDateStr) != null) ? computeNumerology(fullName: fullName, birthDate: _birthDateFromStr(birthDateStr)!) : null;
+        final numerology = storedNum != null ? NumerologyResult(lifePath: storedNum['lifePath'], expression: storedNum['expression'], soul: storedNum['soul'], personality: storedNum['personality']) : null;
 
         _autoGenerateDailyTip();
 
@@ -1019,21 +995,21 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          first.isEmpty ? 'Olá!' : 'Olá $first',
+                          first.isEmpty ? l10n.greetingEmpty : l10n.greeting(first),
                           style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
                         ),
                       ),
                       IconButton(
-                        tooltip: 'Editar Perfil',
+                        tooltip: l10n.update,
                         onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfileInputScreen())),
                         icon: const Icon(Icons.edit_outlined),
                       ),
                     ],
                   ),
                   const SizedBox(height: 12),
-                  if (birthDateText.isNotEmpty) _InfoRow(icon: Icons.cake_outlined, label: 'Data de nascimento', value: birthDateText),
+                  if (birthDateText.isNotEmpty) _InfoRow(icon: Icons.cake_outlined, label: l10n.birthDate, value: birthDateText),
                   if (birthDateText.isNotEmpty) const SizedBox(height: 8),
-                  if (placeLabel.isNotEmpty) _InfoRow(icon: Icons.place_outlined, label: 'Local de nascimento', value: placeLabel),
+                  if (placeLabel.isNotEmpty) _InfoRow(icon: Icons.place_outlined, label: l10n.birthPlace, value: placeLabel),
                 ],
               ),
             ),
@@ -1042,9 +1018,9 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Human Design', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                  Text(l10n.hdTitle, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                   const SizedBox(height: 12),
-                  if (hdBase == null) const Text('Ainda a calcular Human Design...') else HumanDesignSection(hd: hdBase),
+                  if (hdBase == null) Text(l10n.hdCalculating) else HumanDesignSection(hd: hdBase),
                 ],
               ),
             ),
@@ -1053,11 +1029,11 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Astrologia', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                  Text(l10n.astroTitle, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                   const SizedBox(height: 12),
-                  _KeyValueRow(icon: Icons.wb_sunny_outlined, label: 'Signo', value: sunSign),
+                  _KeyValueRow(icon: Icons.wb_sunny_outlined, label: l10n.zodiacSign, value: sunSign),
                   const SizedBox(height: 8),
-                  _KeyValueRow(icon: Icons.north_outlined, label: 'Ascendente', value: ascSign),
+                  _KeyValueRow(icon: Icons.north_outlined, label: l10n.ascendant, value: ascSign),
                 ],
               ),
             ),
@@ -1066,16 +1042,16 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Numerologia', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                  Text(l10n.numTitle, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                   const SizedBox(height: 12),
                   if (numerology == null) const Text('—') else ...[
-                    _KeyValueRow(icon: Icons.tag_outlined, label: 'Caminho de Vida', value: numerology.lifePath.toString()),
+                    _KeyValueRow(icon: Icons.tag_outlined, label: l10n.lifePath, value: numerology.lifePath.toString()),
                     const SizedBox(height: 8),
-                    _KeyValueRow(icon: Icons.tag_outlined, label: 'Expressão', value: numerology.expression.toString()),
+                    _KeyValueRow(icon: Icons.tag_outlined, label: l10n.expression, value: numerology.expression.toString()),
                     const SizedBox(height: 8),
-                    _KeyValueRow(icon: Icons.tag_outlined, label: 'Alma', value: numerology.soul.toString()),
+                    _KeyValueRow(icon: Icons.tag_outlined, label: l10n.soul, value: numerology.soul.toString()),
                     const SizedBox(height: 8),
-                    _KeyValueRow(icon: Icons.tag_outlined, label: 'Personalidade', value: numerology.personality.toString()),
+                    _KeyValueRow(icon: Icons.tag_outlined, label: l10n.personality, value: numerology.personality.toString()),
                   ],
                 ],
               ),
@@ -1090,13 +1066,13 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Insights de Perfil', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                        Text(l10n.profileInsights, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                         const SizedBox(height: 10),
-                        const Text('Ainda não tens insights gerados.'),
+                        Text(l10n.noInsights),
                         const SizedBox(height: 12),
                         ElevatedButton(
                           onPressed: () => _ai.runInsightsBehindRewardedAd(),
-                          child: const Text('Gerar Insights (Anúncio)'),
+                          child: Text(l10n.generateInsights),
                         ),
                       ],
                     ),
@@ -1109,18 +1085,18 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                     children: [
                       Row(
                         children: [
-                          const Expanded(child: Text('Insights de Perfil', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900))),
+                          Expanded(child: Text(l10n.profileInsights, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900))),
                           TextButton.icon(
                             onPressed: () => _ai.runInsightsBehindRewardedAd(),
                             icon: const Icon(Icons.auto_awesome_outlined),
-                            label: const Text('Atualizar'),
+                            label: Text(l10n.update),
                           ),
                         ],
                       ),
                       const SizedBox(height: 10),
                       Text(ins['summary']?.toString() ?? '—'),
                       const SizedBox(height: 12),
-                      const Text('Pilares do teu Perfil', style: TextStyle(fontWeight: FontWeight.w900)),
+                      Text(l10n.profilePillars, style: const TextStyle(fontWeight: FontWeight.w900)),
                       _bullets(ins['insights'] ?? []),
                     ],
                   ),
@@ -1139,14 +1115,14 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                 final lastTipData = lastTipDoc?.data() ?? {};
                 
                 final formattedDate = lastTipDoc != null 
-                    ? _formatDateStr(lastTipDoc.id) 
-                    : _formatDateStr(_ai.todayKeyLocal());
+                    ? _formatDateStr(lastTipDoc.id, l10n.dailyTip) 
+                    : _formatDateStr(_ai.todayKeyLocal(), l10n.dailyTip);
 
                 return _PrimaryCard(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Dica Diária', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                      Text(l10n.dailyTip, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                       const SizedBox(height: 10),
                       Text(formattedDate, style: const TextStyle(fontWeight: FontWeight.w900)),
                       const SizedBox(height: 8),
@@ -1155,7 +1131,7 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                         ElevatedButton.icon(
                           onPressed: () => _ai.runTipsBehindRewardedAd(),
                           icon: const Icon(Icons.auto_awesome_outlined),
-                          label: const Text('Obter dica diária (Anúncio)'),
+                          label: Text(l10n.getDailyTip),
                         ),
                         const SizedBox(height: 14),
                       ],
@@ -1163,7 +1139,7 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                       if (lastTipDoc != null)
                         Text(lastTipData['text']?.toString() ?? '—')
                       else
-                        const Text('Vê o anúncio para obteres a tua dica diária'),
+                        Text(l10n.watchAdForTip),
                     ],
                   ),
                 );

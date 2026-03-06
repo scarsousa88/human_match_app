@@ -37,6 +37,7 @@ flutter_launcher_icons:
   image_path: "assets/icon/icon.png"
 
 flutter:
+  generate: true # ATIVADO: Para gerar ficheiros de tradução automaticamente
   uses-material-design: true
 
   assets:

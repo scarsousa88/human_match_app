@@ -1,0 +1,258 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for English (`en`).
+class AppLocalizationsEn extends AppLocalizations {
+  AppLocalizationsEn([String locale = 'en']) : super(locale);
+
+  @override
+  String get appTitle => 'Human Match';
+
+  @override
+  String get tabProfile => 'My Profile';
+
+  @override
+  String get tabCommunity => 'Community';
+
+  @override
+  String get tabCompare => 'Compare';
+
+  @override
+  String get welcomeMessage => 'Know yourself, relate better!';
+
+  @override
+  String get soonMessage => 'Soon';
+
+  @override
+  String get communitySoon => 'Explore nearby and compatible profiles';
+
+  @override
+  String get compareSoon => 'Compare profiles manually';
+
+  @override
+  String get logout => 'Logout';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get login => 'Login';
+
+  @override
+  String get register => 'Create account';
+
+  @override
+  String get forgotPassword => 'Forgot password';
+
+  @override
+  String get noAccount => 'No account? Register';
+
+  @override
+  String get hasAccount => 'Already have an account? Login';
+
+  @override
+  String get acceptTerms => 'I accept the Terms and Conditions';
+
+  @override
+  String get termsTitle => 'Terms and Conditions';
+
+  @override
+  String get termsContent =>
+      'Welcome to Human Match.\n\n1. Data Protection: By using this application, you agree to the processing of your birth data (date, time, and location) for calculating your Human Design, Astrology, and Numerology profile.\n\n2. Artificial Intelligence: The insights and tips generated are produced by AI models and should be interpreted as self-knowledge suggestions, not as professional or medical advice.\n\n3. Ads: The application uses rewarded ads to unlock free content. Anonymous advertising data may be processed by Google AdMob.\n\n4. Privacy: We do not share your personal data with third parties. You can delete your account at any time in the settings.\n\nBy accepting, you confirm that you are over 18 years old or have parental authorization.';
+
+  @override
+  String get processing => 'Processing...';
+
+  @override
+  String get acceptAndContinue => 'Accept and continue';
+
+  @override
+  String get cancelAndExit => 'Cancel and exit';
+
+  @override
+  String get loading => 'Wait...';
+
+  @override
+  String get createProfile => 'Create profile';
+
+  @override
+  String get baseData => 'Base data';
+
+  @override
+  String get baseDataDesc =>
+      'This allows calculating Human Design + ascendant.';
+
+  @override
+  String get name => 'Name';
+
+  @override
+  String get country => 'Country';
+
+  @override
+  String get city => 'City';
+
+  @override
+  String get saveProfile => 'Save profile';
+
+  @override
+  String get birthDate => 'Birth date';
+
+  @override
+  String get birthPlace => 'Birth place';
+
+  @override
+  String get selectDate => 'Select date';
+
+  @override
+  String get selectTime => 'Select time';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String greeting(String name) {
+    return 'Hello $name';
+  }
+
+  @override
+  String get greetingEmpty => 'Hello!';
+
+  @override
+  String get hdTitle => 'Human Design';
+
+  @override
+  String get hdCalculating => 'Calculating Human Design...';
+
+  @override
+  String get astroTitle => 'Astrology';
+
+  @override
+  String get zodiacSign => 'Sign';
+
+  @override
+  String get ascendant => 'Ascendant';
+
+  @override
+  String get numTitle => 'Numerology';
+
+  @override
+  String get lifePath => 'Life Path';
+
+  @override
+  String get expression => 'Expression';
+
+  @override
+  String get soul => 'Soul';
+
+  @override
+  String get personality => 'Personality';
+
+  @override
+  String get profileInsights => 'Profile Insights';
+
+  @override
+  String get noInsights => 'You don\'t have insights generated yet.';
+
+  @override
+  String get generateInsights => 'Generate Insights (Ad)';
+
+  @override
+  String get update => 'Update';
+
+  @override
+  String get profilePillars => 'Your Profile Pillars';
+
+  @override
+  String get dailyTip => 'Daily Tip';
+
+  @override
+  String get getDailyTip => 'Get daily tip (Ad)';
+
+  @override
+  String get watchAdForTip => 'Watch the ad to get your daily tip';
+
+  @override
+  String get errorFillEmailPassword => 'Fill in email and password.';
+
+  @override
+  String get errorAcceptTerms => 'You need to accept the Terms and Conditions.';
+
+  @override
+  String get resetEmailSent => 'Email sent. (Check spam too)';
+
+  @override
+  String get resetEmailError => 'Write your email above and try again.';
+
+  @override
+  String get errorUserNotFound => 'User not found.';
+
+  @override
+  String get errorWrongPassword => 'Wrong password.';
+
+  @override
+  String get errorInvalidEmail => 'Invalid email.';
+
+  @override
+  String get errorEmailAlreadyInUse => 'This email is already in use.';
+
+  @override
+  String get errorWeakPassword => 'Weak password (min. 6 characters).';
+
+  @override
+  String errorGeneral(String error) {
+    return 'Error: $error';
+  }
+
+  @override
+  String get errorFillProfile => 'Fill in name, date, time, and city.';
+
+  @override
+  String errorSavingProfile(String error) {
+    return 'Error saving/calculating: $error';
+  }
+
+  @override
+  String get signAries => 'Aries';
+
+  @override
+  String get signTaurus => 'Taurus';
+
+  @override
+  String get signGemini => 'Gemini';
+
+  @override
+  String get signCancer => 'Cancer';
+
+  @override
+  String get signLeo => 'Leo';
+
+  @override
+  String get signVirgo => 'Virgo';
+
+  @override
+  String get signLibra => 'Libra';
+
+  @override
+  String get signScorpio => 'Scorpio';
+
+  @override
+  String get signSagittarius => 'Sagittarius';
+
+  @override
+  String get signCapricorn => 'Capricorn';
+
+  @override
+  String get signAquarius => 'Aquarius';
+
+  @override
+  String get signPisces => 'Pisces';
+}
