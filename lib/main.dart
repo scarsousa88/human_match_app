@@ -583,6 +583,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
   List<Place> _places = [];
   String? _country;
   Place? _city;
+  String? _tempCityName;
 
   @override
   void initState() {
@@ -629,6 +630,12 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
             _birthTimeController.text = birthTimeStr;
           } catch (_) {}
         }
+        
+        final placeData = data['place'] as Map?;
+        if (placeData != null) {
+          _country = placeData['country']?.toString();
+          _tempCityName = placeData['city']?.toString();
+        }
       });
     }
   }
@@ -639,9 +646,23 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
     setState(() {
       _places = list;
       final countries = _countries();
-      _country = countries.isNotEmpty ? countries.first : null;
+      
+      if (_country == null || !countries.contains(_country)) {
+        _country = countries.isNotEmpty ? countries.first : null;
+      }
+
       final cities = _citiesForCountry(_country);
-      _city = cities.isNotEmpty ? cities.first : null;
+      
+      if (_tempCityName != null) {
+        final match = cities.where((p) => p.city == _tempCityName).toList();
+        if (match.isNotEmpty) {
+          _city = match.first;
+        } else {
+          _city = cities.isNotEmpty ? cities.first : null;
+        }
+      } else {
+        _city = cities.isNotEmpty ? cities.first : null;
+      }
     });
   }
 
