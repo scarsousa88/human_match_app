@@ -23,6 +23,7 @@ import 'calc/human_design.dart';
 import 'calc/numerology.dart';
 import 'hd/human_design_section.dart';
 import 'ai_actions.dart';
+import 'app_terms.dart'; // Novo import
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -156,6 +157,14 @@ class ProfileGate extends StatelessWidget {
         }
 
         final data = snap.data?.data() ?? {};
+        
+        // 1. Verificar se aceitou a versão ATUAL dos termos
+        final acceptedVersion = data['acceptedTermsVersion']?.toString();
+        if (acceptedVersion != AppTerms.currentVersion) {
+          return const TermsConsentScreen();
+        }
+
+        // 2. Verificar se o perfil está completo
         final hasName = (data['name'] ?? '').toString().trim().isNotEmpty;
         final hasPlace = (data['place'] is Map) && (data['place']['tzId'] != null);
         final hasBirthDate = (data['birthDateStr'] ?? '').toString().trim().isNotEmpty;
@@ -171,6 +180,66 @@ class ProfileGate extends StatelessWidget {
   }
 }
 
+/// ---------------- TERMS CONSENT (FOR EXISTING USERS) ----------------
+
+class TermsConsentScreen extends StatefulWidget {
+  const TermsConsentScreen({super.key});
+
+  @override
+  State<TermsConsentScreen> createState() => _TermsConsentScreenState();
+}
+
+class _TermsConsentScreenState extends State<TermsConsentScreen> {
+  bool loading = false;
+
+  Future<void> _accept() async {
+    setState(() => loading = true);
+    try {
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+      await FirebaseFirestore.instance.collection('users').doc(uid).update({
+        'acceptTerms': true,
+        'acceptedTermsVersion': AppTerms.currentVersion, // Grava a versão aceite
+        'termsAcceptedAt': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Erro ao aceitar: $e')));
+    } finally {
+      if (mounted) setState(() => loading = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Scaffold(
+      appBar: AppBar(title: const Text('Termos e Condições')),
+      body: _Shell(
+        child: Column(
+          children: [
+            Expanded(
+              child: _PrimaryCard(
+                child: SingleChildScrollView(
+                  child: Text(AppTerms.termsText, style: TextStyle(color: cs.onSurface)),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: loading ? null : _accept,
+              child: Text(loading ? 'A processar...' : 'Aceito e desejo continuar'),
+            ),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: () => FirebaseAuth.instance.signOut(),
+              child: const Text('Cancelar e sair'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 /// ---------------- NAVIGATION (TABS) ----------------
 
 class MainNavigationScreen extends StatefulWidget {
@@ -181,12 +250,12 @@ class MainNavigationScreen extends StatefulWidget {
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  int _currentIndex = 0; // Começa no Perfil (Direita)
+  int _currentIndex = 0; // Começa no Perfil
 
   final List<Widget> _screens = [
     const ProfileSummaryScreen(),
-    const Center(child: Text('\nExplora perfis próximos e compatíveis\n(Brevemente)', textAlign: TextAlign.center)),
-    const Center(child: Text('\nCompara perfis manualmente\n(Brevemente)', textAlign: TextAlign.center)),
+    const _PlaceholderTab(icon: Icons.people_outline, text: 'Explora perfis próximos e compatíveis\n(Brevemente)'),
+    const _PlaceholderTab(icon: Icons.compare_arrows, text: 'Compara perfis manualmente\n(Brevemente)'),
   ];
 
   final List<String> _titles = ['O meu Perfil', 'Comunidade', 'Comparar'];
@@ -218,7 +287,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
             activeIcon: Icon(Icons.person),
-            label: 'O meu Perfil',
+            label: 'Perfil',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people_outline),
@@ -230,6 +299,26 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             activeIcon: Icon(Icons.compare_arrows),
             label: 'Comparar',
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PlaceholderTab extends StatelessWidget {
+  final IconData icon;
+  final String text;
+  const _PlaceholderTab({required this.icon, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 80, color: Theme.of(context).colorScheme.primary.withOpacity(0.2)),
+          const SizedBox(height: 16),
+          Text(text, textAlign: TextAlign.center, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
         ],
       ),
     );
@@ -248,6 +337,7 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   bool isLogin = true;
   bool loading = false;
+  bool acceptTerms = false;
 
   final emailCtrl = TextEditingController();
   final passCtrl = TextEditingController();
@@ -282,6 +372,11 @@ class _AuthScreenState extends State<AuthScreen> {
       return;
     }
 
+    if (!isLogin && !acceptTerms) {
+      _toast('Precisas de aceitar os Termos e Condições.');
+      return;
+    }
+
     setState(() => loading = true);
     try {
       if (isLogin) {
@@ -291,6 +386,9 @@ class _AuthScreenState extends State<AuthScreen> {
         final uid = FirebaseAuth.instance.currentUser!.uid;
         await FirebaseFirestore.instance.collection('users').doc(uid).set({
           'email': email,
+          'acceptTerms': true,
+          'acceptedTermsVersion': AppTerms.currentVersion, // Grava versão no registo
+          'termsAcceptedAt': FieldValue.serverTimestamp(),
           'createdAt': FieldValue.serverTimestamp(),
           'updatedAt': FieldValue.serverTimestamp(),
         }, SetOptions(merge: true));
@@ -319,6 +417,21 @@ class _AuthScreenState extends State<AuthScreen> {
     } catch (e) {
       _toast('Erro: $e');
     }
+  }
+
+  void _showTerms() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Termos e Condições'),
+        content: const SingleChildScrollView(
+          child: Text(AppTerms.termsText),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Fechar')),
+        ],
+      ),
+    );
   }
 
   @override
@@ -370,6 +483,30 @@ class _AuthScreenState extends State<AuthScreen> {
                     obscureText: true,
                     decoration: const InputDecoration(labelText: 'Password'),
                   ),
+                  if (!isLogin) ...[
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: acceptTerms,
+                          onChanged: (v) => setState(() => acceptTerms = v ?? false),
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: _showTerms,
+                            child: Text(
+                              'Aceito os Termos e Condições',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: cs.primary,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                   const SizedBox(height: 14),
                   ElevatedButton(
                     onPressed: loading ? null : _submit,
@@ -837,7 +974,7 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
       stream: userRef.snapshots(),
       builder: (context, userSnap) {
         if (userSnap.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
-        
+
         final u = userSnap.data?.data() ?? {};
         final fullName = (u['name'] ?? '').toString().trim();
         final first = _firstName(fullName);
