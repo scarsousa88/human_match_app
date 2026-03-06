@@ -91,7 +91,8 @@
   "hdNotSelf": "Non-soi",
   "hdDefinition": "Définition",
   "hdIncarnationCross": "Croix",
-  "hdDefinedCenters": "Centres définis",
+  "hdEnergyCenters": "Centres énergétiques",
+  "hdDefinedCenters": "Centros définis",
   "hdChannels": "Canaux",
   "hdNoData": "Aucune donnée disponible.",
   "hdAuthorityNotice": "* {center} est le centre d'autorité",
@@ -126,7 +127,7 @@
   "hdSigSur": "Surprise",
 
   "hdNotFru": "Frustration",
-  "hdNotBit": "Amertume",
+  "hdNotBit": "Amargure",
   "hdNotAng": "Colère",
   "hdNotDis": "Déception",
 

@@ -630,6 +630,12 @@ abstract class AppLocalizations {
   /// **'Cruz'**
   String get hdIncarnationCross;
 
+  /// No description provided for @hdEnergyCenters.
+  ///
+  /// In pt, this message translates to:
+  /// **'Centros energéticos'**
+  String get hdEnergyCenters;
+
   /// No description provided for @hdDefinedCenters.
   ///
   /// In pt, this message translates to:

@@ -280,6 +280,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get hdIncarnationCross => 'Cruz';
 
   @override
+  String get hdEnergyCenters => 'Centros energéticos';
+
+  @override
   String get hdDefinedCenters => 'Centros definidos';
 
   @override

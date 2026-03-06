@@ -385,29 +385,30 @@ class HumanDesignSection extends StatelessWidget {
 
   static String centerL10n(BuildContext context, String s) {
     final l10n = AppLocalizations.of(context)!;
+    final isPt = Localizations.localeOf(context).languageCode == 'pt';
     final k = s.trim().toLowerCase();
     switch (k) {
       case 'head':
-        return l10n.hdCenterHead;
+        return isPt ? "Head (Cabeça)" : l10n.hdCenterHead;
       case 'ajna':
         return l10n.hdCenterAjna;
       case 'throat':
-        return l10n.hdCenterThroat;
+        return isPt ? "Throat (Garganta)" : l10n.hdCenterThroat;
       case 'g':
-        return l10n.hdCenterG;
+        return isPt ? "G / Identity (Centro G ou Identidade)" : l10n.hdCenterG;
       case 'ego':
       case 'heart':
       case 'will':
-        return l10n.hdCenterEgo;
+        return isPt ? "Heart / Ego / Will (Coração / Ego / Vontade)" : l10n.hdCenterEgo;
       case 'spleen':
-        return l10n.hdCenterSpleen;
+        return isPt ? "Spleen (Baço)" : l10n.hdCenterSpleen;
       case 'solarplexus':
       case 'solar plexus':
-        return l10n.hdCenterSolar;
+        return isPt ? "Solar Plexus (Plexo Solar / Emocional)" : l10n.hdCenterSolar;
       case 'sacral':
-        return l10n.hdCenterSacral;
+        return isPt ? "Sacral (Sacro)" : l10n.hdCenterSacral;
       case 'root':
-        return l10n.hdCenterRoot;
+        return isPt ? "Root (Raiz)" : l10n.hdCenterRoot;
       default:
         return s;
     }
@@ -485,18 +486,41 @@ class _CentersChannelsTable extends StatelessWidget {
   final List<String> definedChannels;
   final String? authorityCenter;
 
+  String _normalizeKey(String s) {
+    final k = s.trim().toLowerCase();
+    if (k == 'ego' || k == 'will' || k == 'heart') return 'heart';
+    if (k == 'solarplexus' || k == 'solar plexus') return 'solar plexus';
+    return k;
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final centerItems = definedCenters.map((s) => HumanDesignSection.centerL10n(context, s)).toList()..sort();
-    final channelItems = definedChannels;
 
-    final maxLen = centerItems.length > channelItems.length ? centerItems.length : channelItems.length;
-    final authorityLabel = authorityCenter == null ? null : HumanDesignSection.centerL10n(context, authorityCenter!);
+    // Fixed order as requested
+    const allCenterKeys = [
+      'head',
+      'ajna',
+      'throat',
+      'g',
+      'heart',
+      'solar plexus',
+      'spleen',
+      'sacral',
+      'root',
+    ];
+
+    final normalizedDefined = definedCenters.map(_normalizeKey).toSet();
+    final authKey = authorityCenter == null ? null : _normalizeKey(authorityCenter!);
+
+    final channelItems = definedChannels;
+    final maxLen = allCenterKeys.length > channelItems.length ? allCenterKeys.length : channelItems.length;
 
     final titleStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
           fontSize: (Theme.of(context).textTheme.titleSmall?.fontSize ?? 14) + 1,
         );
+
+    final authorityLabel = authorityCenter == null ? null : HumanDesignSection.centerL10n(context, authorityCenter!);
 
     return Card(
       elevation: 0,
@@ -506,7 +530,7 @@ class _CentersChannelsTable extends StatelessWidget {
           children: [
             Row(
               children: [
-                Expanded(child: Center(child: Text(l10n.hdDefinedCenters, style: titleStyle))),
+                Expanded(child: Center(child: Text(l10n.hdEnergyCenters, style: titleStyle))),
                 const SizedBox(width: 10),
                 Expanded(child: Center(child: Text(l10n.hdChannels, style: titleStyle))),
               ],
@@ -514,47 +538,41 @@ class _CentersChannelsTable extends StatelessWidget {
             const SizedBox(height: 10),
             const Divider(height: 1),
             const SizedBox(height: 10),
-            if (maxLen == 0)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Text(
-                  l10n.hdNoData,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontSize: (Theme.of(context).textTheme.bodyMedium?.fontSize ?? 14) + 1,
-                      ),
-                ),
-              )
-            else
-              ...List.generate(maxLen, (i) {
-                final c = i < centerItems.length ? centerItems[i] : null;
-                final ch = i < channelItems.length ? channelItems[i] : null;
-                final isAuthority = authorityLabel != null && c == authorityLabel;
+            ...List.generate(maxLen, (i) {
+              final cKey = i < allCenterKeys.length ? allCenterKeys[i] : null;
+              final ch = i < channelItems.length ? channelItems[i] : null;
 
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: c == null
-                            ? const SizedBox()
-                            : _Pill(
-                                text: c,
-                                tone: isAuthority ? _PillTone.authority : _PillTone.conscious,
-                              ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: ch == null
-                            ? const SizedBox()
-                            : _Pill(
-                                text: ch,
-                                tone: _PillTone.conscious,
-                              ),
-                      ),
-                    ],
-                  ),
-                );
-              }),
+              final isDefined = cKey != null && normalizedDefined.contains(cKey);
+              final isAuthority = cKey != null && authKey == cKey;
+              final cName = cKey == null ? null : HumanDesignSection.centerL10n(context, cKey);
+
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: cName == null
+                          ? const SizedBox()
+                          : _Pill(
+                              text: cName,
+                              tone: isDefined
+                                  ? (isAuthority ? _PillTone.authority : _PillTone.conscious)
+                                  : _PillTone.undefined,
+                            ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: ch == null
+                          ? const SizedBox()
+                          : _Pill(
+                              text: ch,
+                              tone: _PillTone.conscious,
+                            ),
+                    ),
+                  ],
+                ),
+              );
+            }),
             if (authorityLabel != null) ...[
               const Divider(height: 1),
               const SizedBox(height: 10),
@@ -737,7 +755,7 @@ class _ActivationCompareRow extends StatelessWidget {
   }
 }
 
-enum _PillTone { conscious, design, authority }
+enum _PillTone { conscious, design, authority, undefined }
 
 class _Pill extends StatelessWidget {
   const _Pill({required this.text, required this.tone});
@@ -764,10 +782,14 @@ class _Pill extends StatelessWidget {
         border = Colors.purpleAccent.withValues(alpha: 0.45);
         bg = Colors.purpleAccent.withValues(alpha: 0.12);
         break;
+      case _PillTone.undefined:
+        border = Colors.white.withValues(alpha: 0.08);
+        bg = Colors.transparent;
+        break;
     }
 
-    final Color fg = isDash
-        ? (Theme.of(context).textTheme.bodySmall?.color?.withValues(alpha: 0.6) ?? Colors.white.withValues(alpha: 0.6))
+    final Color fg = (isDash || tone == _PillTone.undefined)
+        ? (Theme.of(context).textTheme.bodySmall?.color?.withValues(alpha: 0.5) ?? Colors.white.withValues(alpha: 0.5))
         : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white);
 
     return Container(

@@ -287,7 +287,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hdIncarnationCross => 'Croix';
 
   @override
-  String get hdDefinedCenters => 'Centres définis';
+  String get hdEnergyCenters => 'Centres énergétiques';
+
+  @override
+  String get hdDefinedCenters => 'Centros définis';
 
   @override
   String get hdChannels => 'Canaux';
@@ -376,7 +379,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hdNotFru => 'Frustration';
 
   @override
-  String get hdNotBit => 'Amertume';
+  String get hdNotBit => 'Amargure';
 
   @override
   String get hdNotAng => 'Colère';
