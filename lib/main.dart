@@ -1155,40 +1155,39 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
             StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
               stream: insightsRef.snapshots(),
               builder: (context, insSnap) {
-                if (insSnap.connectionState == ConnectionState.waiting || _loadingInsights) {
-                  return const _PrimaryCard(child: Center(child: LoadingWidget()));
-                }
-                if (!insSnap.hasData || !insSnap.data!.exists) {
-                  return _PrimaryCard(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(l10n.profileInsights, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
-                        const SizedBox(height: 10),
-                        Text(l10n.noInsights),
-                        const SizedBox(height: 12),
-                        ElevatedButton(
-                          onPressed: () async {
-                            setState(() => _loadingInsights = true);
-                            await _ai.runInsightsBehindRewardedAd();
-                            if (mounted) setState(() => _loadingInsights = false);
-                          },
-                          child: Text(l10n.generateInsights),
-                        ),
-                      ],
-                    ),
+                final isLoading = _loadingInsights || (insSnap.connectionState == ConnectionState.waiting && !insSnap.hasData);
+                final ins = insSnap.data?.data();
+                final exists = insSnap.data?.exists ?? false;
+
+                Widget inner;
+                if (!exists) {
+                  inner = Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(l10n.profileInsights, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                      const SizedBox(height: 10),
+                      Text(l10n.noInsights),
+                      const SizedBox(height: 12),
+                      ElevatedButton(
+                        onPressed: isLoading ? null : () async {
+                          setState(() => _loadingInsights = true);
+                          await _ai.runInsightsBehindRewardedAd();
+                          if (mounted) setState(() => _loadingInsights = false);
+                        },
+                        child: Text(l10n.generateInsights),
+                      ),
+                    ],
                   );
-                }
-                final ins = insSnap.data!.data() ?? {};
-                return _PrimaryCard(
-                  child: Column(
+                } else {
+                  final data = ins ?? {};
+                  inner = Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         children: [
                           Expanded(child: Text(l10n.profileInsights, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900))),
                           TextButton.icon(
-                            onPressed: () async {
+                            onPressed: isLoading ? null : () async {
                               setState(() => _loadingInsights = true);
                               await _ai.runInsightsBehindRewardedAd();
                               if (mounted) setState(() => _loadingInsights = false);
@@ -1199,10 +1198,20 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      Text(ins['summary']?.toString() ?? '—'),
+                      Text(data['summary']?.toString() ?? '—'),
                       const SizedBox(height: 12),
                       Text(l10n.profilePillars, style: const TextStyle(fontWeight: FontWeight.w900)),
-                      _bullets(ins['insights'] ?? []),
+                      _bullets(data['insights'] ?? []),
+                    ],
+                  );
+                }
+
+                return _PrimaryCard(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Opacity(opacity: isLoading ? 0.4 : 1.0, child: inner),
+                      if (isLoading) const LoadingWidget(),
                     ],
                   ),
                 );
@@ -1212,9 +1221,7 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: lastTipQuery.snapshots(),
               builder: (context, tipsSnap) {
-                if (tipsSnap.connectionState == ConnectionState.waiting || _loadingTip) {
-                  return const _PrimaryCard(child: Center(child: LoadingWidget()));
-                }
+                final isLoading = _loadingTip || (tipsSnap.connectionState == ConnectionState.waiting && !tipsSnap.hasData);
                 
                 final tips = tipsSnap.data?.docs ?? [];
                 final hasTodayTip = tips.isNotEmpty && tips.first.id == _ai.todayKeyLocal();
@@ -1225,32 +1232,40 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                     ? _formatDateStr(lastTipDoc.id, l10n.dailyTip) 
                     : _formatDateStr(_ai.todayKeyLocal(), l10n.dailyTip);
 
-                return _PrimaryCard(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(l10n.dailyTip, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
-                      const SizedBox(height: 10),
-                      Text(formattedDate, style: const TextStyle(fontWeight: FontWeight.w900)),
-                      const SizedBox(height: 8),
-                      
-                      if (!hasTodayTip) ...[
-                        ElevatedButton.icon(
-                          onPressed: () async {
-                            setState(() => _loadingTip = true);
-                            await _ai.runTipsBehindRewardedAd();
-                            if (mounted) setState(() => _loadingTip = false);
-                          },
-                          icon: const Icon(Icons.auto_awesome_outlined),
-                          label: Text(l10n.getDailyTip),
-                        ),
-                        const SizedBox(height: 14),
-                      ],
+                final inner = Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(l10n.dailyTip, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                    const SizedBox(height: 10),
+                    Text(formattedDate, style: const TextStyle(fontWeight: FontWeight.w900)),
+                    const SizedBox(height: 8),
+                    
+                    if (!hasTodayTip) ...[
+                      ElevatedButton.icon(
+                        onPressed: isLoading ? null : () async {
+                          setState(() => _loadingTip = true);
+                          await _ai.runTipsBehindRewardedAd();
+                          if (mounted) setState(() => _loadingTip = false);
+                        },
+                        icon: const Icon(Icons.auto_awesome_outlined),
+                        label: Text(l10n.getDailyTip),
+                      ),
+                      const SizedBox(height: 14),
+                    ],
 
-                      if (lastTipDoc != null)
-                        Text(lastTipData['text']?.toString() ?? '—')
-                      else
-                        Text(l10n.watchAdForTip),
+                    if (lastTipDoc != null)
+                      Text(lastTipData['text']?.toString() ?? '—')
+                    else
+                      Text(l10n.watchAdForTip),
+                  ],
+                );
+
+                return _PrimaryCard(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Opacity(opacity: isLoading ? 0.4 : 1.0, child: inner),
+                      if (isLoading) const LoadingWidget(),
                     ],
                   ),
                 );
