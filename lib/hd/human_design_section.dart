@@ -385,30 +385,30 @@ class HumanDesignSection extends StatelessWidget {
 
   static String centerL10n(BuildContext context, String s) {
     final l10n = AppLocalizations.of(context)!;
-    final isPt = Localizations.localeOf(context).languageCode == 'pt';
     final k = s.trim().toLowerCase();
     switch (k) {
       case 'head':
-        return isPt ? "Head (Cabeça)" : l10n.hdCenterHead;
+        return l10n.hdCenterHead;
       case 'ajna':
         return l10n.hdCenterAjna;
       case 'throat':
-        return isPt ? "Throat (Garganta)" : l10n.hdCenterThroat;
+        return l10n.hdCenterThroat;
       case 'g':
-        return isPt ? "G / Identity (Centro G ou Identidade)" : l10n.hdCenterG;
+      case 'identity':
+        return l10n.hdCenterG;
       case 'ego':
       case 'heart':
       case 'will':
-        return isPt ? "Heart / Ego / Will (Coração / Ego / Vontade)" : l10n.hdCenterEgo;
+        return l10n.hdCenterEgo;
       case 'spleen':
-        return isPt ? "Spleen (Baço)" : l10n.hdCenterSpleen;
+        return l10n.hdCenterSpleen;
       case 'solarplexus':
       case 'solar plexus':
-        return isPt ? "Solar Plexus (Plexo Solar / Emocional)" : l10n.hdCenterSolar;
+        return l10n.hdCenterSolar;
       case 'sacral':
-        return isPt ? "Sacral (Sacro)" : l10n.hdCenterSacral;
+        return l10n.hdCenterSacral;
       case 'root':
-        return isPt ? "Root (Raiz)" : l10n.hdCenterRoot;
+        return l10n.hdCenterRoot;
       default:
         return s;
     }
