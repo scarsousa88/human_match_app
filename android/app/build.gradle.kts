@@ -4,7 +4,6 @@ import java.io.FileInputStream
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
     id("com.google.gms.google-services")
 }
@@ -17,15 +16,15 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.opinto.humanmatch"
-    // VOLTANDO PARA 36: Exigido pelos plugins de Ads e WebView
     compileSdk = 36
 
     defaultConfig {
         applicationId = "com.opinto.humanmatch"
+        // Usa as versões definidas no pubspec.yaml automaticamente
         minSdk = flutter.minSdkVersion
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
 
         multiDexEnabled = true
 
@@ -59,8 +58,6 @@ android {
         create("release") {
             keyAlias = keystoreProperties["keyAlias"] as String
             keyPassword = keystoreProperties["keyPassword"] as String
-            // Tentamos encontrar o ficheiro. Se o caminho no properties for apenas o nome, 
-            // assumimos que está dentro de android/app/
             val storePath = keystoreProperties["storeFile"] as String
             storeFile = if (file(storePath).exists()) {
                 file(storePath)
