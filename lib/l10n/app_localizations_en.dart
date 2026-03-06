@@ -64,7 +64,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get termsContent =>
-      'Privacy Policy - Human Match\n\nThis Privacy Policy describes how Human Match, a mobile application that generates personalized Human Design, Astrology and Numerology reports based on the user\'s full name, date and place of birth, collects, uses and protects your personal data. We are committed to protecting your privacy in compliance with the General Data Protection Regulation (GDPR) of the European Union and applicable legislation in Portugal.\n\nData Collected\nWe collect only the data strictly necessary to provide the service:\n\nFull name;\n\nDate of birth;\n\nPlace of birth.\n\nThis data is used exclusively to calculate and generate your personalized Human Design, Astrology and Numerology reports. We do not collect additional sensitive data, such as email addresses or financial information, unless voluntarily provided for support or account registration.\n\nPurposes of Processing\nData is processed to:\n\nGenerate accurate reports based on the inputs provided;\n\nImprove the accuracy of astrological and human design calculations;\n\nAllow the optional storage of reports for future access (with your explicit consent).\n\nProcessing is lawful based on your free and informed consent, obtained at the time of data submission.\n\nData Sharing\nWe do not share your personal data with third parties, except:\n\nEssential technical service providers (e.g.: secure cloud servers in the EU) under data processing agreements that guarantee confidentiality;\n\nWhen required by law or competent authorities.\n\nThe generated reports are private and are not sold or used for marketing.\n​\n\nStorage and Security\nData is stored on secure servers located in the European Union, with technical measures such as encryption (AES-256), pseudonymization and access controls. We retain data only for the time necessary for the service (generally up to 30 days after the last access, unless consent for prolonged storage is given). We proceed with automatic secure deletion after this period.\n\nYour Rights\nYou can exercise your GDPR rights at any time:\n\nAccess to data;\n\nRectification or correction;\n\nErasure (\"right to be forgotten\");\n\nObjection to processing;\n\nLimitation of processing;\n\nData portability.\n\nConsent and Changes\nBy using the app, you consent to this policy. You can revoke consent at any time, which will prevent access to existing reports. We will update this policy as necessary, notifying users via the app.';
+      'Privacy Policy - Human Match\n\nThis Privacy Policy describes how Human Match, a mobile application that generates personalized Human Design, Astrology and Numerology reports based on the user\'s full name, date and place of birth, collects, uses and protects your personal data. We are committed to protecting your privacy in compliance with the General Data Protection Regulation (GDPR) of the European Union and applicable legislation in Portugal.\n\nData Collected\nWe collect only the data strictly necessary to provide the service:\n\nFull name;\n\nDate of birth;\n\nPlace of birth.\n\nThis data is used exclusively to calculate and generate your personalized Human Design, Astrology and Numerology reports. We do not collect additional sensitive data, such as email addresses or financial information, unless voluntarily provided for support or account registration.\n\nPurposes of Processing\nData is processed to:\n\nGenerate accurate reports based on the inputs provided;\n\nImprove the accuracy of astrological and human design calculations;\n\nAllow the optional storage of reports for future access (with your explicit consent).\n\nProcessing is lawful based on your free and informed consent, obtained at the time of data submission.\n\nData Sharing\nWe do not share your personal data with third parties, except:\n\nEssential technical service providers (e.g.: secure cloud servers in the EU) under data processing agreements that guarantee confidentiality;\n\nWhen required by law or competent authorities.\n\nThe generated reports are private and are not sold or used for marketing.\n​\n\nStorage and Security\nData is stored on secure servers located in the European Union, with technical measures such as encryption (AES-256), pseudonymization and access controls. We retain data only for the time necessary for the service (generally up to 30 days after the last access, unless consent for prolonged storage is given). We proceed with automatic secure deletion after this period.\n\nYour Rights\nYou can exercise your GDPR rights at any time:\n\nAccess to data;\n\nRectification or correction;\n\nErasure (\"right to be forgotten\");\n\nObjection to processing;\n\nLimitation of processing;\n\nData portability.\n\nTo request the deletion of your account and all associated data, you can do so through the following link: https://humanmatch.app/delete-account or by sending an email to support@humanmatch.app.\n\nConsent and Changes\nBy using the app, you consent to this policy. You can revoke consent at any time, which will prevent access to existing reports. We will update this policy as necessary, notifying users via the app.';
 
   @override
   String get processing => 'Processing...';
@@ -82,14 +82,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get createProfile => 'Create profile';
 
   @override
-  String get baseData => 'Base data';
+  String get editProfile => 'Edit profile';
+
+  @override
+  String get baseData => 'User data';
 
   @override
   String get baseDataDesc =>
       'This allows calculating Human Design + ascendant.';
 
   @override
-  String get name => 'Name';
+  String get name => 'Full Name';
+
+  @override
+  String get nameNumerologyInfo =>
+      'This field will be used to determine the Numerology variables. Special characters or accents should not be used.';
 
   @override
   String get country => 'Country';
@@ -310,7 +317,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hdPersonality => 'Personality';
 
   @override
-  String get hdConscious => '(Conscious)';
+  String get hdConscious => '(Conscience)';
 
   @override
   String get hdGen => 'Generator';
@@ -370,7 +377,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hdSigSur => 'Surprise';
 
   @override
-  String get hdNotFru => 'Frustration';
+  String get hdNotFru => 'Frustración';
 
   @override
   String get hdNotBit => 'Bitterness';
@@ -464,4 +471,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hdPlanetPluto => 'Pluto';
+
+  @override
+  String get legalInfo => 'Legal Information';
+
+  @override
+  String get deleteAccountData => 'Delete Account and Data';
 }

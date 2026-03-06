@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -171,7 +172,7 @@ class ProfileGate extends StatelessWidget {
         }
 
         final data = snap.data?.data() ?? {};
-        
+
         final acceptedVersion = data['acceptedTermsVersion']?.toString();
         if (acceptedVersion != AppTerms.currentVersion) {
           return const TermsConsentScreen();
@@ -660,7 +661,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
             _birthTimeController.text = birthTimeStr;
           } catch (_) {}
         }
-        
+
         final placeData = data['place'] as Map?;
         if (placeData != null) {
           _country = placeData['country']?.toString();
@@ -676,13 +677,13 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
     setState(() {
       _places = list;
       final countries = _countries();
-      
+
       if (_country == null || !countries.contains(_country)) {
         _country = countries.isNotEmpty ? countries.first : null;
       }
 
       final cities = _citiesForCountry(_country);
-      
+
       if (_tempCityName != null) {
         final match = cities.where((p) => p.city == _tempCityName).toList();
         if (match.isNotEmpty) {
@@ -850,6 +851,20 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
     }
   }
 
+  void _showTerms() {
+    final l10n = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.termsTitle),
+        content: SingleChildScrollView(child: Text(l10n.termsContent)),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.ok)),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
@@ -858,7 +873,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
     final cities = _citiesForCountry(_country);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.createProfile)),
+      appBar: AppBar(title: Text(l10n.editProfile)),
       body: _Shell(
         child: ListView(
           children: [
@@ -870,7 +885,54 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                   const SizedBox(height: 8),
                   Text(l10n.baseDataDesc, style: TextStyle(color: cs.onSurfaceVariant)),
                   const SizedBox(height: 14),
-                  TextField(controller: nameCtrl, decoration: InputDecoration(labelText: l10n.name)),
+                  // Label com ícone de informação
+                  Row(
+                    children: [
+                      Text(l10n.name, style: const TextStyle(fontWeight: FontWeight.w600)),
+                      const SizedBox(width: 6),
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              contentPadding: EdgeInsets.zero,
+                              content: Stack(
+                                children: [
+                                  Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: IconButton(
+                                      icon: const Icon(Icons.close, size: 20),
+                                      onPressed: () => Navigator.pop(ctx),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
+                                    child: ConstrainedBox(
+                                      constraints: const BoxConstraints(maxWidth: 260),
+                                      child: Text(
+                                        l10n.nameNumerologyInfo,
+                                        textAlign: TextAlign.left,
+                                        style: const TextStyle(fontSize: 14),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        child: Icon(Icons.info_outline, size: 18, color: cs.primary),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: nameCtrl,
+                    decoration: const InputDecoration(
+                      hintText: "",
+                    ),
+                  ),
                   const SizedBox(height: 12),
                   Row(
                     children: [
@@ -921,6 +983,30 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                   ElevatedButton(
                     onPressed: saving ? null : _save,
                     child: saving ? const LoadingWidget(size: 24) : Text(l10n.saveProfile),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            _PrimaryCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(l10n.legalInfo, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
+                  const SizedBox(height: 14),
+                  OutlinedButton.icon(
+                    onPressed: _showTerms,
+                    icon: const Icon(Icons.description_outlined),
+                    label: Text(l10n.termsTitle),
+                  ),
+                  const SizedBox(height: 12),
+                  OutlinedButton.icon(
+                    onPressed: () => launchUrl(Uri.parse('https://humanmatch.app/delete-account'), mode: LaunchMode.externalApplication),
+                    icon: const Icon(Icons.delete_outline, color: Colors.red),
+                    label: Text(l10n.deleteAccountData, style: const TextStyle(color: Colors.red)),
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: Colors.red),
+                    ),
                   ),
                 ],
               ),
@@ -1130,7 +1216,7 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                 children: [
                   Text(l10n.numTitle, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                   const SizedBox(height: 12),
-                  if (numerology == null) const Text('—') else 
+                  if (numerology == null) const Text('—') else
                     Card(
                       elevation: 0,
                       child: Padding(
@@ -1222,14 +1308,14 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
               stream: lastTipQuery.snapshots(),
               builder: (context, tipsSnap) {
                 final isLoading = _loadingTip || (tipsSnap.connectionState == ConnectionState.waiting && !tipsSnap.hasData);
-                
+
                 final tips = tipsSnap.data?.docs ?? [];
                 final hasTodayTip = tips.isNotEmpty && tips.first.id == _ai.todayKeyLocal();
                 final lastTipDoc = tips.isNotEmpty ? tips.first : null;
                 final lastTipData = lastTipDoc?.data() ?? {};
-                
-                final formattedDate = lastTipDoc != null 
-                    ? _formatDateStr(lastTipDoc.id, l10n.dailyTip) 
+
+                final formattedDate = lastTipDoc != null
+                    ? _formatDateStr(lastTipDoc.id, l10n.dailyTip)
                     : _formatDateStr(_ai.todayKeyLocal(), l10n.dailyTip);
 
                 final inner = Column(
@@ -1239,7 +1325,7 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                     const SizedBox(height: 10),
                     Text(formattedDate, style: const TextStyle(fontWeight: FontWeight.w900)),
                     const SizedBox(height: 8),
-                    
+
                     if (!hasTodayTip) ...[
                       ElevatedButton.icon(
                         onPressed: isLoading ? null : () async {

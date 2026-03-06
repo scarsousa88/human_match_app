@@ -60,6 +60,7 @@ You are a senior analyst of integrated self-knowledge systems, specializing in H
 - LANGUAGE: You MUST respond exclusively in ${targetLang}. This is a strict requirement.
 - TONE: Professional, precise, and inspired.
 - DATA: Do NOT invent values. Use ONLY the provided technical data.
+- PRIVACY: Do NOT include the user's name in the output.
 - FORMAT: ALWAYS return valid JSON.
   `.trim();
 }
@@ -155,7 +156,7 @@ export const generateDailyTipIfNeeded = onCall(
 
     const targetLang = getLanguageName(language);
     const prompt = `
-Generate a daily tip for ${u.name} by integrating Human Design, Astrology, and Numerology.
+Generate a daily tip for the user by integrating Human Design, Astrology, and Numerology.
 Technical Data: Type: ${hd.type}, Profile: ${hd.profile}, Strategy: ${hd.strategy}, Sun: ${astro.sunSign}, Life Path: ${num.lifePath}.
 Focus on a practical micro-action for today that helps the user align with their authentic self.
 
@@ -192,7 +193,7 @@ export const generateInsights = onCall(
 
     const prompt = isPt ? `
 Atua como um analista espiritual avançado que combina Human Design, astrologia psicológica e numerologia integrativa.
-A tua tarefa é criar uma interpretação profunda e coesa que revele a natureza essencial de ${u.name} — o seu modo de funcionar, aprender e relacionar-se, o seu papel no mundo e o propósito mais elevado da sua alma.
+A tua tarefa é criar uma interpretação profunda e coesa que revele a natureza essencial do utilizador — o seu modo de funcionar, aprender e relacionar-se, o seu papel no mundo e o propósito mais elevado da sua alma.
 
 Foca-te especialmente em identificar a narrativa central da alma: como o design, o mapa astrológico e os números convergem para revelar o caminho de maior autenticidade e expansão da consciência.
 
@@ -220,6 +221,7 @@ ESTILO E ESTRUTURA DA RESPOSTA (Obrigatório em Português):
 - Organiza a resposta com estes cabeçalhos de secção: "Essência Central e Estrutura Energética", "Ritmo Emocional", "Propósito e Missão", "Desafios e Integração". (Usa quebras de linha \\n entre as secções).
 - Usa metáforas simbólicas ou imagens arquetípicas quando útil, mas mantém o rigor conceptual.
 - Termina com exatamente três frases de síntese que resumem a essência, movimento e apelo evolutivo da pessoa.
+- IMPORTANTE: Não incluas o nome do utilizador na resposta.
 
 RETORNA APENAS JSON:
 {
@@ -228,7 +230,7 @@ RETORNA APENAS JSON:
 }
     `.trim() : `
 Act as an advanced spiritual analyst combining Human Design, psychological Astrology, and integrative Numerology.
-Your task is to create a deep and cohesive interpretation that reveals the essential nature of ${u.name} — their way of functioning, learning, and relating, their role in the world, and their soul's highest purpose.
+Your task is to create a deep and cohesive interpretation that reveals the essential nature of the user — their way of functioning, learning, and relating, their role in the world, and their soul's highest purpose.
 
 Focus especially on identifying the central soul narrative: how design, astrological chart, and numbers converge to reveal the path of greatest authenticity and consciousness expansion.
 
@@ -239,11 +241,11 @@ ANALYTICAL TASKS:
    - Clarify the signature and not‑self theme, giving clear practical strategies for returning to energetic coherence.
    - Interpret the profile (${hd.profile}) and incarnation cross (${hd.incarnationCross}) as expressions of the person’s archetypal role and evolutionary purpose.
 
-2. ASTROLOGY:
+2. ASTROLOGIA:
    - Interpret the Sun (${astro.sunSign}), Moon (infer from HD activations: ${JSON.stringify(hd.activations)}), and Ascendant (${astro.ascendantSign}) as the core triad of identity, emotion, and consciousness growth.
    - Note elemental balances and overall chart patterns to describe temperament, growth cycles, and existential themes.
 
-3. NUMEROLOGY:
+3. NUMEROLOGIA:
    - Analyze the main numbers (Life Path: ${num.lifePath}, Expression: ${num.expression}, Soul: ${num.soul}, Personality: ${num.personality}) to reveal internal motivation, external expression, and soul lessons.
    - Integrate them with the design and chart to highlight resonances or tensions that support spiritual and material maturity.
 
@@ -256,6 +258,7 @@ STYLE AND STRUCTURE OF THE RESPONSE (Mandatory in ${targetLangName}):
 - Organize the answer with these section headers (translated to ${targetLangName}): "Core Essence & Energy Structure", "Emotional Rhythm", "Purpose & Mission", "Challenges & Integration". (Use line breaks \\n between the sections).
 - Use symbolic metaphors or archetypal imagery when helpful, but keep conceptual rigor.
 - End with exactly three synthesis sentences that summarize the essence, movement, and evolutionary calling of the person.
+- IMPORTANT: Do not include the user's name in the response.
 
 RETURN ONLY JSON:
 {

@@ -2,7 +2,7 @@
 
 class AppTerms {
   /// Versão atual dos termos. Incrementar sempre que houver mudanças legais.
-  static const String currentVersion = '1.1';
+  static const String currentVersion = '1.2';
 
   static const String termsText = '''
 Política de Privacidade - Human Match
@@ -58,6 +58,8 @@ Oposição ao tratamento;
 Limitação do tratamento;
 
 Portabilidade dos dados.
+
+Para solicitar a eliminação da sua conta e de todos os dados associados, poderá fazê-lo através do seguinte link: https://humanmatch.app/delete-account ou enviando um email para support@humanmatch.app.
 
 Consentimento e Alterações
 Ao usar a app, consente com esta política. Pode revogar o consentimento a qualquer momento, o que impedirá o acesso a relatórios existentes. Atualizaremos esta política conforme necessário, notificando os utilizadores via app.

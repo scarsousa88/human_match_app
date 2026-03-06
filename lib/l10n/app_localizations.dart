@@ -213,7 +213,7 @@ abstract class AppLocalizations {
   /// No description provided for @termsContent.
   ///
   /// In pt, this message translates to:
-  /// **'Política de Privacidade - Human Match\n\nEsta Política de Privacidade descreve como a Human Match, uma aplicação móvel que gera relatórios personalizados de Human Design, Astrologia e Numerologia com base no nome completo, data e local de nascimento dos utilizadores, recolhe, utiliza e protege os seus dados pessoais. Estamos comprometidos com a proteção da sua privacidade em conformidade com o Regulamento Geral de Proteção de Dados (RGPD) da União Europeia e legislação aplicável em Portugal.\n\nDados Recolhidos\nRecolhemos apenas os dados estritamente necessários para fornecer o serviço:\n\nNome completo;\n\nData de nascimento;\n\nLocal de nascimento.\n\nEstes dados são usados exclusivamente para calcular e gerar os seus relatórios personalizados de Human Design, Astrologia e Numerologia. Não recolhemos dados sensíveis adicionais, como endereço de email ou informações financeiras, a menos que sejam voluntariamente fornecidos para suporte ou registo de conta.\n\nFinalidades do Tratamento\nOs dados são tratados para:\n\nGerar relatórios precisos baseados nos inputs fornecidos;\n\nMelhorar a precisão dos cálculos astrológicos e de design humano;\n\nPermitir o armazenamento opcional de relatórios para acesso futuro (com o seu consentimento explícito).\n\nO tratamento é lícito com base no seu consentimento livre e informado, obtido no momento da submissão dos dados.\n\nPartilha de Dados\nNão partilhamos os seus dados pessoais com terceiros, exceto:\n\nPrestadores de serviços técnicos essenciais (ex.: servidores de cloud seguros na UE) sob acordos de processamento de dados que garantem confidencialidade;\n\nQuando exigido por lei ou autoridades competentes.\n\nOs relatórios gerados são privados e não são vendidos ou usados para marketing.\n​\n\nArmazenamento e Segurança\nOs dados são armazenados em servidores seguros localizados na União Europeia, com medidas técnicas como encriptação (AES-256), pseudonimização e controlos de acesso. Retemos os dados apenas pelo tempo necessário para o serviço (geralmente até 30 dias após o último acesso, salvo consentimento para armazenamento prolongado). Procedemos à eliminação segura automática após esse período.\n\nOs Seus Direitos\nPode exercer os seus direitos RGPD a qualquer momento:\n\nAcesso aos dados;\n\nRetificação ou correção;\n\nApagamento (\"direito ao esquecimento\");\n\nOposição ao tratamento;\n\nLimitação do tratamento;\n\nPortabilidade dos dados.\n\nConsentimento e Alterações\nAo usar a app, consente com esta política. Pode revogar o consentimento a qualquer momento, o que impedirá o acesso a relatórios existentes. Atualizaremos esta política conforme necessário, notificando os utilizadores via app.'**
+  /// **'Política de Privacidade - Human Match\n\nEsta Política de Privacidade descreve como a Human Match, uma aplicação móvel que gera relatórios personalizados de Human Design, Astrologia e Numerologia com base no nome completo, data e local de nascimento dos utilizadores, recolhe, utiliza e protege os seus dados pessoais. Estamos comprometidos com a proteção da sua privacidade em conformidade com o Regulamento Geral de Proteção de Dados (RGPD) da União Europeia e legislação aplicável em Portugal.\n\nDados Recolhidos\nRecolhemos apenas os dados estritamente necessários para fornecer o serviço:\n\nNome completo;\n\nData de nascimento;\n\nLocal de nascimento.\n\nEstes dados são usados exclusivamente para calcular e gerar os seus relatórios personalizados de Human Design, Astrologia e Numerologia. Não recolhemos dados sensíveis adicionais, como endereço de email ou informações financeiras, a menos que sejam voluntariamente fornecidos para suporte ou registo de conta.\n\nFinalidades do Tratamento\nOs dados são tratados para:\n\nGerar relatórios precisos baseados nos inputs fornecidos;\n\nMelhorar a precisão dos cálculos astrológicos e de design humano;\n\nPermitir o armazenamento opcional de relatórios para acesso futuro (com o seu consentimento explícito).\n\nO tratamento é lícito com base no seu consentimento livre e informado, obtido no momento da submissão dos dados.\n\nPartilha de Dados\nNão partilhamos os seus dados pessoais com terceiros, exceto:\n\nPrestadores de serviços técnicos essenciais (ex.: servidores de cloud seguros na UE) sob acordos de processamento de dados que garantem confidencialidade;\n\nQuando exigido por lei ou autoridades competentes.\n\nOs relatórios gerados são privados e não são vendidos ou usados para marketing.\n​\n\nArmazenamento e Segurança\nOs dados são armazenados em servidores seguros localizados na União Europeia, com medidas técnicas como encriptação (AES-256), pseudonimização e controlos de acesso. Retemos os dados apenas pelo tempo necessário para o serviço (geralmente até 30 dias após o último acesso, salvo consentimento para armazenamento prolongado). Procedemos à eliminação segura automática após esse período.\n\nOs Seus Direitos\nPode exercer os seus direitos RGPD a qualquer momento:\n\nAcesso aos dados;\n\nRectificação ou correção;\n\nApagamento (\"direito ao esquecimento\");\n\nOposição ao tratamento;\n\nLimitação do tratamento;\n\nPortabilidade dos dados.\n\nPara solicitar a eliminação da sua conta e de todos os dados associados, poderá fazê-lo através do seguinte link: https://humanmatch.app/delete-account ou enviando um email para support@humanmatch.app.\n\nConsentimento e Alterações\nAo usar a app, você consente com esta política. Pode revogar o consentimento a qualquer momento, o que impedirá o acesso a relatórios existentes. Atualizaremos esta política conforme necessário, notificando os utilizadores via app.'**
   String get termsContent;
 
   /// No description provided for @processing.
@@ -246,10 +246,16 @@ abstract class AppLocalizations {
   /// **'Criar perfil'**
   String get createProfile;
 
+  /// No description provided for @editProfile.
+  ///
+  /// In pt, this message translates to:
+  /// **'Editar perfil'**
+  String get editProfile;
+
   /// No description provided for @baseData.
   ///
   /// In pt, this message translates to:
-  /// **'Dados base'**
+  /// **'Dados do utilizador'**
   String get baseData;
 
   /// No description provided for @baseDataDesc.
@@ -261,8 +267,14 @@ abstract class AppLocalizations {
   /// No description provided for @name.
   ///
   /// In pt, this message translates to:
-  /// **'Nome'**
+  /// **'Nome Completo'**
   String get name;
+
+  /// No description provided for @nameNumerologyInfo.
+  ///
+  /// In pt, this message translates to:
+  /// **'Este campo será usado para determinar as variáveis da Numerologia. Não deves usar caracteres especiais ou acentuação.'**
+  String get nameNumerologyInfo;
 
   /// No description provided for @country.
   ///
@@ -897,13 +909,13 @@ abstract class AppLocalizations {
   /// No description provided for @hdCenterG.
   ///
   /// In pt, this message translates to:
-  /// **'Identidade (G)'**
+  /// **'Centro G'**
   String get hdCenterG;
 
   /// No description provided for @hdCenterEgo.
   ///
   /// In pt, this message translates to:
-  /// **'Ego (Coração)'**
+  /// **'Coração'**
   String get hdCenterEgo;
 
   /// No description provided for @hdCenterSpleen.
@@ -921,7 +933,7 @@ abstract class AppLocalizations {
   /// No description provided for @hdCenterSacral.
   ///
   /// In pt, this message translates to:
-  /// **'Sacral'**
+  /// **'Sacro'**
   String get hdCenterSacral;
 
   /// No description provided for @hdCenterRoot.
@@ -995,6 +1007,18 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Plutão'**
   String get hdPlanetPluto;
+
+  /// No description provided for @legalInfo.
+  ///
+  /// In pt, this message translates to:
+  /// **'Informações Legais'**
+  String get legalInfo;
+
+  /// No description provided for @deleteAccountData.
+  ///
+  /// In pt, this message translates to:
+  /// **'Eliminação de Conta e Dados'**
+  String get deleteAccountData;
 }
 
 class _AppLocalizationsDelegate

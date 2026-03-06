@@ -14,6 +14,7 @@ dependencies:
     sdk: flutter
   timezone: any
   google_mobile_ads: ^7.0.0
+  url_launcher: ^6.3.1
 
   cupertino_icons: ^1.0.8
   firebase_core: ^4.5.0
@@ -29,7 +30,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: ^0.14.4
-
   flutter_lints: ^6.0.0
 
 flutter_launcher_icons:
@@ -40,9 +40,8 @@ flutter_launcher_icons:
   adaptive_icon_foreground: "assets/icon/icon.png"
   adaptive_icon_round_icon: true
 
-
 flutter:
-  generate: true # ATIVADO: Para gerar ficheiros de tradução automaticamente
+  generate: true
   uses-material-design: true
 
   assets:
