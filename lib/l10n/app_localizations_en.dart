@@ -281,7 +281,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hdIncarnationCross => 'Cross';
 
   @override
-  String get hdEnergyCenters => 'Centros energéticos';
+  String get hdEnergyCenters => 'Energy Centers';
 
   @override
   String get hdDefinedCenters => 'Defined Centers';

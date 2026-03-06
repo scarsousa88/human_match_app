@@ -283,7 +283,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get hdEnergyCenters => 'Centros energéticos';
 
   @override
-  String get hdDefinedCenters => 'Centros definidos';
+  String get hdDefinedCenters => 'Centros Definidos';
 
   @override
   String get hdChannels => 'Canais';

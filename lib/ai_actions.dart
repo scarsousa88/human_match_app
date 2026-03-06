@@ -31,6 +31,18 @@ class AiActions {
     return '${now.year}-${_p2(now.month)}-${_p2(now.day)}';
   }
 
+  /// Retorna o idioma atual suportado ou 'en' como fallback.
+  String getLanguageCode() {
+    try {
+      final code = Localizations.localeOf(context).languageCode.toLowerCase();
+      final supported = ['pt', 'en', 'es', 'fr'];
+      if (supported.contains(code)) return code;
+      return 'en';
+    } catch (_) {
+      return 'en'; 
+    }
+  }
+
   Future<T?> _call<T>(String functionName, {Map<String, dynamic>? data}) async {
     try {
       final callable = _functions.httpsCallable(functionName);
@@ -51,7 +63,7 @@ class AiActions {
       return;
     }
 
-    _toast('A carregar anúncio...');
+    _toast('Loading ad...');
 
     bool rewardEarned = false;
 
@@ -63,7 +75,6 @@ class AiActions {
           ad.fullScreenContentCallback = FullScreenContentCallback(
             onAdDismissedFullScreenContent: (ad) async {
               ad.dispose();
-              // Atraso de segurança para estabilizar o motor gráfico
               await Future.delayed(const Duration(milliseconds: 200));
               if (rewardEarned && context.mounted) {
                 onReward();
@@ -72,7 +83,7 @@ class AiActions {
             onAdFailedToShowFullScreenContent: (ad, error) {
               debugPrint('Ad failed to show: $error');
               ad.dispose();
-              onReward(); // Fallback imediato se falhar ao mostrar
+              onReward();
             },
           );
 
@@ -81,8 +92,8 @@ class AiActions {
           });
         },
         onAdFailedToLoad: (error) {
-          debugPrint('Falha ao carregar anúncio: $error');
-          onReward(); // Fallback se não conseguir carregar o anúncio
+          debugPrint('Ad failed to load: $error');
+          onReward();
         },
       ),
     );
@@ -99,11 +110,13 @@ class AiActions {
     await _showRewardedAdAndRun(() async {
       try {
         await _unlock('profile', '');
-        await _call('generateInsights');
-        _toast('Insights atualizados ✅');
+        await _call('generateInsights', data: {
+          'language': getLanguageCode(),
+        });
+        _toast('Insights updated ✅');
       } catch (e) {
-        debugPrint('Erro runInsights: $e');
-        _toast('Erro ao atualizar insights.');
+        debugPrint('Error runInsights: $e');
+        _toast('Error updating insights.');
       }
     });
   }
@@ -113,11 +126,14 @@ class AiActions {
       try {
         final dk = todayKeyLocal();
         await _unlock('dailyTip', dk);
-        await _call('generateDailyTipIfNeeded', data: {'dateKey': dk});
-        _toast('Dica atualizada ✅');
+        await _call('generateDailyTipIfNeeded', data: {
+          'dateKey': dk,
+          'language': getLanguageCode(),
+        });
+        _toast('Tip updated ✅');
       } catch (e) {
-        debugPrint('Erro runTips: $e');
-        _toast('Erro ao atualizar dica.');
+        debugPrint('Error runTips: $e');
+        _toast('Error updating tip.');
       }
     });
   }

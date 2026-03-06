@@ -28,15 +28,6 @@ function todayKey(dateKey?: string): string {
   return `${now.getFullYear()}-${pad2(now.getMonth() + 1)}-${pad2(now.getDate())}`;
 }
 
-function isoWeekKey(d = new Date()): string {
-  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-  const dayNum = date.getUTCDay() || 7;
-  date.setUTCDate(date.getUTCDate() + 4 - dayNum);
-  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
-  const weekNo = Math.ceil((((date.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
-  return `${date.getUTCFullYear()}-W${pad2(weekNo)}`;
-}
-
 function safeJsonParse(raw: string) {
   try {
     return JSON.parse(raw);
@@ -51,22 +42,33 @@ function safeJsonParse(raw: string) {
   }
 }
 
-function systemPrompt(): string {
+function systemPrompt(language: string = "en"): string {
+  const langMap: { [key: string]: string } = {
+    "pt": "Portuguese (Portugal)",
+    "en": "English",
+    "es": "Spanish",
+    "fr": "French"
+  };
+
+  // Default to English if the language is not supported or not provided
+  const targetLang = langMap[language] || "English";
+
   return `
-Responde em PT-PT. Tom moderno, prático e humano.
-És um analista sénior de sistemas de autoconhecimento integrados.
-NÃO inventes valores. Usa APENAS os dados técnicos recebidos.
-DEVOLVE SEMPRE JSON válido.
+You are a senior analyst of integrated self-knowledge systems.
+- LANGUAGE: You MUST respond exclusively in ${targetLang}.
+- TONE: Modern, practical, and human.
+- DATA: Do NOT invent values. Use ONLY the provided technical data.
+- FORMAT: ALWAYS return valid JSON.
   `.trim();
 }
 
-async function callOpenAI_JSON(apiKey: string, prompt: string) {
+async function callOpenAI_JSON(apiKey: string, prompt: string, language: string = "en") {
   const client = new OpenAI({ apiKey });
 
   const completion = await client.chat.completions.create({
     model: "gpt-4o-mini",
     messages: [
-      { role: "system", content: systemPrompt() },
+      { role: "system", content: systemPrompt(language) },
       { role: "user", content: prompt }
     ],
     response_format: { type: "json_object" }
@@ -137,11 +139,9 @@ export const generateDailyTipIfNeeded = onCall(
   async (request) => {
     const uid = requireAuth(request.auth?.uid);
     const dateKey = todayKey(request.data?.dateKey);
+    const language = request.data?.language || "en";
 
     const tipRef = db.collection("users").doc(uid).collection("dailyTips").doc(dateKey);
-
-    // CORREÇÃO: Permite atualização ao carregar novamente
-    // const existing = await tipRef.get(); if (existing.exists) return { ok: true, reused: true };
 
     const unlocked = await checkGate(uid, "dailyTip", dateKey);
     if (!unlocked) return { ok: false, needsAd: true };
@@ -152,13 +152,13 @@ export const generateDailyTipIfNeeded = onCall(
     const astro = u.astro;
 
     const prompt = `
-Gera uma dica diária (60-100 palavras) para ${u.name}.
-Dados: Tipo: ${hd.type} Perfil: ${hd.profile}, Estratégia: ${hd.strategy} Signo Solar: ${astro.sunSign} Ascendente: ${astro.ascendantSign} LP ${num.lifePath}.
-Foca-te numa micro-ação prática baseada no perfil.
-JSON: { "text": "..." }
+Generate a daily tip (60-100 words) for ${u.name}.
+Technical Data: Type: ${hd.type}, Profile: ${hd.profile}, Strategy: ${hd.strategy}, Sun Sign: ${astro.sunSign}, Ascendant: ${astro.ascendantSign}, Life Path: ${num.lifePath}.
+Focus on a practical micro-action based on the profile.
+JSON format: { "text": "..." }
     `.trim();
 
-    const raw = await callOpenAI_JSON(OPENAI_API_KEY.value(), prompt);
+    const raw = await callOpenAI_JSON(OPENAI_API_KEY.value(), prompt, language);
     const parsed = safeJsonParse(raw);
     if (!parsed?.text) throw new HttpsError("internal", "Invalid AI output.");
 
@@ -167,14 +167,11 @@ JSON: { "text": "..." }
   }
 );
 
-/**
- * GERA INSIGHTS DE PERFIL (Geral)
- * Substitui o generateWeeklyInsightsIfNeeded
- */
 export const generateInsights = onCall(
   { secrets: [OPENAI_API_KEY] },
   async (request) => {
     const uid = requireAuth(request.auth?.uid);
+    const language = request.data?.language || "en";
     const insightsRef = db.collection("users").doc(uid).collection("aiInsights").doc("latest");
 
     const unlocked = await checkGate(uid, "profile", "");
@@ -186,44 +183,44 @@ export const generateInsights = onCall(
     const astro = u.astro;
 
     const prompt = `
-Analisa o perfil holístico de ${u.name} e cria um resumo completo e integrativo.
-Evita usar o nome completo ou excessivo do utilizador.
+Analyze the holistic profile of ${u.name} and create a comprehensive and integrative summary.
+Do not use the full name or excessive use of the user's name.
 
-DADOS TÉCNICOS:
+TECHNICAL DATA:
 1. HUMAN DESIGN:
-   - Tipo: ${hd.type}
-   - Perfil: ${hd.profile}
-   - Estratégia: ${hd.strategy}
-   - Cruz de Encarnação: ${hd.incarnationCross}
-   - Canais Definidos: ${JSON.stringify(hd.channels)}
-   - Portas (Gates) Ativas: ${JSON.stringify(hd.activeGates)}
+   - Type: ${hd.type}
+   - Profile: ${hd.profile}
+   - Strategy: ${hd.strategy}
+   - Incarnation Cross: ${hd.incarnationCross}
+   - Defined Channels: ${JSON.stringify(hd.channels)}
+   - Active Gates: ${JSON.stringify(hd.activeGates)}
 
-2. ASTROLOGIA:
-   - Signo Solar: ${astro.sunSign}
-   - Ascendente: ${astro.ascendantSign}
+2. ASTROLOGY:
+   - Sun Sign: ${astro.sunSign}
+   - Ascendant: ${astro.ascendantSign}
 
-3. NUMEROLOGIA:
-   - Caminho de Vida: ${num.lifePath}
-   - Expressão: ${num.expression}
-   - Alma: ${num.soul}
-   - Personalidade: ${num.personality}
+3. NUMEROLOGY:
+   - Life Path: ${num.lifePath}
+   - Expression: ${num.expression}
+   - Soul: ${num.soul}
+   - Personality: ${num.personality}
 
-TAREFA:
-Cria um JSON com:
-- "summary": Um parágrafo de 6-8 frases que resume a essência deste perfil cruzando os 3 sistemas de forma técnica e profunda.
-- "insights": Uma lista com exatamente 3 pontos poderosos:
-  1. Human Design: Usa toda a informação que tens do human design e neste podes te alongar mais um pouco até 300 caracteres.
-  2. Astrologia: Foca no Signo Solar (${astro.sunSign}) e Ascendente (${astro.ascendantSign}).
-  3. Numerologia: Foca no Caminho de Vida (${num.lifePath}) e Expressão (${num.expression}).
+TASK:
+Create a JSON object with:
+- "summary": A paragraph of 6-8 sentences summarizing the essence of this profile crossing the 3 systems technically and deeply.
+- "insights": A list of exactly 3 powerful points:
+  1. Human Design: Use all HD information, up to 300 characters.
+  2. Astrology: Focus on Sun Sign (${astro.sunSign}) and Ascendant (${astro.ascendantSign}).
+  3. Numerology: Focus on Life Path (${num.lifePath}) and Expression (${num.expression}).
 
-RESPOSTA APENAS EM JSON:
+RESPONSE ONLY IN JSON:
 {
   "summary": "...",
   "insights": ["...", "...", "..."]
 }
     `.trim();
 
-    const raw = await callOpenAI_JSON(OPENAI_API_KEY.value(), prompt);
+    const raw = await callOpenAI_JSON(OPENAI_API_KEY.value(), prompt, language);
     const parsed = safeJsonParse(raw);
     if (!parsed?.summary) throw new HttpsError("internal", "Invalid AI output.");
 

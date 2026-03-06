@@ -64,7 +64,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get termsContent =>
-      'Bienvenido a Human Match.\n\n1. Protección de Datos: Al utilizar esta aplicación, acepta el procesamiento de sus datos de nacimiento (fecha, hora y lugar) para el cálculo de su perfil de Human Design, Astrología y Numerología.\n\n2. Inteligência Artificial: Los insights y consejos generados son producidos por modelos de IA y deben interpretarse como sugerencias de autoconecimiento, no como asesoramiento profesional o médico.\n\n3. Anuncios: La aplicación utiliza anuncios premiados para desbloquear contenidos gratuitos. Los datos anónimos de publicidad pueden ser procesados por Google AdMob.\n\n4. Privacidad: No compartimos sus datos personales con terceros. Puede eliminar su cuenta en cualquier momento en los ajustes.\n\nAl aceptar, confirma que tiene más de 18 años o autorización parental.';
+      'Bienvenido a Human Match.\n\n1. Protección de Datos: Al utilizar esta aplicación, acepta el procesamiento de sus datos de nacimiento (fecha, hora y lugar) para el cálculo de su perfil de Human Design, Astrología y Numerología.\n\n2. Inteligencia Artificial: Los insights y consejos generados son producidos por modelos de IA y deben interpretarse como sugerencias de autoconocimiento, no como asesoramiento profesional o médico.\n\n3. Anuncios: La aplicación utiliza anuncios premiados para desbloquear contenidos gratuitos. Los datos anónimos de publicidad pueden ser procesados por Google AdMob.\n\n4. Privacidad: No compartimos sus datos personales con terceros. Puede eliminar su cuenta en cualquier momento en los ajustes.\n\nAl aceptar, confirma que tiene más de 18 años o autorización parental.';
 
   @override
   String get processing => 'Procesando...';
@@ -277,7 +277,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get hdNotSelf => 'No-ser';
 
   @override
-  String get hdDefinition => 'Definicón';
+  String get hdDefinition => 'Definición';
 
   @override
   String get hdIncarnationCross => 'Cruz';
@@ -286,7 +286,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get hdEnergyCenters => 'Centros energéticos';
 
   @override
-  String get hdDefinedCenters => 'Centros definidos';
+  String get hdDefinedCenters => 'Centros Definidos';
 
   @override
   String get hdChannels => 'Canales';

@@ -962,7 +962,10 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
     _didAutoDaily = true;
     try {
       final callable = FirebaseFunctions.instance.httpsCallable('generateDailyTipIfNeeded');
-      await callable.call({'dateKey': _ai.todayKeyLocal()});
+      await callable.call({
+        'dateKey': _ai.todayKeyLocal(),
+        'language': _ai.getLanguageCode(),
+      });
     } catch (_) {}
   }
 

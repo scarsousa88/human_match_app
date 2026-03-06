@@ -639,7 +639,7 @@ abstract class AppLocalizations {
   /// No description provided for @hdDefinedCenters.
   ///
   /// In pt, this message translates to:
-  /// **'Centros definidos'**
+  /// **'Centros Definidos'**
   String get hdDefinedCenters;
 
   /// No description provided for @hdChannels.
