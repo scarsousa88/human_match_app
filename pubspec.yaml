@@ -23,6 +23,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.20.0
+  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:
@@ -35,6 +36,10 @@ flutter_launcher_icons:
   android: true
   ios: true
   image_path: "assets/icon/icon.png"
+  adaptive_icon_background: "#3E1E4F"
+  adaptive_icon_foreground: "assets/icon/icon.png"
+  adaptive_icon_round_icon: true
+
 
 flutter:
   generate: true # ATIVADO: Para gerar ficheiros de tradução automaticamente
@@ -45,3 +50,5 @@ flutter:
     - assets/ephe/
     - assets/icon/icon.png
     - assets/icon/card.png
+    - assets/icon/compare.png
+    - assets/icon/loading.svg

@@ -18,8 +18,8 @@ class HumanDesignSection extends StatelessWidget {
   final Map<String, dynamic> hd;
 
   // Keep table alignment consistent between header and rows.
-  static const int _flexPlanet = 4;
-  static const int _flexPill = 5;
+  static const int _flexPlanet = 6;
+  static const int _flexPill = 4;
 
   @override
   Widget build(BuildContext context) {
@@ -59,46 +59,28 @@ class HumanDesignSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // 1) KPI zone (layout em linhas, estilo atual)
+        // 1) KPI zone
         Card(
           elevation: 0,
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: Column(
               children: [
-                _InfoLine(icon: Icons.person_outline,
-                    label: 'Tipo',
-                    value: type),
+                _InfoLine(icon: Icons.person_outline, label: 'Tipo', value: type),
                 const SizedBox(height: 10),
-                _InfoLine(
-                    icon: Icons.favorite_outline,
-                    label: 'Autoridade',
-                    value: authority),
+                _InfoLine(icon: Icons.favorite_outline, label: 'Autoridade', value: authority),
                 const SizedBox(height: 10),
-                _InfoLine(
-                    icon: Icons.alt_route_outlined,
-                    label: 'Estratégia',
-                    value: strategy),
+                _InfoLine(icon: Icons.alt_route_outlined, label: 'Estratégia', value: strategy),
                 const SizedBox(height: 10),
-                _InfoLine(icon: Icons.badge_outlined,
-                    label: 'Perfil',
-                    value: profile),
+                _InfoLine(icon: Icons.badge_outlined, label: 'Perfil', value: profile),
                 const SizedBox(height: 10),
-                _InfoLine(icon: Icons.auto_awesome_outlined,
-                    label: 'Signature',
-                    value: signature),
+                _InfoLine(icon: Icons.auto_awesome_outlined, label: 'Signature', value: signature),
                 const SizedBox(height: 10),
-                _InfoLine(icon: Icons.warning_amber_outlined,
-                    label: 'Not‑self',
-                    value: notSelfTheme),
+                _InfoLine(icon: Icons.warning_amber_outlined, label: 'Not‑self', value: notSelfTheme),
                 const SizedBox(height: 10),
-                _InfoLine(icon: Icons.hub_outlined,
-                    label: 'Definition',
-                    value: definition),
+                _InfoLine(icon: Icons.hub_outlined, label: 'Definition', value: definition),
                 const SizedBox(height: 10),
-                _InfoLine(icon: Icons.add_road_outlined,
-                    label: 'Cross',
-                    value: incarnationCross),
+                _InfoLine(icon: Icons.add_road_outlined, label: 'Cross', value: incarnationCross),
               ],
             ),
           ),
@@ -106,28 +88,11 @@ class HumanDesignSection extends StatelessWidget {
 
         const SizedBox(height: 1),
 
-        // 2) Centers + Channels
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: _CentersCard(
-                title: 'Centros definidos',
-                emptyText: 'Nenhum centro definido.',
-                centers: definedCenters,
-                authorityCenter: authorityCenter,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _ListCard(
-                title: 'Canais definidos',
-                emptyText: 'Nenhum canal definido.',
-                items: (definedChannels.map(_normalizeChannel).toList()..sort()),
-                icon: Icons.share_outlined,
-              ),
-            ),
-          ],
+        // 2) Centers + Channels (Table structure)
+        _CentersChannelsTable(
+          definedCenters: definedCenters,
+          definedChannels: (definedChannels.map(_normalizeChannel).toList()..sort()),
+          authorityCenter: authorityCenter,
         ),
 
         const SizedBox(height: 12),
@@ -406,8 +371,11 @@ class _InfoLine extends StatelessWidget {
   Widget build(BuildContext context) {
     final labelStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
           fontWeight: FontWeight.w600,
+          fontSize: (Theme.of(context).textTheme.bodyMedium?.fontSize ?? 14) + 1,
         );
-    final valueStyle = Theme.of(context).textTheme.titleSmall;
+    final valueStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
+          fontSize: (Theme.of(context).textTheme.titleSmall?.fontSize ?? 14) + 1,
+        );
 
     return Row(
       children: [
@@ -433,75 +401,98 @@ class _InfoLine extends StatelessWidget {
   }
 }
 
-class _CentersCard extends StatelessWidget {
-  const _CentersCard({
-    required this.title,
-    required this.centers,
-    required this.emptyText,
+class _CentersChannelsTable extends StatelessWidget {
+  const _CentersChannelsTable({
+    required this.definedCenters,
+    required this.definedChannels,
     required this.authorityCenter,
   });
 
-  final String title;
-  final List<String> centers;
-  final String emptyText;
+  final List<String> definedCenters;
+  final List<String> definedChannels;
   final String? authorityCenter;
 
   @override
   Widget build(BuildContext context) {
-    final items = centers.map(HumanDesignSection._centerPt).toList()..sort();
+    final centerItems = definedCenters.map(HumanDesignSection._centerPt).toList()..sort();
+    final channelItems = definedChannels;
 
-    final authorityLabel =
-        authorityCenter == null ? null : HumanDesignSection._centerPt(authorityCenter!);
+    final maxLen = centerItems.length > channelItems.length ? centerItems.length : channelItems.length;
+    final authorityLabel = authorityCenter == null ? null : HumanDesignSection._centerPt(authorityCenter!);
+
+    final titleStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
+          fontSize: (Theme.of(context).textTheme.titleSmall?.fontSize ?? 14) + 1,
+        );
 
     return Card(
       elevation: 0,
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                const Icon(Icons.hexagon_outlined, size: 18),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ),
+                Expanded(child: Center(child: Text('Centros definidos', style: titleStyle))),
+                const SizedBox(width: 10),
+                Expanded(child: Center(child: Text('Canais', style: titleStyle))),
               ],
             ),
             const SizedBox(height: 10),
-            if (items.isEmpty)
-              Text(emptyText, style: Theme.of(context).textTheme.bodySmall)
-            else ...[
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: items.map((t) {
-                  final isAuthority = authorityLabel != null && t == authorityLabel;
-                  return Chip(
-                    label: Text(t),
-                    side: isAuthority
-                        ? BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
-                            width: 1.2,
-                          )
-                        : null,
-                    backgroundColor: isAuthority
-                        ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.12)
-                        : null,
-                  );
-                }).toList(),
-              ),
-              if (authorityLabel != null) ...[
-                const SizedBox(height: 8),
-                Text(
-                  '* $authorityLabel é o centro autoritário (Authority)',
-                  style: Theme.of(context).textTheme.bodySmall,
+            const Divider(height: 1),
+            const SizedBox(height: 10),
+            if (maxLen == 0)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Text(
+                  'Nenhum dado disponível.',
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontSize: (Theme.of(context).textTheme.bodyMedium?.fontSize ?? 14) + 1,
+                      ),
                 ),
-              ],
+              )
+            else
+              ...List.generate(maxLen, (i) {
+                final c = i < centerItems.length ? centerItems[i] : null;
+                final ch = i < channelItems.length ? channelItems[i] : null;
+                final isAuthority = authorityLabel != null && c == authorityLabel;
+
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: c == null
+                            ? const SizedBox()
+                            : _Pill(
+                                text: c,
+                                tone: isAuthority ? _PillTone.authority : _PillTone.conscious,
+                              ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: ch == null
+                            ? const SizedBox()
+                            : _Pill(
+                                text: ch,
+                                tone: _PillTone.conscious,
+                              ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            if (authorityLabel != null) ...[
+              const Divider(height: 1),
+              const SizedBox(height: 10),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '* $authorityLabel é o centro autoritário (Authority)',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontSize: (Theme.of(context).textTheme.bodySmall?.fontSize ?? 12) + 1,
+                      ),
+                ),
+              ),
             ],
           ],
         ),
@@ -530,8 +521,12 @@ class _ActivationHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle = Theme.of(context).textTheme.titleSmall;
-    final subStyle = Theme.of(context).textTheme.bodySmall;
+    final titleStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
+          fontSize: (Theme.of(context).textTheme.titleSmall?.fontSize ?? 14) + 1,
+        );
+    final subStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
+          fontSize: (Theme.of(context).textTheme.bodySmall?.fontSize ?? 12) + 1,
+        );
 
     Widget headerCell(String top, String bottom) {
       return Column(
@@ -556,18 +551,18 @@ class _ActivationHeader extends StatelessWidget {
     return Row(
       children: [
         Flexible(
-          flex: _flexPlanet,
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text('Astros', style: titleStyle),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Flexible(
           flex: _flexPill,
           child: Align(
             alignment: Alignment.center,
-            child: headerCell('Personalidade', '(Consciente)'),
+            child: headerCell('Design', '(Inconsciente)'),
+          ),
+        ),
+        const SizedBox(width: 10),
+        Flexible(
+          flex: _flexPlanet,
+          child: Align(
+            alignment: Alignment.center,
+            child: Text('Astros', style: titleStyle),
           ),
         ),
         const SizedBox(width: 10),
@@ -575,7 +570,7 @@ class _ActivationHeader extends StatelessWidget {
           flex: _flexPill,
           child: Align(
             alignment: Alignment.center,
-            child: headerCell('Design', '(Inconsciente)'),
+            child: headerCell('Personalidade', '(Consciente)'),
           ),
         ),
       ],
@@ -601,29 +596,30 @@ class _ActivationCompareRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Flexible(
+            flex: _flexPill,
+            child: _Pill(text: row.designGL, tone: _PillTone.design),
+          ),
+          const SizedBox(width: 10),
+          Flexible(
             flex: _flexPlanet,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(sym, style: const TextStyle(fontSize: 16)),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    namePt,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
+                Text(sym, style: const TextStyle(fontSize: 17)),
+                const SizedBox(width: 6),
+                Text(
+                  namePt,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontSize: (Theme.of(context).textTheme.bodyMedium?.fontSize ?? 14) + 1,
+                      ),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 12),
-          Flexible(
-            flex: _flexPill,
-            child: _Pill(text: row.consciousGL, tone: _PillTone.conscious),
-          ),
           const SizedBox(width: 10),
           Flexible(
             flex: _flexPill,
-            child: _Pill(text: row.designGL, tone: _PillTone.design),
+            child: _Pill(text: row.consciousGL, tone: _PillTone.conscious),
           ),
         ],
       ),
@@ -632,64 +628,40 @@ class _ActivationCompareRow extends StatelessWidget {
 
   String _planetNamePt(String body) {
     switch (body) {
-      case 'Sun':
-        return 'Sol';
-      case 'Earth':
-        return 'Terra';
-      case 'Moon':
-        return 'Lua';
-      case 'Mercury':
-        return 'Mercúrio';
-      case 'Venus':
-        return 'Vénus';
-      case 'Mars':
-        return 'Marte';
-      case 'Jupiter':
-        return 'Júpiter';
-      case 'Saturn':
-        return 'Saturno';
-      case 'Uranus':
-        return 'Urano';
-      case 'Neptune':
-        return 'Neptuno';
-      case 'Pluto':
-        return 'Plutão';
-      default:
-        return body;
+      case 'Sun': return 'Sol';
+      case 'Earth': return 'Terra';
+      case 'Moon': return 'Lua';
+      case 'Mercury': return 'Mercúrio';
+      case 'Venus': return 'Vénus';
+      case 'Mars': return 'Marte';
+      case 'Jupiter': return 'Júpiter';
+      case 'Saturn': return 'Saturno';
+      case 'Uranus': return 'Urano';
+      case 'Neptune': return 'Neptuno';
+      case 'Pluto': return 'Plutão';
+      default: return body;
     }
   }
 
   String _planetSymbol(String body) {
     switch (body) {
-      case 'Sun':
-        return '☉';
-      case 'Earth':
-        return '⊕';
-      case 'Moon':
-        return '☾';
-      case 'Mercury':
-        return '☿';
-      case 'Venus':
-        return '♀';
-      case 'Mars':
-        return '♂';
-      case 'Jupiter':
-        return '♃';
-      case 'Saturn':
-        return '♄';
-      case 'Uranus':
-        return '♅';
-      case 'Neptune':
-        return '♆';
-      case 'Pluto':
-        return '♇';
-      default:
-        return '•';
+      case 'Sun': return '☉';
+      case 'Earth': return '⊕';
+      case 'Moon': return '☾';
+      case 'Mercury': return '☿';
+      case 'Venus': return '♀';
+      case 'Mars': return '♂';
+      case 'Jupiter': return '♃';
+      case 'Saturn': return '♄';
+      case 'Uranus': return '♅';
+      case 'Neptune': return '♆';
+      case 'Pluto': return '♇';
+      default: return '•';
     }
   }
 }
 
-enum _PillTone { conscious, design }
+enum _PillTone { conscious, design, authority }
 
 class _Pill extends StatelessWidget {
   const _Pill({required this.text, required this.tone});
@@ -700,22 +672,27 @@ class _Pill extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDash = text.trim() == '—';
 
-    final Color border = tone == _PillTone.conscious
-        ? Colors.black.withValues(alpha: 0.35)
-        : Colors.redAccent.withValues(alpha: 0.45);
+    Color border;
+    Color bg;
 
-    final Color bg = tone == _PillTone.conscious
-        ? Colors.black.withValues(alpha: 0.06)
-        : Colors.redAccent.withValues(alpha: 0.07);
+    switch (tone) {
+      case _PillTone.conscious:
+        border = Colors.white.withValues(alpha: 0.35);
+        bg = Colors.white.withValues(alpha: 0.08);
+        break;
+      case _PillTone.design:
+        border = Colors.redAccent.withValues(alpha: 0.45);
+        bg = Colors.redAccent.withValues(alpha: 0.07);
+        break;
+      case _PillTone.authority:
+        border = Colors.purpleAccent.withValues(alpha: 0.45);
+        bg = Colors.purpleAccent.withValues(alpha: 0.12);
+        break;
+    }
 
     final Color fg = isDash
-        ? (Theme.of(context)
-                .textTheme
-                .bodySmall
-                ?.color
-                ?.withValues(alpha: 0.6) ??
-            Colors.black.withValues(alpha: 0.6))
-        : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black);
+        ? (Theme.of(context).textTheme.bodySmall?.color?.withValues(alpha: 0.6) ?? Colors.white.withValues(alpha: 0.6))
+        : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -729,57 +706,10 @@ class _Pill extends StatelessWidget {
         child: Text(
           text,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(color: fg),
-        ),
-      ),
-    );
-  }
-}
-
-class _ListCard extends StatelessWidget {
-  const _ListCard({
-    required this.title,
-    required this.items,
-    required this.emptyText,
-    required this.icon,
-  });
-
-  final String title;
-  final List<String> items;
-  final String emptyText;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(icon, size: 18),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            if (items.isEmpty)
-              Text(emptyText, style: Theme.of(context).textTheme.bodySmall)
-            else
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: items.map((t) => Chip(label: Text(t))).toList(),
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                color: fg,
+                fontSize: (Theme.of(context).textTheme.titleSmall?.fontSize ?? 14) + 1,
               ),
-          ],
         ),
       ),
     );

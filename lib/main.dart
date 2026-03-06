@@ -25,6 +25,7 @@ import 'hd/human_design_section.dart';
 import 'ai_actions.dart';
 import 'app_terms.dart';
 import 'l10n/app_localizations.dart';
+import 'ui/loading_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -70,7 +71,10 @@ class HumanMatchApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = ColorScheme.fromSeed(seedColor: const Color(0xFF6D28D9));
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: const Color(0xFF3E1E4F),
+      brightness: Brightness.dark,
+    );
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -91,9 +95,9 @@ class HumanMatchApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: colorScheme,
-        scaffoldBackgroundColor: colorScheme.surface,
+        scaffoldBackgroundColor: const Color(0xFF3E1E4F),
         appBarTheme: AppBarTheme(
-          backgroundColor: colorScheme.surface,
+          backgroundColor: const Color(0xFF3E1E4F),
           foregroundColor: colorScheme.onSurface,
           centerTitle: true,
         ),
@@ -139,7 +143,7 @@ class RootGate extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snap) {
         if (snap.connectionState == ConnectionState.waiting) {
-          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+          return const Scaffold(body: LoadingWidget());
         }
         if (snap.data == null) return const AuthScreen();
         return const ProfileGate();
@@ -160,7 +164,7 @@ class ProfileGate extends StatelessWidget {
       stream: FirebaseFirestore.instance.collection('users').doc(user.uid).snapshots(),
       builder: (context, snap) {
         if (snap.connectionState == ConnectionState.waiting) {
-          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+          return const Scaffold(body: LoadingWidget());
         }
 
         final data = snap.data?.data() ?? {};
@@ -233,7 +237,7 @@ class _TermsConsentScreenState extends State<TermsConsentScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: loading ? null : _accept,
-              child: Text(loading ? l10n.processing : l10n.acceptAndContinue),
+              child: loading ? const LoadingWidget(size: 24) : Text(l10n.acceptAndContinue),
             ),
             const SizedBox(height: 8),
             TextButton(
@@ -328,7 +332,7 @@ class _PlaceholderTab extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset('assets/icon/icon.png', width: 300),
+          Image.asset('assets/icon/compare.png', width: 300),
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -532,7 +536,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   const SizedBox(height: 14),
                   ElevatedButton(
                     onPressed: loading ? null : _submit,
-                    child: Text(loading ? l10n.loading : (isLogin ? l10n.login : l10n.register)),
+                    child: loading ? const LoadingWidget(size: 24) : Text(isLogin ? l10n.login : l10n.register),
                   ),
                   const SizedBox(height: 8),
                   if (isLogin)
@@ -835,7 +839,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                   ),
                   const SizedBox(height: 12),
                   if (_places.isEmpty)
-                    const Center(child: Padding(padding: EdgeInsets.all(12), child: CircularProgressIndicator()))
+                    const Center(child: Padding(padding: EdgeInsets.all(12), child: LoadingWidget()))
                   else ...[
                     DropdownButtonFormField<String>(
                       key: ValueKey('country_$_country'),
@@ -862,7 +866,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                   const SizedBox(height: 14),
                   ElevatedButton(
                     onPressed: saving ? null : _save,
-                    child: Text(saving ? l10n.processing : l10n.saveProfile),
+                    child: saving ? const LoadingWidget(size: 24) : Text(l10n.saveProfile),
                   ),
                 ],
               ),
@@ -958,7 +962,7 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
     return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
       stream: userRef.snapshots(),
       builder: (context, userSnap) {
-        if (userSnap.connectionState == ConnectionState.waiting) return const Center(child: CircularProgressIndicator());
+        if (userSnap.connectionState == ConnectionState.waiting) return const Center(child: LoadingWidget());
 
         final u = userSnap.data?.data() ?? {};
         final fullName = (u['name'] ?? '').toString().trim();
@@ -1031,9 +1035,19 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                 children: [
                   Text(l10n.astroTitle, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                   const SizedBox(height: 12),
-                  _KeyValueRow(icon: Icons.wb_sunny_outlined, label: l10n.zodiacSign, value: sunSign),
-                  const SizedBox(height: 8),
-                  _KeyValueRow(icon: Icons.north_outlined, label: l10n.ascendant, value: ascSign),
+                  Card(
+                    elevation: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        children: [
+                          _KeyValueRow(icon: Icons.wb_sunny_outlined, label: l10n.zodiacSign, value: sunSign),
+                          const SizedBox(height: 10),
+                          _KeyValueRow(icon: Icons.north_outlined, label: l10n.ascendant, value: ascSign),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -1044,15 +1058,24 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                 children: [
                   Text(l10n.numTitle, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                   const SizedBox(height: 12),
-                  if (numerology == null) const Text('—') else ...[
-                    _KeyValueRow(icon: Icons.tag_outlined, label: l10n.lifePath, value: numerology.lifePath.toString()),
-                    const SizedBox(height: 8),
-                    _KeyValueRow(icon: Icons.tag_outlined, label: l10n.expression, value: numerology.expression.toString()),
-                    const SizedBox(height: 8),
-                    _KeyValueRow(icon: Icons.tag_outlined, label: l10n.soul, value: numerology.soul.toString()),
-                    const SizedBox(height: 8),
-                    _KeyValueRow(icon: Icons.tag_outlined, label: l10n.personality, value: numerology.personality.toString()),
-                  ],
+                  if (numerology == null) const Text('—') else 
+                    Card(
+                      elevation: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          children: [
+                            _KeyValueRow(icon: Icons.tag_outlined, label: l10n.lifePath, value: numerology.lifePath.toString()),
+                            const SizedBox(height: 10),
+                            _KeyValueRow(icon: Icons.tag_outlined, label: l10n.expression, value: numerology.expression.toString()),
+                            const SizedBox(height: 10),
+                            _KeyValueRow(icon: Icons.tag_outlined, label: l10n.soul, value: numerology.soul.toString()),
+                            const SizedBox(height: 10),
+                            _KeyValueRow(icon: Icons.tag_outlined, label: l10n.personality, value: numerology.personality.toString()),
+                          ],
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -1060,7 +1083,7 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
             StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
               stream: insightsRef.snapshots(),
               builder: (context, insSnap) {
-                if (insSnap.connectionState == ConnectionState.waiting) return const _PrimaryCard(child: Center(child: CircularProgressIndicator()));
+                if (insSnap.connectionState == ConnectionState.waiting) return const _PrimaryCard(child: Center(child: LoadingWidget()));
                 if (!insSnap.hasData || !insSnap.data!.exists) {
                   return _PrimaryCard(
                     child: Column(
@@ -1107,7 +1130,7 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
             StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
               stream: lastTipQuery.snapshots(),
               builder: (context, tipsSnap) {
-                if (tipsSnap.connectionState == ConnectionState.waiting) return const _PrimaryCard(child: Center(child: CircularProgressIndicator()));
+                if (tipsSnap.connectionState == ConnectionState.waiting) return const _PrimaryCard(child: Center(child: LoadingWidget()));
                 
                 final tips = tipsSnap.data?.docs ?? [];
                 final hasTodayTip = tips.isNotEmpty && tips.first.id == _ai.todayKeyLocal();
@@ -1192,6 +1215,35 @@ class _KeyValueRow extends StatelessWidget {
   final IconData icon; final String label; final String value;
   @override
   Widget build(BuildContext context) {
-    return Row(children: [Icon(icon, size: 18), const SizedBox(width: 10), Expanded(child: Text(label, style: Theme.of(context).textTheme.bodyMedium)), const SizedBox(width: 12), Text(value, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900), textAlign: TextAlign.right)]);
+    final labelStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
+      fontWeight: FontWeight.w600,
+    );
+    final valueStyle = Theme.of(context).textTheme.titleSmall;
+
+    return Row(
+      children: [
+        Expanded(
+          flex: 5,
+          child: Row(
+            children: [
+              Icon(icon, size: 18),
+              const SizedBox(width: 8),
+              Expanded(child: Text(label, style: labelStyle)),
+            ],
+          ),
+        ),
+        Expanded(
+          flex: 7,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              value,
+              style: valueStyle,
+              textAlign: TextAlign.right,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

@@ -64,7 +64,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get termsContent =>
-      'Bem-vindo ao Human Match.\n\n1. Proteção de Dados: Ao utilizar esta aplicação, concorda com o processamento dos seus dados de nascimento (data, hora e local) para o cálculo do seu perfil de Human Design, Astrologia e Numerologia.\n\n2. Inteligência Artificial: Os insights e dicas gerados são produzidos por modelos de IA e devem ser interpretados como sugestões de autoconhecimento, não como aconselhamento profissional ou médico.\n\n3. Anúncios: A aplicação utiliza anúncios premiados para desbloquear conteúdos gratuitos. Dados anónimos de publicidade podem ser processados pela Google AdMob.\n\n4. Privacidade: Não partilhamos os seus dados pessoais com terceiros. Pode apagar a sua conta a qualquer momento nas definições.\n\nAo aceitar, confirma que tem mais de 18 anos ou autorização parental.';
+      'Bienvenue sur Human Match.\n\n1. Protection des données : En utilisant cette application, vous acceptez le traitement de vos données de naissance (date, heure et lieu) pour le calcul de votre profil Human Design, Astrologie et Numérologie.\n\n2. Intelligence Artificielle : Les insights et conseils générés sont produits par des modèles d\'IA et doivent être interprétés comme des suggestions de connaissance de soi, et non comme des conseils professionnels ou médicaux.\n\n3. Publicité : L\'application utilise des publicités récompensées pour débloquer du contenu gratuit. Des données publicitaires anonymes peuvent être traitées par Google AdMob.\n\n4. Confidentialité : Nous ne partageons pas vos données personnelles avec des tiers. Vous pouvez supprimer votre compte à tout moment dans les paramètres.\n\nEn acceptant, vous confirmez que vous avez plus de 18 ans ou une autorisation parentale.';
 
   @override
   String get processing => 'Traitement...';
@@ -182,78 +182,83 @@ class AppLocalizationsFr extends AppLocalizations {
       'Regardez la publicité pour obtenir votre conseil';
 
   @override
-  String get errorFillEmailPassword => 'Preenche email e password.';
+  String get errorFillEmailPassword =>
+      'Veuillez saisir votre e-mail et votre mot de passe.';
 
   @override
-  String get errorAcceptTerms => 'Precisas de aceitar os Termos e Condições.';
+  String get errorAcceptTerms =>
+      'Vous devez accepter les conditions générales.';
 
   @override
-  String get resetEmailSent => 'Email enviado. (Vê spam também)';
+  String get resetEmailSent => 'E-mail envoyé. (Vérifiez également vos spams)';
 
   @override
-  String get resetEmailError => 'Escreve o email acima e tenta novamente.';
+  String get resetEmailError =>
+      'Saisissez votre e-mail ci-dessus et réessayez.';
 
   @override
-  String get errorUserNotFound => 'Utilizador não encontrado.';
+  String get errorUserNotFound => 'Utilisateur non trouvé.';
 
   @override
-  String get errorWrongPassword => 'Password incorreta.';
+  String get errorWrongPassword => 'Mot de passe incorrect.';
 
   @override
-  String get errorInvalidEmail => 'Email inválido.';
+  String get errorInvalidEmail => 'E-mail invalide.';
 
   @override
-  String get errorEmailAlreadyInUse => 'Este email já está a ser usado.';
+  String get errorEmailAlreadyInUse => 'Cet e-mail est déjà utilisé.';
 
   @override
-  String get errorWeakPassword => 'Password fraca (mín. 6 caracteres).';
+  String get errorWeakPassword =>
+      'Mot de passe trop court (min. 6 caractères).';
 
   @override
   String errorGeneral(String error) {
-    return 'Erro: $error';
+    return 'Erreur : $error';
   }
 
   @override
-  String get errorFillProfile => 'Preenche nome, data, hora e cidade.';
+  String get errorFillProfile =>
+      'Veuillez renseigner votre nom, date, heure et ville.';
 
   @override
   String errorSavingProfile(String error) {
-    return 'Erro ao guardar/calcular: $error';
+    return 'Erreur lors de l\'enregistrement/calcul : $error';
   }
 
   @override
-  String get signAries => 'Carneiro';
+  String get signAries => 'Bélier';
 
   @override
-  String get signTaurus => 'Touro';
+  String get signTaurus => 'Taureau';
 
   @override
-  String get signGemini => 'Gémeos';
+  String get signGemini => 'Gémeaux';
 
   @override
-  String get signCancer => 'Caranguejo';
+  String get signCancer => 'Cancer';
 
   @override
-  String get signLeo => 'Leão';
+  String get signLeo => 'Lion';
 
   @override
-  String get signVirgo => 'Virgem';
+  String get signVirgo => 'Vierge';
 
   @override
-  String get signLibra => 'Balança';
+  String get signLibra => 'Balance';
 
   @override
-  String get signScorpio => 'Escorpião';
+  String get signScorpio => 'Scorpion';
 
   @override
-  String get signSagittarius => 'Sagitário';
+  String get signSagittarius => 'Sagittaire';
 
   @override
-  String get signCapricorn => 'Capricórnio';
+  String get signCapricorn => 'Capricorne';
 
   @override
-  String get signAquarius => 'Aquário';
+  String get signAquarius => 'Verseau';
 
   @override
-  String get signPisces => 'Peixes';
+  String get signPisces => 'Poissons';
 }

@@ -17,6 +17,7 @@
   "hasAccount": "Déjà un compte ? Connexion",
   "acceptTerms": "J'accepte les Conditions Générales",
   "termsTitle": "Conditions Générales",
+  "termsContent": "Bienvenue sur Human Match.\n\n1. Protection des données : En utilisant cette application, vous acceptez le traitement de vos données de naissance (date, heure et lieu) pour le calcul de votre profil Human Design, Astrologie et Numérologie.\n\n2. Intelligence Artificielle : Les insights et conseils générés sont produits par des modèles d'IA et doivent être interprétés comme des suggestions de connaissance de soi, et non comme des conseils professionnels ou médicaux.\n\n3. Publicité : L'application utilise des publicités récompensées pour débloquer du contenu gratuit. Des données publicitaires anonymes peuvent être traitées par Google AdMob.\n\n4. Confidentialité : Nous ne partageons pas vos données personnelles avec des tiers. Vous pouvez supprimer votre compte à tout moment dans les paramètres.\n\nEn acceptant, vous confirmez que vous avez plus de 18 ans ou une autorisation parentale.",
   "processing": "Traitement...",
   "acceptAndContinue": "Accepter et continuer",
   "cancelAndExit": "Annuler et quitter",
@@ -35,11 +36,7 @@
   "cancel": "Annuler",
   "ok": "OK",
   "greeting": "Bonjour {name}",
-  "@greeting": {
-    "placeholders": {
-      "name": { "type": "String" }
-    }
-  },
+  "@greeting": { "placeholders": { "name": { "type": "String" } } },
   "greetingEmpty": "Bonjour !",
   "hdTitle": "Human Design",
   "hdCalculating": "Calcul du Human Design en cours...",
@@ -58,5 +55,31 @@
   "profilePillars": "Piliers de votre Profil",
   "dailyTip": "Conseil Quotidien",
   "getDailyTip": "Obtenir un conseil (Publicité)",
-  "watchAdForTip": "Regardez la publicité pour obtenir votre conseil"
+  "watchAdForTip": "Regardez la publicité pour obtenir votre conseil",
+  "errorFillEmailPassword": "Veuillez saisir votre e-mail et votre mot de passe.",
+  "errorAcceptTerms": "Vous devez accepter les conditions générales.",
+  "resetEmailSent": "E-mail envoyé. (Vérifiez également vos spams)",
+  "resetEmailError": "Saisissez votre e-mail ci-dessus et réessayez.",
+  "errorUserNotFound": "Utilisateur non trouvé.",
+  "errorWrongPassword": "Mot de passe incorrect.",
+  "errorInvalidEmail": "E-mail invalide.",
+  "errorEmailAlreadyInUse": "Cet e-mail est déjà utilisé.",
+  "errorWeakPassword": "Mot de passe trop court (min. 6 caractères).",
+  "errorGeneral": "Erreur : {error}",
+  "@errorGeneral": { "placeholders": { "error": { "type": "String" } } },
+  "errorFillProfile": "Veuillez renseigner votre nom, date, heure et ville.",
+  "errorSavingProfile": "Erreur lors de l'enregistrement/calcul : {error}",
+  "@errorSavingProfile": { "placeholders": { "error": { "type": "String" } } },
+  "signAries": "Bélier",
+  "signTaurus": "Taureau",
+  "signGemini": "Gémeaux",
+  "signCancer": "Cancer",
+  "signLeo": "Lion",
+  "signVirgo": "Vierge",
+  "signLibra": "Balance",
+  "signScorpio": "Scorpion",
+  "signSagittarius": "Sagittaire",
+  "signCapricorn": "Capricorne",
+  "signAquarius": "Verseau",
+  "signPisces": "Poissons"
 }

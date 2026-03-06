@@ -153,13 +153,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get soul => 'Alma';
 
   @override
-  String get personality => 'Personalidade';
+  String get personality => 'Personalidad';
 
   @override
   String get profileInsights => 'Insights de Perfil';
 
   @override
-  String get noInsights => 'Ainda no tienes insights gerados.';
+  String get noInsights => 'Aún no tienes insights generados.';
 
   @override
   String get generateInsights => 'Generar Insights (Anuncio)';
@@ -168,7 +168,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get update => 'Actualizar';
 
   @override
-  String get profilePillars => 'Pilares do teu Perfil';
+  String get profilePillars => 'Pilares de tu Perfil';
 
   @override
   String get dailyTip => 'Consejo Diario';
@@ -180,78 +180,81 @@ class AppLocalizationsEs extends AppLocalizations {
   String get watchAdForTip => 'Mira el anuncio para obtener tu consejo diario';
 
   @override
-  String get errorFillEmailPassword => 'Preenche email e password.';
+  String get errorFillEmailPassword =>
+      'Ingresa correo electrónico y contraseña.';
 
   @override
-  String get errorAcceptTerms => 'Precisas de aceitar os Termos e Condições.';
+  String get errorAcceptTerms => 'Debes aceptar los Términos y Condiciones.';
 
   @override
-  String get resetEmailSent => 'Email enviado. (Vê spam também)';
+  String get resetEmailSent =>
+      'Correo enviado. (Revisa también la carpeta de spam)';
 
   @override
-  String get resetEmailError => 'Escreve o email acima e tenta novamente.';
+  String get resetEmailError =>
+      'Escribe tu correo arriba e inténtalo de nuevo.';
 
   @override
-  String get errorUserNotFound => 'Utilizador não encontrado.';
+  String get errorUserNotFound => 'Usuario no encontrado.';
 
   @override
-  String get errorWrongPassword => 'Password incorreta.';
+  String get errorWrongPassword => 'Contraseña incorrecta.';
 
   @override
-  String get errorInvalidEmail => 'Email inválido.';
+  String get errorInvalidEmail => 'Correo electrónico inválido.';
 
   @override
-  String get errorEmailAlreadyInUse => 'Este email já está a ser usado.';
+  String get errorEmailAlreadyInUse => 'Este correo ya está en uso.';
 
   @override
-  String get errorWeakPassword => 'Password fraca (mín. 6 caracteres).';
+  String get errorWeakPassword => 'Contraseña débil (mín. 6 caracteres).';
 
   @override
   String errorGeneral(String error) {
-    return 'Erro: $error';
+    return 'Error: $error';
   }
 
   @override
-  String get errorFillProfile => 'Preenche nome, data, hora e cidade.';
+  String get errorFillProfile => 'Completa nombre, fecha, hora y ciudad.';
 
   @override
   String errorSavingProfile(String error) {
-    return 'Erro ao guardar/calcular: $error';
+    return 'Error al guardar/calcular: $error';
   }
 
   @override
-  String get signAries => 'Carneiro';
+  String get signAries => 'Aries';
 
   @override
-  String get signTaurus => 'Touro';
+  String get signTaurus => 'Tauro';
 
   @override
-  String get signGemini => 'Gémeos';
+  String get signGemini => 'Géminis';
 
   @override
-  String get signCancer => 'Caranguejo';
+  String get signCancer => 'Cáncer';
 
   @override
-  String get signLeo => 'Leão';
+  String get signLeo => 'Leo';
 
   @override
-  String get signVirgo => 'Virgem';
+  String get signVirgo => 'Virgo';
 
   @override
-  String get signLibra => 'Balança';
+  String get signLibra => 'Libra';
 
   @override
-  String get signScorpio => 'Escorpião';
+  String get signScorpio => 'Escorpio';
 
   @override
-  String get signSagittarius => 'Sagitário';
+  String get signSagittarius => 'Sagitario';
 
   @override
-  String get signCapricorn => 'Capricórnio';
+  String get signCapricorn => 'Capricornio';
 
   @override
-  String get signAquarius => 'Aquário';
+  String get signAquarius => 'Acuario';
 
   @override
-  String get signPisces => 'Peixes';
+  String get signPisces => 'Piscis';
 }
