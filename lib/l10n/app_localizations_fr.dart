@@ -57,6 +57,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hasAccount => 'Déjà un compte ? Connexion';
 
   @override
+  String get continueWithGoogle => 'Continuer avec Google';
+
+  @override
   String get acceptTerms => 'J\'accepte les Conditions Générales';
 
   @override
@@ -140,7 +143,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hdCalculating => 'Calcul du Human Design en cours...';
 
   @override
-  String get astroTitle => 'Astrologie';
+  String get astroTitle => 'Astrologia';
 
   @override
   String get zodiacSign => 'Signe';
@@ -314,7 +317,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hdDesign => 'Design';
 
   @override
-  String get hdUnconscious => '(Inconscient)';
+  String get hdUnconscious => '(Inconsciente)';
 
   @override
   String get hdPlanets => 'Planètes';

@@ -198,6 +198,12 @@ abstract class AppLocalizations {
   /// **'Já tens conta? Entrar'**
   String get hasAccount;
 
+  /// No description provided for @continueWithGoogle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Continuar com Google'**
+  String get continueWithGoogle;
+
   /// No description provided for @acceptTerms.
   ///
   /// In pt, this message translates to:
@@ -639,7 +645,7 @@ abstract class AppLocalizations {
   /// No description provided for @hdIncarnationCross.
   ///
   /// In pt, this message translates to:
-  /// **'Cruz'**
+  /// **'Encarnação'**
   String get hdIncarnationCross;
 
   /// No description provided for @hdEnergyCenters.
@@ -711,7 +717,7 @@ abstract class AppLocalizations {
   /// No description provided for @hdMG.
   ///
   /// In pt, this message translates to:
-  /// **'Gerador Manifestante'**
+  /// **'Gerador Manifestador'**
   String get hdMG;
 
   /// No description provided for @hdMan.
@@ -933,7 +939,7 @@ abstract class AppLocalizations {
   /// No description provided for @hdCenterSacral.
   ///
   /// In pt, this message translates to:
-  /// **'Sacro'**
+  /// **'Sacral'**
   String get hdCenterSacral;
 
   /// No description provided for @hdCenterRoot.

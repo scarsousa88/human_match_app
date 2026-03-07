@@ -57,6 +57,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get hasAccount => 'Já tens conta? Entrar';
 
   @override
+  String get continueWithGoogle => 'Continuar com Google';
+
+  @override
   String get acceptTerms => 'Aceito os Termos e Condições';
 
   @override
@@ -284,7 +287,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get hdDefinition => 'Definição';
 
   @override
-  String get hdIncarnationCross => 'Cruz';
+  String get hdIncarnationCross => 'Encarnação';
 
   @override
   String get hdEnergyCenters => 'Centros energéticos';
@@ -322,7 +325,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get hdGen => 'Gerador';
 
   @override
-  String get hdMG => 'Gerador Manifestante';
+  String get hdMG => 'Gerador Manifestador';
 
   @override
   String get hdMan => 'Manifestador';
@@ -433,7 +436,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get hdCenterSolar => 'Plexo Solar';
 
   @override
-  String get hdCenterSacral => 'Sacro';
+  String get hdCenterSacral => 'Sacral';
 
   @override
   String get hdCenterRoot => 'Raiz';

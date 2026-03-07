@@ -57,6 +57,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get hasAccount => '¿Ya tienes cuenta? Entrar';
 
   @override
+  String get continueWithGoogle => 'Continuar con Google';
+
+  @override
   String get acceptTerms => 'Acepto los Términos y Condiciones';
 
   @override
@@ -403,10 +406,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get hdDefQua => 'Cuádruple Partida';
 
   @override
-  String get hdCrossRight => 'Ángulo Derecho';
+  String get hdCrossRight => 'Ângulo Direito';
 
   @override
-  String get hdCrossLeft => 'Ángulo Izquierdo';
+  String get hdCrossLeft => 'Ângulo Esquerdo';
 
   @override
   String get hdCrossJuxta => 'Justaposición';
