@@ -12,7 +12,20 @@
           "package_name": "com.opinto.humanmatch"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "941622874316-vkv851flamg1j9sr14u3pemtfutgqvtv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.opinto.humanmatch",
+            "certificate_hash": "b04d1a8da722b576426e297ad9c418f4be8772a0"
+          }
+        },
+        {
+          "client_id": "941622874316-54t3li4ablqu19nmvljpbnhl4asehff3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAsmsPqMTihTVXj5fV6gOytc8TVzzY95gc"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "941622874316-54t3li4ablqu19nmvljpbnhl4asehff3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "941622874316-d9v0nga0vs100gh8bot2748p6qvg5ik9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.humanMatchApp"
+              }
+            }
+          ]
         }
       }
     }
