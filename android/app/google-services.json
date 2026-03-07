@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "941622874316-vkv851flamg1j9sr14u3pemtfutgqvtv.apps.googleusercontent.com",
+          "client_id": "941622874316-rmtbak8ng5qg1r7btqid2orogj7dv2o1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.opinto.humanmatch",
-            "certificate_hash": "b04d1a8da722b576426e297ad9c418f4be8772a0"
+            "certificate_hash": "2065e0a31a472ca2d4ec934dc12382ce580f5aa1"
           }
         },
         {

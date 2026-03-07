@@ -68,8 +68,10 @@ You are a senior analyst of integrated self-knowledge systems, specializing in H
 async function callOpenAI_JSON(apiKey: string, prompt: string, language: string = "en") {
   const client = new OpenAI({ apiKey });
 
+  // Modelo definido conforme instrução do utilizador: gpt-5-nano
+  // Nota: Se ocorrer erro 404 (Model Not Found), verifique se o nome do modelo está correto na sua conta OpenAI.
   const completion = await client.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: "gpt-5-nano",
     messages: [
       { role: "system", content: systemPrompt(language) },
       { role: "user", content: prompt }
@@ -101,6 +103,8 @@ async function getUserComputedData(uid: string) {
 
 async function checkGate(uid: string, type: string, key: string): Promise<boolean> {
   const snap = await db.collection("users").doc(uid).get();
+  if (!snap.exists) return false;
+
   const data = snap.data() || {};
   const gates = data.aiGates || {};
 
@@ -121,16 +125,27 @@ export const unlockAiContent = onCall(async (request) => {
 
   if (type === "dailyTip") {
     const dk = todayKey(dateKey);
-    await userRef.set({
-      aiGates: { dailyTip: { dateKey: dk, unlocked: true, unlockedAt: FieldValue.serverTimestamp() } }
-    }, { merge: true });
+    const updateData: any = {};
+    updateData[`aiGates.dailyTip`] = {
+      dateKey: dk,
+      unlocked: true,
+      unlockedAt: FieldValue.serverTimestamp()
+    };
+    await userRef.update(updateData).catch(async () => {
+      await userRef.set({ aiGates: { dailyTip: { dateKey: dk, unlocked: true, unlockedAt: FieldValue.serverTimestamp() } } }, { merge: true });
+    });
     return { ok: true, key: dk };
   }
 
   if (type === "weekly" || type === "profile") {
-    await userRef.set({
-      aiGates: { profile: { unlocked: true, unlockedAt: FieldValue.serverTimestamp() } }
-    }, { merge: true });
+    const updateData: any = {};
+    updateData[`aiGates.profile`] = {
+      unlocked: true,
+      unlockedAt: FieldValue.serverTimestamp()
+    };
+    await userRef.update(updateData).catch(async () => {
+      await userRef.set({ aiGates: { profile: { unlocked: true, unlockedAt: FieldValue.serverTimestamp() } } }, { merge: true });
+    });
     return { ok: true };
   }
 
@@ -147,7 +162,9 @@ export const generateDailyTipIfNeeded = onCall(
     const tipRef = db.collection("users").doc(uid).collection("dailyTips").doc(dateKey);
 
     const unlocked = await checkGate(uid, "dailyTip", dateKey);
-    if (!unlocked) return { ok: false, needsAd: true };
+    if (!unlocked) {
+      throw new HttpsError("permission-denied", "Daily tip not unlocked. Please watch an ad.");
+    }
 
     const u = await getUserComputedData(uid);
     const hd = u.humanDesignBase;
@@ -181,7 +198,9 @@ export const generateInsights = onCall(
     const insightsRef = db.collection("users").doc(uid).collection("aiInsights").doc("latest");
 
     const unlocked = await checkGate(uid, "profile", "");
-    if (!unlocked) return { ok: false, needsAd: true };
+    if (!unlocked) {
+      throw new HttpsError("permission-denied", "Insights not unlocked. Please watch an ad.");
+    }
 
     const u = await getUserComputedData(uid);
     const hd = u.humanDesignBase;

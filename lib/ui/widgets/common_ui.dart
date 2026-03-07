@@ -77,7 +77,7 @@ class KeyValueRow extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          flex: 5,
+          flex: 3,
           child: Row(
             children: [
               Icon(icon, size: 18),
@@ -87,7 +87,7 @@ class KeyValueRow extends StatelessWidget {
           ),
         ),
         Expanded(
-          flex: 7,
+          flex: 1,
           child: Align(
             alignment: Alignment.centerRight,
             child: Text(

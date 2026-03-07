@@ -77,20 +77,29 @@ class AiActions {
           ad.fullScreenContentCallback = FullScreenContentCallback(
             onAdDismissedFullScreenContent: (ad) async {
               ad.dispose();
-              await Future.delayed(const Duration(milliseconds: 200));
-              if (rewardEarned && context.mounted) {
-                try {
-                  await onReward();
-                } finally {
-                  if (!completer.isCompleted) completer.complete();
+              // Aguardar para garantir que o evento de recompensa foi processado pelo SDK
+              await Future.delayed(const Duration(milliseconds: 600));
+              
+              if (rewardEarned) {
+                if (context.mounted) {
+                  _toast('Ad finished! Updating data...'); 
+                  try {
+                    await onReward();
+                  } catch (e) {
+                    debugPrint('Error after reward: $e');
+                  } finally {
+                    if (!completer.isCompleted) completer.complete();
+                  }
                 }
               } else {
+                _toast('Ad closed too early. No reward earned.');
                 if (!completer.isCompleted) completer.complete();
               }
             },
             onAdFailedToShowFullScreenContent: (ad, error) {
               debugPrint('Ad failed to show: $error');
               ad.dispose();
+              // Se falhar a mostrar, permitimos avançar (cortesia/fallback)
               onReward().then((_) {
                 if (!completer.isCompleted) completer.complete();
               }).catchError((_) {
@@ -100,11 +109,14 @@ class AiActions {
           );
 
           ad.show(onUserEarnedReward: (ad, reward) {
+            debugPrint('Reward granted: ${reward.amount}');
             rewardEarned = true;
           });
         },
         onAdFailedToLoad: (error) {
           debugPrint('Ad failed to load: $error');
+          // No emulador ou se houver erro de rede, permitimos avançar para não bloquear o user
+          _toast('Ad unavailable. Updating anyway...');
           onReward().then((_) {
             if (!completer.isCompleted) completer.complete();
           }).catchError((_) {
