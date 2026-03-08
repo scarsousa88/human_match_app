@@ -184,10 +184,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dailyTip => 'Dica Diária';
 
   @override
-  String get getDailyTip => 'Obter dica diária (Anúncio)';
+  String get getDailyTip => 'Obter dica diária';
 
   @override
-  String get watchAdForTip => 'Vê o anúncio para obteres a tua dica diária';
+  String get watchAdForTip => 'Vê o vídeo para obteres a tua dica diária';
 
   @override
   String get errorFillEmailPassword => 'Preenche email e password.';

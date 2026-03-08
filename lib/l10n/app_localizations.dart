@@ -447,13 +447,13 @@ abstract class AppLocalizations {
   /// No description provided for @getDailyTip.
   ///
   /// In pt, this message translates to:
-  /// **'Obter dica diária (Anúncio)'**
+  /// **'Obter dica diária'**
   String get getDailyTip;
 
   /// No description provided for @watchAdForTip.
   ///
   /// In pt, this message translates to:
-  /// **'Vê o anúncio para obteres a tua dica diária'**
+  /// **'Vê o vídeo para obteres a tua dica diária'**
   String get watchAdForTip;
 
   /// No description provided for @errorFillEmailPassword.

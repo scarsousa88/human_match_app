@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../../l10n/app_localizations.dart';
 import '../../app_terms.dart';
 import '../loading_widget.dart';
@@ -18,9 +19,16 @@ class _AuthScreenState extends State<AuthScreen> {
   bool isLogin = true;
   bool loading = false;
   bool acceptTerms = false;
+  bool obscurePass = true;
 
   final emailCtrl = TextEditingController();
   final passCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    debugPrint('APP_VERSION: 1.1.0_WEB_UPDATE');
+  }
 
   @override
   void dispose() {
@@ -29,17 +37,36 @@ class _AuthScreenState extends State<AuthScreen> {
     super.dispose();
   }
 
-  void _toast(String msg) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  void _toast(String msg) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg),
+        backgroundColor: (msg.contains('Erro') || msg.contains('Error') || msg.contains('incorrect') || msg.contains('incorretos') || msg.contains('existe')) ? Colors.red : null,
+      )
+    );
+  }
 
   String _authMsg(BuildContext context, FirebaseAuthException e) {
     final l10n = AppLocalizations.of(context)!;
+    debugPrint('WEB_DEBUG: CODE=${e.code} | MSG=${e.message}');
+    
     switch (e.code) {
-      case 'user-not-found': return l10n.errorUserNotFound;
-      case 'wrong-password': return l10n.errorWrongPassword;
-      case 'invalid-email': return l10n.errorInvalidEmail;
-      case 'email-already-in-use': return l10n.errorEmailAlreadyInUse;
-      case 'weak-password': return l10n.errorWeakPassword;
-      default: return l10n.errorGeneral(e.message ?? e.code);
+      case 'user-not-found':
+      case 'wrong-password':
+      case 'invalid-credential':
+      case 'INVALID_LOGIN_CREDENTIALS':
+      case 'invalid-login-credentials':
+        return 'E-mail ou palavra-passe incorretos.';
+      case 'email-already-in-use':
+        return 'Este e-mail já está registado. Tente fazer login ou use outro e-mail.';
+      case 'weak-password':
+        return 'A palavra-passe é muito fraca. Use pelo menos 6 caracteres.';
+      case 'invalid-email':
+        return 'O formato do e-mail é inválido.';
+      case 'operation-not-allowed':
+        return 'O método de login por e-mail/senha não está ativo no Firebase Console.';
+      default: return 'Erro (${e.code}): ${e.message ?? 'Erro desconhecido'}';
     }
   }
 
@@ -62,8 +89,10 @@ class _AuthScreenState extends State<AuthScreen> {
     setState(() => loading = true);
     try {
       if (isLogin) {
+        debugPrint('WEB_DEBUG: Tentando login: [$email]');
         await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: pass);
       } else {
+        debugPrint('WEB_DEBUG: Tentando registar: [$email]');
         await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: pass);
         final uid = FirebaseAuth.instance.currentUser!.uid;
         await FirebaseFirestore.instance.collection('users').doc(uid).set({
@@ -78,44 +107,24 @@ class _AuthScreenState extends State<AuthScreen> {
     } on FirebaseAuthException catch (e) {
       if (mounted) _toast(_authMsg(context, e));
     } catch (e) {
-      if (mounted) _toast(l10n.errorGeneral(e.toString()));
+      if (mounted) _toast('Erro inesperado: $e');
     } finally {
       if (mounted) setState(() => loading = false);
     }
   }
 
   Future<void> _signInWithGoogle() async {
-    final l10n = AppLocalizations.of(context)!;
     setState(() => loading = true);
     try {
-      await GoogleSignIn.instance.initialize();
-      final googleUser = await GoogleSignIn.instance.authenticate();
-      final googleAuth = await googleUser.authentication;
-      
-      final credential = GoogleAuthProvider.credential(
-        idToken: googleAuth.idToken,
-      );
-
-      final userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-      final user = userCredential.user;
-
-      if (user != null) {
-        final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
-        if (!userDoc.exists) {
-          await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-            'email': user.email,
-            'acceptTerms': true,
-            'acceptedTermsVersion': AppTerms.currentVersion,
-            'termsAcceptedAt': FieldValue.serverTimestamp(),
-            'createdAt': FieldValue.serverTimestamp(),
-            'updatedAt': FieldValue.serverTimestamp(),
-          }, SetOptions(merge: true));
-        }
+      if (kIsWeb) {
+        await FirebaseAuth.instance.signInWithPopup(GoogleAuthProvider());
+      } else {
+        // Implementação mobile
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) _toast(_authMsg(context, e));
     } catch (e) {
-      if (mounted) _toast(l10n.errorGeneral(e.toString()));
+      if (mounted) _toast('Erro Google: $e');
     } finally {
       if (mounted) setState(() => loading = false);
     }
@@ -123,7 +132,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
   Future<void> _resetPassword() async {
     final l10n = AppLocalizations.of(context)!;
-    FocusScope.of(context).unfocus();
     final email = emailCtrl.text.trim();
     if (email.isEmpty) {
       _toast(l10n.resetEmailError);
@@ -132,30 +140,13 @@ class _AuthScreenState extends State<AuthScreen> {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       if (mounted) _toast(l10n.resetEmailSent);
-    } on FirebaseAuthException catch (e) {
-      if (mounted) _toast(_authMsg(context, e));
     } catch (e) {
-      if (mounted) _toast(l10n.errorGeneral(e.toString()));
+      if (mounted) _toast('Erro ao resetar: $e');
     }
-  }
-
-  void _showTerms() {
-    final l10n = AppLocalizations.of(context)!;
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.termsTitle),
-        content: SingleChildScrollView(child: Text(l10n.termsContent)),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.ok)),
-        ],
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
@@ -167,22 +158,15 @@ class _AuthScreenState extends State<AuthScreen> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                  child: Image.asset(
-                    'assets/icon/icon.png',
-                    width: 46,
-                    height: 46,
-                  ),
+                  child: Image.asset('assets/icon/icon.png', width: 46, height: 46),
                 ),
                 const SizedBox(width: 12),
-                Expanded(
+                const Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Human Match',
-                        style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900),
-                      ),
-                      Text(l10n.welcomeMessage, style: TextStyle(color: cs.onSurfaceVariant)),
+                      Text('Human Match', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900)),
+                      Text('Discover your cosmic DNA', style: TextStyle(color: Colors.white70)),
                     ],
                   ),
                 ),
@@ -194,17 +178,28 @@ class _AuthScreenState extends State<AuthScreen> {
                 children: [
                   TextField(
                     controller: emailCtrl,
+                    decoration: InputDecoration(
+                      labelText: l10n.email,
+                      prefixIcon: const Icon(Icons.email_outlined, size: 20),
+                    ),
                     keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(labelText: l10n.email),
                   ),
                   const SizedBox(height: 12),
                   TextField(
                     controller: passCtrl,
-                    obscureText: true,
-                    decoration: InputDecoration(labelText: l10n.password),
+                    obscureText: obscurePass,
+                    decoration: InputDecoration(
+                      labelText: l10n.password,
+                      prefixIcon: const Icon(Icons.lock_outline, size: 20),
+                      suffixIcon: IconButton(
+                        icon: Icon(obscurePass ? Icons.visibility_off : Icons.visibility),
+                        onPressed: () => setState(() => obscurePass = !obscurePass),
+                      ),
+                    ),
+                    onSubmitted: (_) => _submit(),
                   ),
-                  if (!isLogin) ...[
-                    const SizedBox(height: 12),
+                  const SizedBox(height: 14),
+                  if (!isLogin)
                     Row(
                       children: [
                         Checkbox(
@@ -213,46 +208,75 @@ class _AuthScreenState extends State<AuthScreen> {
                         ),
                         Expanded(
                           child: GestureDetector(
-                            onTap: _showTerms,
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (ctx) => AlertDialog(
+                                  title: Text(l10n.termsTitle),
+                                  content: SingleChildScrollView(child: Text(l10n.termsContent)),
+                                  actions: [
+                                    TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Fechar'))
+                                  ],
+                                ),
+                              );
+                            },
                             child: Text(
                               l10n.acceptTerms,
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: cs.primary,
-                                decoration: TextDecoration.underline,
-                              ),
+                              style: const TextStyle(fontSize: 13, decoration: TextDecoration.underline),
                             ),
                           ),
                         ),
                       ],
                     ),
-                  ],
-                  const SizedBox(height: 14),
-                  ElevatedButton(
-                    onPressed: loading ? null : _submit,
-                    child: loading ? const LoadingWidget(size: 24) : Text(isLogin ? l10n.login : l10n.register),
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 45,
+                    child: ElevatedButton(
+                      onPressed: loading ? null : _submit,
+                      child: loading ? const LoadingWidget(size: 24) : Text(isLogin ? l10n.login : l10n.register),
+                    ),
                   ),
                   const SizedBox(height: 16),
                   const Row(
                     children: [
                       Expanded(child: Divider()),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
-                        child: Text("OU", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                      ),
+                      Padding(padding: EdgeInsets.symmetric(horizontal: 12), child: Text("OU", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey))),
                       Expanded(child: Divider()),
                     ],
                   ),
                   const SizedBox(height: 16),
-                  OutlinedButton.icon(
-                    onPressed: loading ? null : _signInWithGoogle,
-                    icon: Image.network(
-                      'https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png',
-                      width: 20,
-                      height: 20,
-                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.login),
+                  SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black87,
+                        side: const BorderSide(color: Colors.grey),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        elevation: 2,
+                      ),
+                      onPressed: loading ? null : _signInWithGoogle,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.network(
+                            'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png',
+                            height: 24,
+                          ),
+                          const SizedBox(width: 12),
+                          const Text(
+                            "Continuar com Google",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                              fontFamily: 'Roboto',
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    label: const Text("Continuar com Google"),
                   ),
                   const SizedBox(height: 8),
                   if (isLogin)
@@ -263,10 +287,16 @@ class _AuthScreenState extends State<AuthScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 10),
             TextButton(
-              onPressed: loading ? null : () => setState(() => isLogin = !isLogin),
+              onPressed: () => setState(() {
+                isLogin = !isLogin;
+                acceptTerms = false;
+              }),
               child: Text(isLogin ? l10n.noAccount : l10n.hasAccount),
+            ),
+            const SizedBox(height: 20),
+            Center(
+              child: Text('v1.1.0_WEB_UPDATE', style: TextStyle(fontSize: 10, color: Colors.white.withOpacity(0.2))),
             ),
           ],
         ),

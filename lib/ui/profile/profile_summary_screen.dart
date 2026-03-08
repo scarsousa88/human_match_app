@@ -298,9 +298,7 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                     ],
 
                     if (lastTipDoc != null)
-                      Text(lastTipData['text']?.toString() ?? '—')
-                    else
-                      Text(l10n.watchAdForTip),
+                      Text(lastTipData['text']?.toString() ?? '—'),
                   ],
                 );
 

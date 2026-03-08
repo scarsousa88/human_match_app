@@ -269,16 +269,9 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
   }
 
   void _showTerms() {
-    final l10n = AppLocalizations.of(context)!;
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.termsTitle),
-        content: SingleChildScrollView(child: Text(l10n.termsContent)),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: Text(l10n.ok)),
-        ],
-      ),
+    launchUrl(
+      Uri.parse('https://humanmatch.app/Privacy-policy/'),
+      mode: LaunchMode.externalApplication,
     );
   }
 
