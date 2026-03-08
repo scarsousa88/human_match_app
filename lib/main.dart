@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 import 'firebase_options.dart';
+import 'hd/swiss_ephemeris_service.dart';
 import 'l10n/app_localizations.dart';
 import 'ui/navigation/root_gate.dart';
 
@@ -18,6 +19,9 @@ void main() async {
   if (!kIsWeb) {
     // Ads only on mobile
     await MobileAds.instance.initialize();
+    
+    // Initialize Swiss Ephemeris
+    await SwissEphemerisService().init();
   }
 
   runApp(const HumanMatchApp());

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import '../../l10n/app_localizations.dart';
 import '../../app_terms.dart';
@@ -48,7 +47,6 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   String _authMsg(BuildContext context, FirebaseAuthException e) {
-    final l10n = AppLocalizations.of(context)!;
     debugPrint('WEB_DEBUG: CODE=${e.code} | MSG=${e.message}');
     
     switch (e.code) {

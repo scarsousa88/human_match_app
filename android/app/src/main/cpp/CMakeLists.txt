@@ -23,4 +23,4 @@ target_include_directories(sweffi PRIVATE
 )
 
 find_library(log-lib log)
-target_link_libraries(sweffi ${log-lib} m)
+target_link_libraries(sweffi ${log-lib} m "-Wl,-z,max-page-size=16384")
