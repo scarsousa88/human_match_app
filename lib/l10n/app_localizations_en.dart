@@ -480,4 +480,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deleteAccountData => 'Delete Account and Data';
+
+  @override
+  String get verifyEmailTitle => 'Verify your Email';
+
+  @override
+  String verifyEmailSent(String email) {
+    return 'We sent a verification email to $email. Please check your inbox (and spam folder).';
+  }
+
+  @override
+  String get checkVerification => 'I\'ve verified';
+
+  @override
+  String get resendVerification => 'Resend email';
+
+  @override
+  String get verificationResent => 'Verification email resent.';
 }

@@ -6,6 +6,7 @@ import '../../app_terms.dart';
 import '../loading_widget.dart';
 import '../auth/auth_screen.dart';
 import '../auth/terms_consent_screen.dart';
+import '../auth/verify_email_screen.dart';
 import '../profile/profile_input_screen.dart';
 import 'main_navigation.dart';
 
@@ -23,7 +24,8 @@ class _RootGateState extends State<RootGate> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _authStream = FirebaseAuth.instance.authStateChanges();
+    // userChanges() emite eventos quando o user faz reload, o que é útil para verificação de email
+    _authStream = FirebaseAuth.instance.userChanges();
   }
 
   @override
@@ -34,13 +36,10 @@ class _RootGateState extends State<RootGate> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // Quando a app volta para primeiro plano (ex: vindo do browser de delete-account)
     if (state == AppLifecycleState.resumed) {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        // Tenta dar refresh ao user para ver se ele ainda existe
         user.reload().catchError((e) {
-          // Se der erro (ex: user-not-found), forçamos o reload da app para limpar tudo
           if (mounted) HumanMatchApp.restartApp(context);
         });
       }
@@ -77,6 +76,11 @@ class _RootGateState extends State<RootGate> with WidgetsBindingObserver {
         
         final user = snap.data;
         if (user == null) return const AuthScreen();
+        
+        // Se o email não estiver verificado, mostramos a tela de verificação
+        if (!user.emailVerified) {
+          return const VerifyEmailScreen();
+        }
         
         return const ProfileGate();
       },

@@ -96,17 +96,23 @@ class _AuthScreenState extends State<AuthScreen> {
         await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: pass);
       } else {
         final cred = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: pass);
-        final uid = cred.user!.uid;
-        
-        // Garantir criação do documento após registo com sucesso
-        await FirebaseFirestore.instance.collection('users').doc(uid).set({
-          'email': email,
-          'acceptTerms': true,
-          'acceptedTermsVersion': AppTerms.currentVersion,
-          'termsAcceptedAt': FieldValue.serverTimestamp(),
-          'createdAt': FieldValue.serverTimestamp(),
-          'updatedAt': FieldValue.serverTimestamp(),
-        }, SetOptions(merge: true));
+        final user = cred.user;
+        if (user != null) {
+          final uid = user.uid;
+          
+          // Enviar email de verificação
+          await user.sendEmailVerification();
+          
+          // Garantir criação do documento após registo com sucesso
+          await FirebaseFirestore.instance.collection('users').doc(uid).set({
+            'email': email,
+            'acceptTerms': true,
+            'acceptedTermsVersion': AppTerms.currentVersion,
+            'termsAcceptedAt': FieldValue.serverTimestamp(),
+            'createdAt': FieldValue.serverTimestamp(),
+            'updatedAt': FieldValue.serverTimestamp(),
+          }, SetOptions(merge: true));
+        }
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) _toast(_authMsg(context, e));

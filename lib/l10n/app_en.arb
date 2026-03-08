@@ -167,5 +167,12 @@
   "hdPlanetPluto": "Pluto",
 
   "legalInfo": "Legal Information",
-  "deleteAccountData": "Delete Account and Data"
+  "deleteAccountData": "Delete Account and Data",
+
+  "verifyEmailTitle": "Verify your Email",
+  "verifyEmailSent": "We sent a verification email to {email}. Please check your inbox (and spam folder).",
+  "@verifyEmailSent": { "placeholders": { "email": { "type": "String" } } },
+  "checkVerification": "I've verified",
+  "resendVerification": "Resend email",
+  "verificationResent": "Verification email resent."
 }

@@ -1,0 +1,37 @@
+{
+    "name": "Human Match",
+    "short_name": "Human Match",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#0F0B1E",
+    "theme_color": "#E6B325",
+    "description": "Discover your Cosmic DNA with Human Design, Astrology and Numerology.",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "assets/assets/icon/icon.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "assets/assets/icon/icon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "assets/assets/icon/icon.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "assets/assets/icon/icon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}

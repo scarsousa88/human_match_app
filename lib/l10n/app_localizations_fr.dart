@@ -167,7 +167,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get personality => 'Personnalité';
 
   @override
-  String get profileInsights => 'Insights de Profil';
+  String get profileInsights => 'Insights de Perfil';
 
   @override
   String get noInsights => 'Vous n\'avez pas encore d\'insights générés.';
@@ -486,4 +486,21 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get deleteAccountData => 'Suppression de Compte et Données';
+
+  @override
+  String get verifyEmailTitle => 'Vérifiez votre e-mail';
+
+  @override
+  String verifyEmailSent(String email) {
+    return 'Nous avons envoyé un e-mail de confirmation à $email. Veuillez vérifier votre boîte de réception (et votre dossier de spam).';
+  }
+
+  @override
+  String get checkVerification => 'J\'ai vérifié';
+
+  @override
+  String get resendVerification => 'Renvoyer l\'e-mail';
+
+  @override
+  String get verificationResent => 'E-mail de vérification renvoyé.';
 }

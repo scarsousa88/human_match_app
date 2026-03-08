@@ -1025,6 +1025,36 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Eliminação de Conta e Dados'**
   String get deleteAccountData;
+
+  /// No description provided for @verifyEmailTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Verifica o teu Email'**
+  String get verifyEmailTitle;
+
+  /// No description provided for @verifyEmailSent.
+  ///
+  /// In pt, this message translates to:
+  /// **'Enviámos um email de confirmação para {email}. Por favor, verifica a tua caixa de entrada (e pasta de spam).'**
+  String verifyEmailSent(String email);
+
+  /// No description provided for @checkVerification.
+  ///
+  /// In pt, this message translates to:
+  /// **'Já verifiquei'**
+  String get checkVerification;
+
+  /// No description provided for @resendVerification.
+  ///
+  /// In pt, this message translates to:
+  /// **'Reenviar email'**
+  String get resendVerification;
+
+  /// No description provided for @verificationResent.
+  ///
+  /// In pt, this message translates to:
+  /// **'Email de verificação reenviado.'**
+  String get verificationResent;
 }
 
 class _AppLocalizationsDelegate

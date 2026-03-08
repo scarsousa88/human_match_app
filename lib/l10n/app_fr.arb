@@ -51,7 +51,7 @@
   "expression": "Expression",
   "soul": "Âme",
   "personality": "Personnalité",
-  "profileInsights": "Insights de Profil",
+  "profileInsights": "Insights de Perfil",
   "noInsights": "Vous n'avez pas encore d'insights générés.",
   "generateInsights": "Générer des Insights (Publicité)",
   "update": "Mettre à jour",
@@ -167,5 +167,12 @@
   "hdPlanetPluto": "Pluton",
 
   "legalInfo": "Informations Légales",
-  "deleteAccountData": "Suppression de Compte et Données"
+  "deleteAccountData": "Suppression de Compte et Données",
+
+  "verifyEmailTitle": "Vérifiez votre e-mail",
+  "verifyEmailSent": "Nous avons envoyé un e-mail de confirmation à {email}. Veuillez vérifier votre boîte de réception (et votre dossier de spam).",
+  "@verifyEmailSent": { "placeholders": { "email": { "type": "String" } } },
+  "checkVerification": "J'ai vérifié",
+  "resendVerification": "Renvoyer l'e-mail",
+  "verificationResent": "E-mail de vérification renvoyé."
 }

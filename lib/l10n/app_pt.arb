@@ -167,5 +167,12 @@
   "hdPlanetPluto": "Plutão",
 
   "legalInfo": "Informações Legais",
-  "deleteAccountData": "Eliminação de Conta e Dados"
+  "deleteAccountData": "Eliminação de Conta e Dados",
+
+  "verifyEmailTitle": "Verifica o teu Email",
+  "verifyEmailSent": "Enviámos um email de confirmação para {email}. Por favor, verifica a tua caixa de entrada (e pasta de spam).",
+  "@verifyEmailSent": { "placeholders": { "email": { "type": "String" } } },
+  "checkVerification": "Já verifiquei",
+  "resendVerification": "Reenviar email",
+  "verificationResent": "Email de verificação reenviado."
 }
