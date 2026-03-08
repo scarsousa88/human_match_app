@@ -37,6 +37,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
 
   bool _isNameLocked = false;
   bool _isDateLocked = false;
+  bool _showDeleteOption = false;
 
   @override
   void initState() {
@@ -62,7 +63,10 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
     if (user == null) return;
 
     final snap = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
-    if (!snap.exists) return;
+    if (!snap.exists) {
+      if (mounted) setState(() => _showDeleteOption = false);
+      return;
+    }
 
     final data = snap.data() ?? {};
     if (mounted) {
@@ -70,6 +74,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
         final existingName = (data['name'] ?? '').toString().trim();
         nameCtrl.text = existingName;
         _isNameLocked = existingName.isNotEmpty;
+        _showDeleteOption = existingName.isNotEmpty;
 
         final birthDateStr = (data['birthDateStr'] ?? '').toString().trim();
         if (birthDateStr.isNotEmpty) {
@@ -202,7 +207,9 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
   Future<void> _save() async {
     final l10n = AppLocalizations.of(context)!;
     FocusScope.of(context).unfocus();
-    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+    final uid = user.uid;
     final name = nameCtrl.text.trim();
 
     if (name.isEmpty || birthDate == null || birthTime == null || _city == null) {
@@ -230,6 +237,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
 
       await userRef.set({
         'name': name,
+        'email': user.email,
         'birthPlaceLabel': place.label,
         'place': {
           'country': place.country,
@@ -252,16 +260,18 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
         'humanDesignBase': hdData,
         'numerology': numRes.toJson(),
         'updatedAt': FieldValue.serverTimestamp(),
+        'aiGates': {
+          'dailyTip': FieldValue.delete(),
+          'profile': FieldValue.delete(),
+        }
       }, SetOptions(merge: true));
 
-      await userRef.collection('aiInsights').doc('latest').delete();
-      final now = DateTime.now();
-      final todayKey = '${now.year}-${_p2(now.month)}-${_p2(now.day)}';
-      await userRef.collection('dailyTips').doc(todayKey).delete();
-      await userRef.update({
-        'aiGates.dailyTip': FieldValue.delete(),
-        'aiGates.profile': FieldValue.delete(),
-      });
+      try {
+        await userRef.collection('aiInsights').doc('latest').delete();
+        final now = DateTime.now();
+        final todayKey = '${now.year}-${_p2(now.month)}-${_p2(now.day)}';
+        await userRef.collection('dailyTips').doc(todayKey).delete();
+      } catch (_) {}
 
       if (mounted) {
         if (Navigator.canPop(context)) {
@@ -283,7 +293,15 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
     final cities = _citiesForCountry(_country);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.editProfile)),
+      appBar: AppBar(
+        title: Text(l10n.editProfile),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () => FirebaseAuth.instance.signOut(),
+          )
+        ],
+      ),
       body: Shell(
         child: ListView(
           children: [
@@ -369,7 +387,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                   else ...[
                     DropdownButtonFormField<String>(
                       key: ValueKey('country_$_country'),
-                      initialValue: _country, 
+                      initialValue: _country,
                       decoration: InputDecoration(labelText: l10n.country),
                       items: countries.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
                       onChanged: (v) {
@@ -383,7 +401,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                     const SizedBox(height: 12),
                     DropdownButtonFormField<Place>(
                       key: ValueKey('city_$_city'),
-                      initialValue: _city, 
+                      initialValue: _city,
                       decoration: InputDecoration(labelText: l10n.city),
                       items: cities.map((p) => DropdownMenuItem(value: p, child: Text(p.city))).toList(),
                       onChanged: (v) => setState(() => _city = v),
@@ -398,22 +416,41 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
               ),
             ),
             const SizedBox(height: 32),
-            Center(
-              child: TextButton.icon(
-                onPressed: () {
-                  final locale = Localizations.localeOf(context).languageCode;
-                  launchUrl(
-                    Uri.parse('https://humanmatch.app/delete-account?lang=$locale'),
-                    mode: LaunchMode.externalApplication,
-                  );
-                },
-                icon: const Icon(Icons.delete_outline, size: 18, color: Colors.grey),
-                label: Text(
-                  l10n.deleteAccountData,
-                  style: const TextStyle(color: Colors.grey, fontSize: 13, decoration: TextDecoration.underline),
+            if (_showDeleteOption)
+              Center(
+                child: TextButton.icon(
+                  onPressed: () async {
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user == null) return;
+                    
+                    final token = await user.getIdToken(true);
+                    final locale = Localizations.localeOf(context).languageCode;
+                    
+                    final uri = Uri.parse('https://humanmatch.app/delete-account')
+                        .replace(queryParameters: {
+                          'lang': locale,
+                          'token': token,
+                          'uid': user.uid,
+                        });
+
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(
+                        uri,
+                        mode: LaunchMode.externalApplication,
+                      );
+
+                      // Removido o logout automático daqui.
+                      // O logout será agora realizado apenas quando o utilizador confirmar a eliminação na página web,
+                      // através do Deep Link 'humanmatch://auth' que configurámos.
+                    }
+                  },
+                  icon: const Icon(Icons.delete_outline, size: 18, color: Colors.grey),
+                  label: Text(
+                    l10n.deleteAccountData,
+                    style: const TextStyle(color: Colors.grey, fontSize: 13, decoration: TextDecoration.underline),
+                  ),
                 ),
               ),
-            ),
             const SizedBox(height: 24),
           ],
         ),

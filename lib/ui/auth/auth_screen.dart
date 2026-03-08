@@ -26,7 +26,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   void initState() {
     super.initState();
-    debugPrint('APP_VERSION: 1.1.0_WEB_UPDATE');
+    debugPrint('APP_VERSION: 1.1.1_DEBUG_AUTH');
   }
 
   @override
@@ -36,42 +36,48 @@ class _AuthScreenState extends State<AuthScreen> {
     super.dispose();
   }
 
-  void _toast(String msg) {
+  void _toast(String msg, {bool isError = true}) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(msg),
-        backgroundColor: (msg.contains('Erro') || msg.contains('Error') || msg.contains('incorrect') || msg.contains('incorretos') || msg.contains('existe')) ? Colors.red : null,
+        backgroundColor: isError ? Colors.red : Colors.green,
+        duration: const Duration(seconds: 4),
+        action: msg.contains('usado') || msg.contains('use') 
+          ? SnackBarAction(
+              label: 'ENTRAR', 
+              textColor: Colors.white,
+              onPressed: () => setState(() => isLogin = true)
+            ) 
+          : null,
       )
     );
   }
 
   String _authMsg(BuildContext context, FirebaseAuthException e) {
-    debugPrint('WEB_DEBUG: CODE=${e.code} | MSG=${e.message}');
+    final l10n = AppLocalizations.of(context)!;
+    debugPrint('AUTH_ERROR: ${e.code} | ${e.message}');
     
     switch (e.code) {
-      case 'user-not-found':
-      case 'wrong-password':
+      case 'user-not-found': return l10n.errorUserNotFound;
+      case 'wrong-password': return l10n.errorWrongPassword;
+      case 'email-already-in-use': return 'Este email já está registado. Tente fazer LOGIN em vez de criar conta.';
       case 'invalid-credential':
-      case 'INVALID_LOGIN_CREDENTIALS':
-      case 'invalid-login-credentials':
-        return 'E-mail ou palavra-passe incorretos.';
-      case 'email-already-in-use':
-        return 'Este e-mail já está registado. Tente fazer login ou use outro e-mail.';
-      case 'weak-password':
-        return 'A palavra-passe é muito fraca. Use pelo menos 6 caracteres.';
-      case 'invalid-email':
-        return 'O formato do e-mail é inválido.';
-      case 'operation-not-allowed':
-        return 'O método de login por e-mail/senha não está ativo no Firebase Console.';
-      default: return 'Erro (${e.code}): ${e.message ?? 'Erro desconhecido'}';
+      case 'INVALID_LOGIN_CREDENTIALS': return 'Credenciais incorretas ou conta inexistente.';
+      case 'weak-password': return l10n.errorWeakPassword;
+      case 'invalid-email': return l10n.errorInvalidEmail;
+      case 'user-disabled': return 'Conta desativada.';
+      case 'too-many-requests': return 'Bloqueado temporariamente por excesso de tentativas.';
+      case 'account-exists-with-different-credential': 
+        return 'Já existe uma conta com este email vinculada ao Google. Use "Continuar com Google".';
+      default: return 'Erro: ${e.code}';
     }
   }
 
   Future<void> _submit() async {
     final l10n = AppLocalizations.of(context)!;
     FocusScope.of(context).unfocus();
-    final email = emailCtrl.text.trim();
+    final email = emailCtrl.text.trim().toLowerCase();
     final pass = passCtrl.text;
 
     if (email.isEmpty || pass.isEmpty) {
@@ -87,12 +93,12 @@ class _AuthScreenState extends State<AuthScreen> {
     setState(() => loading = true);
     try {
       if (isLogin) {
-        debugPrint('WEB_DEBUG: Tentando login: [$email]');
         await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: pass);
       } else {
-        debugPrint('WEB_DEBUG: Tentando registar: [$email]');
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: pass);
-        final uid = FirebaseAuth.instance.currentUser!.uid;
+        final cred = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: pass);
+        final uid = cred.user!.uid;
+        
+        // Garantir criação do documento após registo com sucesso
         await FirebaseFirestore.instance.collection('users').doc(uid).set({
           'email': email,
           'acceptTerms': true,
@@ -117,7 +123,7 @@ class _AuthScreenState extends State<AuthScreen> {
       if (kIsWeb) {
         await FirebaseAuth.instance.signInWithPopup(GoogleAuthProvider());
       } else {
-        // Implementação mobile
+        await FirebaseAuth.instance.signInWithProvider(GoogleAuthProvider());
       }
     } on FirebaseAuthException catch (e) {
       if (mounted) _toast(_authMsg(context, e));
@@ -137,7 +143,7 @@ class _AuthScreenState extends State<AuthScreen> {
     }
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-      if (mounted) _toast(l10n.resetEmailSent);
+      if (mounted) _toast(l10n.resetEmailSent, isError: false);
     } catch (e) {
       if (mounted) _toast('Erro ao resetar: $e');
     }
@@ -146,51 +152,65 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    const goldColor = Color(0xFFE6B325);
 
     return Scaffold(
       body: Shell(
         child: ListView(
           children: [
-            const SizedBox(height: 18),
-            Row(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Image.asset('assets/icon/icon.png', width: 46, height: 46),
-                ),
-                const SizedBox(width: 12),
-                const Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Human Match', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900)),
-                      Text('Discover your cosmic DNA', style: TextStyle(color: Colors.white70)),
-                    ],
+            const SizedBox(height: 30),
+            Center(
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: goldColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: goldColor.withOpacity(0.2)),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Image.asset('assets/icon/icon.png', width: 80, height: 80),
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 24),
+                  const Text(
+                    'Human Match',
+                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: -1),
+                  ),
+                  const Text(
+                    'DISCOVER YOUR COSMIC DNA',
+                    style: TextStyle(color: goldColor, fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 2),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 40),
             PrimaryCard(
               child: Column(
                 children: [
                   TextField(
                     controller: emailCtrl,
+                    style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       labelText: l10n.email,
-                      prefixIcon: const Icon(Icons.email_outlined, size: 20),
+                      labelStyle: const TextStyle(color: Colors.white60),
+                      prefixIcon: const Icon(Icons.email_outlined, size: 20, color: Colors.white60),
                     ),
                     keyboardType: TextInputType.emailAddress,
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 16),
                   TextField(
                     controller: passCtrl,
                     obscureText: obscurePass,
+                    style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       labelText: l10n.password,
-                      prefixIcon: const Icon(Icons.lock_outline, size: 20),
+                      labelStyle: const TextStyle(color: Colors.white60),
+                      prefixIcon: const Icon(Icons.lock_outline, size: 20, color: Colors.white60),
                       suffixIcon: IconButton(
-                        icon: Icon(obscurePass ? Icons.visibility_off : Icons.visibility),
+                        icon: Icon(obscurePass ? Icons.visibility_off : Icons.visibility, color: Colors.white60),
                         onPressed: () => setState(() => obscurePass = !obscurePass),
                       ),
                     ),
@@ -202,6 +222,9 @@ class _AuthScreenState extends State<AuthScreen> {
                       children: [
                         Checkbox(
                           value: acceptTerms,
+                          activeColor: goldColor,
+                          checkColor: Colors.black,
+                          side: const BorderSide(color: Colors.white38),
                           onChanged: (v) => setState(() => acceptTerms = v ?? false),
                         ),
                         Expanded(
@@ -210,68 +233,61 @@ class _AuthScreenState extends State<AuthScreen> {
                               showDialog(
                                 context: context,
                                 builder: (ctx) => AlertDialog(
-                                  title: Text(l10n.termsTitle),
-                                  content: SingleChildScrollView(child: Text(l10n.termsContent)),
+                                  backgroundColor: const Color(0xFF1A162B),
+                                  title: Text(l10n.termsTitle, style: const TextStyle(color: Colors.white)),
+                                  content: SingleChildScrollView(child: Text(AppTerms.termsText, style: const TextStyle(color: Colors.white70))),
                                   actions: [
-                                    TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Fechar'))
+                                    TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Fechar', style: TextStyle(color: goldColor)))
                                   ],
                                 ),
                               );
                             },
                             child: Text(
                               l10n.acceptTerms,
-                              style: const TextStyle(fontSize: 13, decoration: TextDecoration.underline),
+                              style: const TextStyle(fontSize: 13, color: Colors.white70, decoration: TextDecoration.underline),
                             ),
                           ),
                         ),
                       ],
                     ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
-                    height: 45,
+                    height: 55,
                     child: ElevatedButton(
                       onPressed: loading ? null : _submit,
                       child: loading ? const LoadingWidget(size: 24) : Text(isLogin ? l10n.login : l10n.register),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  const Row(
+                  const SizedBox(height: 24),
+                  Row(
                     children: [
-                      Expanded(child: Divider()),
-                      Padding(padding: EdgeInsets.symmetric(horizontal: 12), child: Text("OU", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey))),
-                      Expanded(child: Divider()),
+                      Expanded(child: Divider(color: Colors.white.withOpacity(0.1))),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text("OU", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white.withOpacity(0.3), fontSize: 12)),
+                      ),
+                      Expanded(child: Divider(color: Colors.white.withOpacity(0.1))),
                     ],
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 24),
                   SizedBox(
-                    height: 50,
+                    height: 55,
                     width: double.infinity,
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black87,
-                        side: const BorderSide(color: Colors.grey),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        elevation: 2,
+                        backgroundColor: Colors.white.withOpacity(0.05),
+                        foregroundColor: Colors.white,
+                        side: BorderSide(color: Colors.white.withOpacity(0.1)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       ),
                       onPressed: loading ? null : _signInWithGoogle,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.network(
-                            'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png',
-                            height: 24,
-                          ),
+                          Image.network('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png', height: 22),
                           const SizedBox(width: 12),
-                          const Text(
-                            "Continuar com Google",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              fontFamily: 'Roboto',
-                            ),
-                          ),
+                          const Text("Continuar com Google", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
                         ],
                       ),
                     ),
@@ -280,22 +296,25 @@ class _AuthScreenState extends State<AuthScreen> {
                   if (isLogin)
                     TextButton(
                       onPressed: loading ? null : _resetPassword,
-                      child: Text(l10n.forgotPassword),
+                      child: Text(l10n.forgotPassword, style: const TextStyle(color: Colors.white54)),
                     ),
                 ],
               ),
             ),
+            const SizedBox(height: 8),
             TextButton(
               onPressed: () => setState(() {
                 isLogin = !isLogin;
                 acceptTerms = false;
               }),
-              child: Text(isLogin ? l10n.noAccount : l10n.hasAccount),
+              child: Text(
+                isLogin ? l10n.noAccount : l10n.hasAccount,
+                style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold),
+              ),
             ),
+            const SizedBox(height: 30),
+            Center(child: Text('v1.1.1_DEBUG_AUTH', style: TextStyle(fontSize: 10, color: Colors.white.withOpacity(0.1)))),
             const SizedBox(height: 20),
-            Center(
-              child: Text('v1.1.0_WEB_UPDATE', style: TextStyle(fontSize: 10, color: Colors.white.withOpacity(0.2))),
-            ),
           ],
         ),
       ),

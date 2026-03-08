@@ -19,12 +19,19 @@ class _TermsConsentScreenState extends State<TermsConsentScreen> {
   Future<void> _accept() async {
     setState(() => loading = true);
     try {
-      final uid = FirebaseAuth.instance.currentUser!.uid;
-      await FirebaseFirestore.instance.collection('users').doc(uid).update({
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) return;
+      
+      final uid = user.uid;
+      // Usamos .set com merge:true em vez de .update para garantir que funciona 
+      // mesmo que o documento tenha sido eliminado previamente (ex: após delete account).
+      await FirebaseFirestore.instance.collection('users').doc(uid).set({
+        'email': user.email,
         'acceptTerms': true,
         'acceptedTermsVersion': AppTerms.currentVersion,
         'termsAcceptedAt': FieldValue.serverTimestamp(),
-      });
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
     } catch (e) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
     } finally {

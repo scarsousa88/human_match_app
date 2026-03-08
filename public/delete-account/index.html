@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delete Account - Human Match</title>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-functions-compat.js"></script>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #f9f9f9; }
         .card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; }
@@ -13,11 +15,13 @@
         .btn-delete { background-color: #d32f2f; color: white; border: none; padding: 14px 28px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; transition: background 0.3s; }
         .btn-delete:hover { background-color: #b71c1c; }
         .btn-delete:disabled { background-color: #ccc; cursor: not-allowed; }
-        .lang-switch { display: none; margin-bottom: 30px; }
+        .lang-switch { margin-bottom: 30px; }
         .lang-switch button { background: none; border: 1px solid #ccc; padding: 5px 10px; cursor: pointer; margin: 0 5px; border-radius: 4px; }
         .lang-switch button.active { background-color: #3E1E4F; color: white; border-color: #3E1E4F; }
         .lang-content { display: none; }
-        #status-message { margin-top: 20px; font-weight: bold; }
+        #status-message { margin-top: 20px; font-weight: bold; padding: 10px; border-radius: 8px; display: none; }
+        .success { background-color: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+        .error { background-color: #ffebee; color: #c62828; border: 1px solid #ffcdd2; }
     </style>
 </head>
 <body>
@@ -29,81 +33,151 @@
             <button onclick="setLang('fr')" id="btn-fr">FR</button>
         </div>
 
-        <!-- PORTUGUESE -->
         <div id="lang-pt" class="lang-content">
             <h1>Eliminar Conta e Dados</h1>
             <p>Em conformidade com o Regulamento Geral de Proteção de Dados (RGPD), garantimos o seu direito ao esquecimento.</p>
-            <p class="warning">Ao confirmar, todos os seus dados pessoais (nome, data, hora e local de nascimento) e relatórios gerados serão apagados permanentemente dos nossos servidores. Esta ação não pode ser desfeita.</p>
-            <button class="btn-delete" onclick="handleDelete()">Confirmar Eliminação de Dados</button>
+            <p class="warning">Ao confirmar, todos os seus dados pessoais e relatórios serão apagados permanentemente. Esta ação é irreversível.</p>
+            <button class="btn-delete" onclick="handleDelete()">Confirmar e Sair da App</button>
         </div>
 
-        <!-- ENGLISH -->
         <div id="lang-en" class="lang-content">
             <h1>Delete Account and Data</h1>
-            <p>In compliance with the General Data Protection Regulation (GDPR), we guarantee your right to be forgotten.</p>
-            <p class="warning">By confirming, all your personal data (name, date, time and place of birth) and generated reports will be permanently deleted from our servers. This action cannot be undone.</p>
-            <button class="btn-delete" onclick="handleDelete()">Confirm Data Deletion</button>
+            <p>In compliance with GDPR, we guarantee your right to be forgotten.</p>
+            <p class="warning">By confirming, all your personal data and reports will be permanently deleted. This action cannot be undone.</p>
+            <button class="btn-delete" onclick="handleDelete()">Confirm and Logout from App</button>
         </div>
 
-        <!-- SPANISH -->
         <div id="lang-es" class="lang-content">
             <h1>Eliminar Cuenta y Datos</h1>
-            <p>De conformidad con el Reglamento General de Protección de Dados (RGPD), garantizamos su derecho al olvido.</p>
-            <p class="warning">Al confirmar, todos sus datos personales (nombre, fecha, hora y lugar de nacimiento) y los informes generados se eliminarán permanentemente de nuestros servidores. Esta acción no se puede deshacer.</p>
-            <button class="btn-delete" onclick="handleDelete()">Confirmar Eliminación de Dados</button>
+            <p>De conformidad con o RGPD, garantizamos su direito al olvido.</p>
+            <p class="warning">Al confirmar, todos sus datos personales se eliminarán permanentemente. Esta acción es irreversible.</p>
+            <button class="btn-delete" onclick="handleDelete()">Confirmar y Salir</button>
         </div>
 
-        <!-- FRENCH -->
         <div id="lang-fr" class="lang-content">
-            <h1>Supprimer le compte et les données</h1>
-            <p>Conformément au Règlement Général sur la Protection des Données (RGPD), nous garantissons votre droit à l'oubli.</p>
-            <p class="warning">En confirmant, toutes vos données personnelles (nom, date, heure et lieu de naissance) et les rapports générés seront définitivement supprimés de nos serveurs. Cette action est irréversible.</p>
-            <button class="btn-delete" onclick="handleDelete()">Confirmer la suppression des données</button>
+            <h1>Supprimer le compte</h1>
+            <p>Conformément au RGPD, nous garantissons votre droit à l'oubli.</p>
+            <p class="warning">En confirmant, toutes vos données seront définitivement supprimées.</p>
+            <button class="btn-delete" onclick="handleDelete()">Confirmer et Quitter</button>
         </div>
 
         <div id="status-message"></div>
     </div>
 
     <script>
-        function setLang(lang) {
+        const firebaseConfig = {
+            authDomain: "humanmatch-4ab47.firebaseapp.com",
+            projectId: "humanmatch-4ab47"
+        };
+        firebase.initializeApp(firebaseConfig);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        const uid = urlParams.get('uid');
+        const statusEl = document.getElementById('status-message');
+
+        const authErrorMsg = {
+            pt: "Erro: Sessão não encontrada. Por favor, aceda a esta página através da App Human Match.",
+            en: "Error: Session not found. Please access this page through the Human Match App.",
+            es: "Error: Sesión no encontrada. Por favor, acceda a esta página desde la App Human Match.",
+            fr: "Erreur : Session introuvable. Veuillez accéder à cette page via l'application Human Match."
+        };
+
+        function showStatus(text, isError = false) {
+            statusEl.innerText = text;
+            statusEl.className = isError ? "error" : "success";
+            statusEl.style.display = "block";
+        }
+
+        function setLang(langCode) {
+            const supported = ['pt', 'en', 'es', 'fr'];
+            const active = supported.includes(langCode) ? langCode : 'en';
+
             document.querySelectorAll('.lang-content').forEach(el => el.style.display = 'none');
             document.querySelectorAll('.lang-switch button').forEach(el => el.classList.remove('active'));
-            const content = document.getElementById('lang-' + lang);
-            if (content) {
-                content.style.display = 'block';
-                document.getElementById('btn-' + lang).classList.add('active');
-            } else {
-                document.getElementById('lang-en').style.display = 'block';
-                document.getElementById('btn-en').classList.add('active');
+
+            const content = document.getElementById('lang-' + active);
+            if (content) content.style.display = 'block';
+
+            const btn = document.getElementById('btn-' + active);
+            if (btn) btn.classList.add('active');
+
+            if (!token || !uid) {
+                showStatus(authErrorMsg[active], true);
+                document.querySelectorAll('.btn-delete').forEach(b => {
+                    b.disabled = true;
+                    b.style.backgroundColor = "#ccc";
+                });
             }
         }
 
-        const urlParams = new URLSearchParams(window.location.search);
-        let lang = urlParams.get('lang');
-
-        if (!lang) {
-            const userLang = navigator.language || navigator.userLanguage;
-            lang = userLang.split('-')[0];
-        }
-
+        // Detetar idioma: URL -> Navegador -> 'en'
         const supportedLangs = ['pt', 'en', 'es', 'fr'];
-        if (supportedLangs.includes(lang)) {
-            setLang(lang);
-        } else {
-            setLang('en');
+        let initialLang = urlParams.get('lang');
+        if (!initialLang || !supportedLangs.includes(initialLang)) {
+            const browserLang = navigator.language.split('-')[0];
+            initialLang = supportedLangs.includes(browserLang) ? browserLang : 'en';
         }
 
-        function handleDelete() {
-            const currentLang = document.querySelector('.lang-switch button.active').id.split('-')[1];
+        setLang(initialLang);
 
-            const messages = {
-                pt: "Para eliminar a sua conta, por favor utilize a opção dentro da aplicação Human Match em Perfil > Editar Perfil > Eliminar Conta, ou contacte support@humanmatch.app.",
-                en: "To delete your account, please use the option inside the Human Match app in Profile > Edit Profile > Delete Account, or contact support@humanmatch.app.",
-                es: "Para eliminar su cuenta, utilice la opção dentro de la aplicación Human Match en Perfil > Editar Perfil > Eliminar Cuenta, o contacte con support@humanmatch.app.",
-                fr: "Pour supprimer votre compte, veuillez utiliser l'option à l'intérieur de l'application Human Match dans Profil > Modifier le profil > Supprimer le compte, ou contactez support@humanmatch.app."
+        async function handleDelete() {
+            if (!token || !uid) return;
+
+            const activeBtn = document.querySelector('.lang-switch button.active');
+            const currentLang = activeBtn ? activeBtn.id.split('-')[1] : 'en';
+
+            const confirmMsg = {
+                pt: "Tem a certeza que deseja eliminar permanentemente a sua conta?",
+                en: "Are you sure you want to permanently delete your account?",
+                es: "¿Estás seguro de que quieres eliminar permanentemente tu cuenta?",
+                fr: "Êtes-vous sûr de vouloir supprimer définitivement votre compte ?"
             };
 
-            alert(messages[currentLang]);
+            if (!confirm(confirmMsg[currentLang])) return;
+
+            const deleteFunc = firebase.functions().httpsCallable('deleteUserAccountAndData');
+
+            document.querySelectorAll('.btn-delete').forEach(b => {
+                b.disabled = true;
+                b.innerText = "...";
+            });
+
+            try {
+                const result = await deleteFunc({ token: token, uid: uid });
+                if (result.data.success) {
+                    const successMsg = {
+                        pt: "Conta eliminada com sucesso. A fechar...",
+                        en: "Account successfully deleted. Closing...",
+                        es: "Cuenta eliminada con éxito. Cerrando...",
+                        fr: "Compte supprimé avec succès. Fermeture..."
+                    };
+                    showStatus(successMsg[currentLang]);
+
+                    // Tenta redirecionar para a App para forçar o logout
+                    window.location.href = "humanmatch://auth";
+
+                    // Aguarda um momento e tenta fechar a janela
+                    setTimeout(() => {
+                        window.close();
+                        // Se window.close() falhar (comum em browsers mobile),
+                        // pelo menos informamos o user que pode fechar.
+                        const finalMsg = {
+                            pt: "Dados eliminados. Pode fechar esta página.",
+                            en: "Data deleted. You can close this page.",
+                            es: "Datos eliminados. Puedes cerrar esta página.",
+                            fr: "Données supprimées. Vous pouvez fermer cette page."
+                        };
+                        showStatus(finalMsg[currentLang]);
+                    }, 1500);
+                }
+            } catch (error) {
+                showStatus("Error: " + error.message, true);
+                document.querySelectorAll('.btn-delete').forEach(b => {
+                    b.disabled = false;
+                    b.innerText = "Retry";
+                });
+            }
         }
     </script>
 </body>

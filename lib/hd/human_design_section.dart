@@ -182,7 +182,14 @@ class HumanDesignSection extends StatelessWidget {
       'Pluto',
     ];
 
-    const hiddenBodies = <String>{'TrueNode', 'SouthNode'};
+    // Added 'North Node' and 'South Node' to hidden list to clean up UI from legacy data
+    const hiddenBodies = <String>{
+      'TrueNode', 
+      'SouthNode', 
+      'NorthNode', 
+      'North Node', 
+      'South Node'
+    };
 
     final cMap = <String, Map<String, dynamic>>{};
     for (final a in conscious) {

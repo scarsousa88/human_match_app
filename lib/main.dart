@@ -17,82 +17,121 @@ void main() async {
   tz.initializeTimeZones();
 
   if (!kIsWeb) {
-    // Ads only on mobile
     await MobileAds.instance.initialize();
-    
-    // Initialize Swiss Ephemeris
     await SwissEphemerisService().init();
   }
 
   runApp(const HumanMatchApp());
 }
 
-class HumanMatchApp extends StatelessWidget {
+class HumanMatchApp extends StatefulWidget {
   const HumanMatchApp({super.key});
+
+  static void restartApp(BuildContext context) {
+    context.findAncestorStateOfType<_HumanMatchAppState>()?.restart();
+  }
+
+  @override
+  State<HumanMatchApp> createState() => _HumanMatchAppState();
+}
+
+class _HumanMatchAppState extends State<HumanMatchApp> {
+  Key key = UniqueKey();
+
+  void restart() {
+    setState(() {
+      key = UniqueKey();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    const cosmicBg = Color(0xFF0F0B1E);
+    const goldColor = Color(0xFFE6B325);
+
     final colorScheme = ColorScheme.fromSeed(
       seedColor: const Color(0xFF3E1E4F),
       brightness: Brightness.dark,
+      surface: cosmicBg,
+      onSurface: Colors.white,
     );
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Human Match',
-      supportedLocales: const [
-        Locale('en', 'US'),
-        Locale('pt', 'PT'),
-        Locale('es', 'ES'),
-        Locale('fr', 'FR'),
-      ],
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: colorScheme,
-        scaffoldBackgroundColor: const Color(0xFF3E1E4F),
-        appBarTheme: AppBarTheme(
-          backgroundColor: const Color(0xFF3E1E4F),
-          foregroundColor: colorScheme.onSurface,
-          centerTitle: true,
-        ),
-        cardTheme: CardThemeData(
-          elevation: 0.8,
-          color: colorScheme.surfaceContainerLowest,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          filled: true,
-          fillColor: colorScheme.surfaceContainerLowest,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: BorderSide.none,
+    return KeyedSubtree(
+      key: key,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Human Match',
+        supportedLocales: const [
+          Locale('en', 'US'),
+          Locale('pt', 'PT'),
+          Locale('es', 'ES'),
+          Locale('fr', 'FR'),
+        ],
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        theme: ThemeData(
+          useMaterial3: true,
+          brightness: Brightness.dark,
+          colorScheme: colorScheme,
+          scaffoldBackgroundColor: cosmicBg,
+          canvasColor: cosmicBg, // Adicionado para garantir fundo na Web
+          appBarTheme: const AppBarTheme(
+            backgroundColor: cosmicBg,
+            foregroundColor: Colors.white,
+            centerTitle: true,
+            elevation: 0,
+          ),
+          cardTheme: CardThemeData(
+            elevation: 0,
+            color: Colors.white.withOpacity(0.04),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18),
+              side: BorderSide(color: Colors.white.withOpacity(0.08)),
+            ),
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+            filled: true,
+            fillColor: Colors.white.withOpacity(0.05),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14),
+              borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14),
+              borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14),
+              borderSide: const BorderSide(color: goldColor),
+            ),
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: goldColor,
+              foregroundColor: Colors.black,
+              minimumSize: const Size(double.infinity, 55), // Ligeiramente maior
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+              textStyle: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+            ),
+          ),
+          outlinedButtonTheme: OutlinedButtonThemeData(
+            style: OutlinedButton.styleFrom(
+              minimumSize: const Size(double.infinity, 55),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+              textStyle: const TextStyle(fontWeight: FontWeight.w700),
+              foregroundColor: Colors.white,
+            ),
+          ),
+          snackBarTheme: const SnackBarThemeData(
+            behavior: SnackBarBehavior.floating,
           ),
         ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size(double.infinity, 50),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-            textStyle: const TextStyle(fontWeight: FontWeight.w700),
-          ),
-        ),
-        outlinedButtonTheme: OutlinedButtonThemeData(
-          style: OutlinedButton.styleFrom(
-            minimumSize: const Size(double.infinity, 50),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-            textStyle: const TextStyle(fontWeight: FontWeight.w700),
-          ),
-        ),
-        snackBarTheme: const SnackBarThemeData(
-          behavior: SnackBarBehavior.floating,
-        ),
+        home: const RootGate(),
       ),
-      home: const RootGate(),
     );
   }
 }

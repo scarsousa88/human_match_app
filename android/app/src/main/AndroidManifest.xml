@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <queries>
-        <!-- Força visibilidade total para pacotes Google e Store -->
         <package android:name="com.google.android.gms" />
         <package android:name="com.android.vending" />
         <intent>
@@ -25,7 +24,6 @@
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="false">
 
-        <!-- AdMob App ID -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-2243336683300353~1086577572" />
@@ -46,6 +44,14 @@
             <meta-data
                 android:name="io.flutter.embedding.android.NormalTheme"
                 android:resource="@style/NormalTheme" />
+
+            <!-- Intent Filter para Deep Linking (humanmatch://) -->
+            <intent-filter android:label="humanmatch_link">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="humanmatch" />
+            </intent-filter>
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

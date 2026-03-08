@@ -15,9 +15,18 @@ const OPENAI_API_KEY = defineSecret("OPENAI_API_KEY");
 // Helpers
 // ===============================
 
-function requireAuth(uid?: string): string {
-  if (!uid) throw new HttpsError("unauthenticated", "Not authenticated.");
-  return uid;
+async function getAuthenticatedUid(request: any): Promise<string> {
+  if (request.auth?.uid) return request.auth.uid;
+  const token = request.data?.token;
+  if (token) {
+    try {
+      const decodedToken = await auth.verifyIdToken(token);
+      return decodedToken.uid;
+    } catch (error) {
+      throw new HttpsError("unauthenticated", "Invalid or expired token.");
+    }
+  }
+  throw new HttpsError("unauthenticated", "Not authenticated.");
 }
 
 function pad2(n: number) {
@@ -71,7 +80,7 @@ async function callOpenAI_JSON(apiKey: string, prompt: string, language: string 
   const client = new OpenAI({ apiKey });
 
   const completion = await client.chat.completions.create({
-    model: "gpt-5-nano",
+    model: "gpt-4-turbo-preview", // Updated from non-existent gpt-5-nano
     messages: [
       { role: "system", content: systemPrompt(language) },
       { role: "user", content: prompt }
@@ -119,33 +128,41 @@ async function checkGate(uid: string, type: string, key: string): Promise<boolea
 // ===============================
 
 export const deleteUserAccountAndData = onCall(async (request) => {
-  const uid = requireAuth(request.auth?.uid);
+  const uid = await getAuthenticatedUid(request);
 
   try {
     const userRef = db.collection("users").doc(uid);
 
-    // Delete insights
+    // 1. Delete Firestore collections
     const insights = await userRef.collection("aiInsights").get();
     for (const doc of insights.docs) await doc.ref.delete();
 
-    // Delete daily tips
     const tips = await userRef.collection("dailyTips").get();
     for (const doc of tips.docs) await doc.ref.delete();
 
-    // Delete main doc
+    const insightsV2 = await userRef.collection("insights").get();
+    for (const doc of insightsV2.docs) await doc.ref.delete();
+
     await userRef.delete();
 
-    // 2. Delete Authentication record
+    // 2. Delete the Auth User - This is crucial
     await auth.deleteUser(uid);
 
     return { success: true };
   } catch (error: any) {
+    console.error("Delete user error:", error);
+    // Even if firestore delete fails, we might want to try auth delete
+    try {
+        await auth.deleteUser(uid);
+    } catch(e) { /* ignore if already deleted */ }
+
     throw new HttpsError("internal", error.message);
   }
 });
 
 export const unlockAiContent = onCall(async (request) => {
-  const uid = requireAuth(request.auth?.uid);
+  if (!request.auth?.uid) throw new HttpsError("unauthenticated", "Not authenticated.");
+  const uid = request.auth.uid;
   const { type, dateKey } = request.data;
   const userRef = db.collection("users").doc(uid);
 
@@ -181,7 +198,8 @@ export const unlockAiContent = onCall(async (request) => {
 export const generateDailyTipIfNeeded = onCall(
   { secrets: [OPENAI_API_KEY] },
   async (request) => {
-    const uid = requireAuth(request.auth?.uid);
+    if (!request.auth?.uid) throw new HttpsError("unauthenticated", "Not authenticated.");
+    const uid = request.auth.uid;
     const dateKey = todayKey(request.data?.dateKey);
     const language = request.data?.language || "en";
 
@@ -219,7 +237,8 @@ JSON format: { "text": "..." }
 export const generateInsights = onCall(
   { secrets: [OPENAI_API_KEY] },
   async (request) => {
-    const uid = requireAuth(request.auth?.uid);
+    if (!request.auth?.uid) throw new HttpsError("unauthenticated", "Not authenticated.");
+    const uid = request.auth.uid;
     const language = (request.data?.language || "en").toLowerCase();
     const insightsRef = db.collection("users").doc(uid).collection("aiInsights").doc("latest");
 
@@ -254,7 +273,7 @@ TAREFAS ANALÍTICAS:
    - Observa equilíbrios elementares e padrões gerais do mapa para descrever o temperamento, ciclos de crescimento e temas existenciais.
 
 3. NUMEROLOGIA:
-   - Analisa os números principais (Caminho de Vida: ${num.lifePath}, Expressão: ${num.expression}, Alma: ${num.soul}, Personalidade: ${num.personality}) para revelar motivação interna, expressão externa e lições da alma.
+   - Analisa os números principais (Caminho de Vida: ${num.lifePath}, Expressão: ${num.expression}, Alma: ${num.soul}, Personality: ${num.personality}) para revelar motivação interna, expressão externa e lições da alma.
    - Integra-os com o design e o mapa para realçar ressonâncias ou tensões que apoiam a maturidade espiritual e material.
 
 4. INTEGRAÇÃO HOLÍSTICA:
@@ -287,7 +306,7 @@ ANALYTICAL TASKS:
    - Interpret the profile (${hd.profile}) and incarnation cross (${hd.incarnationCross}) as expressions of the person’s archetypal role and evolutionary purpose.
 
 2. ASTROLOGIA:
-   - Interpret the Sun (${astro.sunSign}), Moon (infer from HD activations: ${JSON.stringify(hd.activations)}), and Ascendant (${astro.ascendantSign}) as the core triad of identity, emotion, and consciousness growth.
+   - Interpret the Sun (${astro.sunSign}), Lua (infer from HD activations: ${JSON.stringify(hd.activations)}), and Ascendant (${astro.ascendantSign}) as the core triad of identity, emotion, and consciousness growth.
    - Note elemental balances and overall chart patterns to describe temperament, growth cycles, and existential themes.
 
 3. NUMEROLOGIA:
