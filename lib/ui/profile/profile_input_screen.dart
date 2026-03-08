@@ -35,6 +35,9 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
   Place? _city;
   String? _tempCityName;
 
+  bool _isNameLocked = false;
+  bool _isDateLocked = false;
+
   @override
   void initState() {
     super.initState();
@@ -64,11 +67,15 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
     final data = snap.data() ?? {};
     if (mounted) {
       setState(() {
-        nameCtrl.text = (data['name'] ?? '').toString().trim();
+        final existingName = (data['name'] ?? '').toString().trim();
+        nameCtrl.text = existingName;
+        _isNameLocked = existingName.isNotEmpty;
+
         final birthDateStr = (data['birthDateStr'] ?? '').toString().trim();
         if (birthDateStr.isNotEmpty) {
           try {
             birthDate = DateTime.parse(birthDateStr);
+            _isDateLocked = true;
           } catch (_) {}
         }
         final birthTimeStr = (data['birthTimeStr'] ?? '').toString().trim();
@@ -268,13 +275,6 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
     }
   }
 
-  void _showTerms() {
-    launchUrl(
-      Uri.parse('https://humanmatch.app/Privacy-policy/'),
-      mode: LaunchMode.externalApplication,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
@@ -338,6 +338,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                   const SizedBox(height: 8),
                   TextField(
                     controller: nameCtrl,
+                    enabled: !_isNameLocked,
                     decoration: const InputDecoration(
                       hintText: "",
                     ),
@@ -347,7 +348,7 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                     children: [
                       Expanded(
                         child: OutlinedButton.icon(
-                          onPressed: _pickDateWheel,
+                          onPressed: _isDateLocked ? null : _pickDateWheel,
                           icon: const Icon(Icons.cake_outlined),
                           label: Text(birthDate == null ? l10n.selectDate : _fmtDate(birthDate)),
                         ),
@@ -396,30 +397,24 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 12),
-            PrimaryCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(l10n.legalInfo, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
-                  const SizedBox(height: 14),
-                  OutlinedButton.icon(
-                    onPressed: _showTerms,
-                    icon: const Icon(Icons.description_outlined),
-                    label: Text(l10n.termsTitle),
-                  ),
-                  const SizedBox(height: 12),
-                  OutlinedButton.icon(
-                    onPressed: () => launchUrl(Uri.parse('https://humanmatch.app/delete-account'), mode: LaunchMode.externalApplication),
-                    icon: const Icon(Icons.delete_outline, color: Colors.red),
-                    label: Text(l10n.deleteAccountData, style: const TextStyle(color: Colors.red)),
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Colors.red),
-                    ),
-                  ),
-                ],
+            const SizedBox(height: 32),
+            Center(
+              child: TextButton.icon(
+                onPressed: () {
+                  final locale = Localizations.localeOf(context).languageCode;
+                  launchUrl(
+                    Uri.parse('https://humanmatch.app/delete-account?lang=$locale'),
+                    mode: LaunchMode.externalApplication,
+                  );
+                },
+                icon: const Icon(Icons.delete_outline, size: 18, color: Colors.grey),
+                label: Text(
+                  l10n.deleteAccountData,
+                  style: const TextStyle(color: Colors.grey, fontSize: 13, decoration: TextDecoration.underline),
+                ),
               ),
             ),
+            const SizedBox(height: 24),
           ],
         ),
       ),

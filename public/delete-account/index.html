@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Account - Human Match</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #f9f9f9; }
+        .card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-align: center; }
+        h1 { color: #3E1E4F; font-size: 24px; margin-bottom: 20px; }
+        p { color: #666; margin-bottom: 24px; text-align: left; }
+        .warning { color: #d32f2f; font-weight: bold; margin-bottom: 30px; }
+        .btn-delete { background-color: #d32f2f; color: white; border: none; padding: 14px 28px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; transition: background 0.3s; }
+        .btn-delete:hover { background-color: #b71c1c; }
+        .btn-delete:disabled { background-color: #ccc; cursor: not-allowed; }
+        .lang-switch { display: none; margin-bottom: 30px; }
+        .lang-switch button { background: none; border: 1px solid #ccc; padding: 5px 10px; cursor: pointer; margin: 0 5px; border-radius: 4px; }
+        .lang-switch button.active { background-color: #3E1E4F; color: white; border-color: #3E1E4F; }
+        .lang-content { display: none; }
+        #status-message { margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="lang-switch">
+            <button onclick="setLang('pt')" id="btn-pt">PT</button>
+            <button onclick="setLang('en')" id="btn-en">EN</button>
+            <button onclick="setLang('es')" id="btn-es">ES</button>
+            <button onclick="setLang('fr')" id="btn-fr">FR</button>
+        </div>
+
+        <!-- PORTUGUESE -->
+        <div id="lang-pt" class="lang-content">
+            <h1>Eliminar Conta e Dados</h1>
+            <p>Em conformidade com o Regulamento Geral de Proteção de Dados (RGPD), garantimos o seu direito ao esquecimento.</p>
+            <p class="warning">Ao confirmar, todos os seus dados pessoais (nome, data, hora e local de nascimento) e relatórios gerados serão apagados permanentemente dos nossos servidores. Esta ação não pode ser desfeita.</p>
+            <button class="btn-delete" onclick="handleDelete()">Confirmar Eliminação de Dados</button>
+        </div>
+
+        <!-- ENGLISH -->
+        <div id="lang-en" class="lang-content">
+            <h1>Delete Account and Data</h1>
+            <p>In compliance with the General Data Protection Regulation (GDPR), we guarantee your right to be forgotten.</p>
+            <p class="warning">By confirming, all your personal data (name, date, time and place of birth) and generated reports will be permanently deleted from our servers. This action cannot be undone.</p>
+            <button class="btn-delete" onclick="handleDelete()">Confirm Data Deletion</button>
+        </div>
+
+        <!-- SPANISH -->
+        <div id="lang-es" class="lang-content">
+            <h1>Eliminar Cuenta y Datos</h1>
+            <p>De conformidad con el Reglamento General de Protección de Dados (RGPD), garantizamos su derecho al olvido.</p>
+            <p class="warning">Al confirmar, todos sus datos personales (nombre, fecha, hora y lugar de nacimiento) y los informes generados se eliminarán permanentemente de nuestros servidores. Esta acción no se puede deshacer.</p>
+            <button class="btn-delete" onclick="handleDelete()">Confirmar Eliminación de Dados</button>
+        </div>
+
+        <!-- FRENCH -->
+        <div id="lang-fr" class="lang-content">
+            <h1>Supprimer le compte et les données</h1>
+            <p>Conformément au Règlement Général sur la Protection des Données (RGPD), nous garantissons votre droit à l'oubli.</p>
+            <p class="warning">En confirmant, toutes vos données personnelles (nom, date, heure et lieu de naissance) et les rapports générés seront définitivement supprimés de nos serveurs. Cette action est irréversible.</p>
+            <button class="btn-delete" onclick="handleDelete()">Confirmer la suppression des données</button>
+        </div>
+
+        <div id="status-message"></div>
+    </div>
+
+    <script>
+        function setLang(lang) {
+            document.querySelectorAll('.lang-content').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.lang-switch button').forEach(el => el.classList.remove('active'));
+            const content = document.getElementById('lang-' + lang);
+            if (content) {
+                content.style.display = 'block';
+                document.getElementById('btn-' + lang).classList.add('active');
+            } else {
+                document.getElementById('lang-en').style.display = 'block';
+                document.getElementById('btn-en').classList.add('active');
+            }
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        let lang = urlParams.get('lang');
+
+        if (!lang) {
+            const userLang = navigator.language || navigator.userLanguage;
+            lang = userLang.split('-')[0];
+        }
+
+        const supportedLangs = ['pt', 'en', 'es', 'fr'];
+        if (supportedLangs.includes(lang)) {
+            setLang(lang);
+        } else {
+            setLang('en');
+        }
+
+        function handleDelete() {
+            const currentLang = document.querySelector('.lang-switch button.active').id.split('-')[1];
+
+            const messages = {
+                pt: "Para eliminar a sua conta, por favor utilize a opção dentro da aplicação Human Match em Perfil > Editar Perfil > Eliminar Conta, ou contacte support@humanmatch.app.",
+                en: "To delete your account, please use the option inside the Human Match app in Profile > Edit Profile > Delete Account, or contact support@humanmatch.app.",
+                es: "Para eliminar su cuenta, utilice la opção dentro de la aplicación Human Match en Perfil > Editar Perfil > Eliminar Cuenta, o contacte con support@humanmatch.app.",
+                fr: "Pour supprimer votre compte, veuillez utiliser l'option à l'intérieur de l'application Human Match dans Profil > Modifier le profil > Supprimer le compte, ou contactez support@humanmatch.app."
+            };
+
+            alert(messages[currentLang]);
+        }
+    </script>
+</body>
+</html>

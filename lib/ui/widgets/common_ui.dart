@@ -21,7 +21,15 @@ class PrimaryCard extends StatelessWidget {
   const PrimaryCard({super.key, required this.child});
   @override
   Widget build(BuildContext context) {
-    return Card(child: Padding(padding: const EdgeInsets.all(16), child: child));
+    return Card(
+      elevation: 0,
+      color: Colors.white.withOpacity(0.04),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: Colors.white.withOpacity(0.08)),
+      ),
+      child: Padding(padding: const EdgeInsets.all(16), child: child),
+    );
   }
 }
 
@@ -40,12 +48,13 @@ class InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const goldColor = Color(0xFFE6B325);
     final textCol = Column(
       crossAxisAlignment: isRightAligned ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children: [
-        Text(label, style: Theme.of(context).textTheme.bodySmall),
+        Text(label, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white54)),
         const SizedBox(height: 2),
-        Text(value, style: Theme.of(context).textTheme.bodyMedium, textAlign: isRightAligned ? TextAlign.right : TextAlign.left),
+        Text(value, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white), textAlign: isRightAligned ? TextAlign.right : TextAlign.left),
       ],
     );
 
@@ -53,7 +62,7 @@ class InfoRow extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: isRightAligned ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
-        Icon(icon, size: 18),
+        Icon(icon, size: 18, color: goldColor),
         const SizedBox(width: 10),
         if (isRightAligned) textCol else Expanded(child: textCol),
       ],
@@ -69,10 +78,12 @@ class KeyValueRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const goldColor = Color(0xFFE6B325);
     final labelStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
       fontWeight: FontWeight.w600,
+      color: Colors.white70,
     );
-    final valueStyle = Theme.of(context).textTheme.titleSmall;
+    final valueStyle = Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.white);
 
     return Row(
       children: [
@@ -80,7 +91,7 @@ class KeyValueRow extends StatelessWidget {
           flex: 3,
           child: Row(
             children: [
-              Icon(icon, size: 18),
+              Icon(icon, size: 18, color: goldColor),
               const SizedBox(width: 8),
               Expanded(child: Text(label, style: labelStyle)),
             ],

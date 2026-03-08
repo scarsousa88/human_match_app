@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../l10n/app_localizations.dart';
 import '../profile/profile_summary_screen.dart';
+import '../profile/profile_input_screen.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -36,57 +39,120 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
+    
+    // Cor Cosmic
+    const cosmicBg = Color(0xFF0F0B1E);
 
     return Scaffold(
+      backgroundColor: cosmicBg,
       appBar: AppBar(
-        title: Text(_currentIndex == 0 ? l10n.tabProfile : (_currentIndex == 1 ? l10n.tabCommunity : l10n.tabCompare)),
-        actions: [
-          IconButton(
-            tooltip: l10n.logout,
-            onPressed: () async => FirebaseAuth.instance.signOut(),
-            icon: const Icon(Icons.logout),
-          ),
-        ],
+        backgroundColor: cosmicBg,
+        elevation: 0,
+        centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.white70),
+        title: _currentIndex == 0 ? const _CosmicDNABadge() : Text(_currentIndex == 1 ? l10n.tabCommunity : l10n.tabCompare, style: const TextStyle(color: Colors.white)),
+      ),
+      drawer: Drawer(
+        backgroundColor: const Color(0xFF1A162B),
+        child: Column(
+          children: [
+            DrawerHeader(
+              decoration: const BoxDecoration(color: Color(0xFF0F0B1E)),
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF3E1E4F),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.asset('assets/icon/icon.png', width: 44),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Text(
+                      l10n.appTitle,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -0.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            _drawerTile(Icons.edit_outlined, l10n.editProfile, () {
+              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfileInputScreen()));
+            }),
+            _drawerTile(Icons.description_outlined, l10n.termsTitle, () {
+              Navigator.pop(context);
+              launchUrl(Uri.parse('https://humanmatch.app/Privacy-policy/'), mode: LaunchMode.externalApplication);
+            }),
+            const Spacer(),
+            const Divider(color: Colors.white10),
+            _drawerTile(Icons.logout, l10n.logout, () {
+              Navigator.pop(context);
+              FirebaseAuth.instance.signOut();
+            }, color: Colors.redAccent),
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
       body: PageView(
         controller: _pageController,
-        onPageChanged: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+        onPageChanged: (index) => setState(() => _currentIndex = index),
         children: _screens,
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
-          _pageController.animateToPage(
-            index,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-          );
+          _pageController.animateToPage(index, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
         },
-        selectedItemColor: theme.colorScheme.primary,
-        unselectedItemColor: theme.colorScheme.onSurfaceVariant,
+        backgroundColor: const Color(0xFF120E22),
+        selectedItemColor: const Color(0xFFE6B325),
+        unselectedItemColor: Colors.white38,
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w900),
         type: BottomNavigationBarType.fixed,
         items: [
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.person_outline),
-            activeIcon: const Icon(Icons.person),
-            label: l10n.tabProfile,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.people_outline),
-            activeIcon: const Icon(Icons.people),
-            label: l10n.tabCommunity,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.compare_arrows),
-            activeIcon: const Icon(Icons.compare_arrows),
-            label: l10n.tabCompare,
-          ),
+          BottomNavigationBarItem(icon: const Icon(Icons.person_outline), activeIcon: const Icon(Icons.person), label: l10n.tabProfile),
+          BottomNavigationBarItem(icon: const Icon(Icons.people_outline), activeIcon: const Icon(Icons.people), label: l10n.tabCommunity),
+          BottomNavigationBarItem(icon: const Icon(Icons.compare_arrows), activeIcon: const Icon(Icons.compare_arrows), label: l10n.tabCompare),
         ],
+      ),
+    );
+  }
+
+  Widget _drawerTile(IconData icon, String label, VoidCallback onTap, {Color? color}) {
+    return ListTile(
+      leading: Icon(icon, color: color ?? Colors.white70),
+      title: Text(label, style: TextStyle(color: color ?? Colors.white70)),
+      onTap: onTap,
+    );
+  }
+}
+
+class _CosmicDNABadge extends StatelessWidget {
+  const _CosmicDNABadge();
+  @override
+  Widget build(BuildContext context) {
+    const goldColor = Color(0xFFE6B325);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: goldColor, width: 1.2),
+        color: goldColor.withOpacity(0.05),
+      ),
+      child: const Text(
+        'DISCOVER YOUR COSMIC DNA',
+        style: TextStyle(color: goldColor, fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 1.4),
       ),
     );
   }
@@ -95,7 +161,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 class _PlaceholderTab extends StatelessWidget {
   final String textKey;
   const _PlaceholderTab({required this.textKey});
-
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -104,25 +169,17 @@ class _PlaceholderTab extends StatelessWidget {
       if (textKey == 'compareSoon') return l10n.compareSoon;
       return '';
     }
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset('assets/icon/compare.png', width: 300),
-          const SizedBox(height: 24),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            child: Text(
-              '${getMsg()}\n(${l10n.soonMessage})',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                fontSize: 16,
-              ),
-            ),
-          ),
-        ],
+    return Container(
+      color: const Color(0xFF0F0B1E),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('assets/icon/compare.png', width: 250, color: Colors.white10, colorBlendMode: BlendMode.modulate),
+            const SizedBox(height: 24),
+            Text('${getMsg()}\n(${l10n.soonMessage})', textAlign: TextAlign.center, style: const TextStyle(color: Colors.white38, fontSize: 15)),
+          ],
+        ),
       ),
     );
   }

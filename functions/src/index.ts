@@ -2,10 +2,12 @@ import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { defineSecret } from "firebase-functions/params";
 import { initializeApp } from "firebase-admin/app";
 import { getFirestore, FieldValue } from "firebase-admin/firestore";
+import { getAuth } from "firebase-admin/auth";
 import OpenAI from "openai";
 
 initializeApp();
 const db = getFirestore();
+const auth = getAuth();
 
 const OPENAI_API_KEY = defineSecret("OPENAI_API_KEY");
 
@@ -68,8 +70,6 @@ You are a senior analyst of integrated self-knowledge systems, specializing in H
 async function callOpenAI_JSON(apiKey: string, prompt: string, language: string = "en") {
   const client = new OpenAI({ apiKey });
 
-  // Modelo definido conforme instrução do utilizador: gpt-5-nano
-  // Nota: Se ocorrer erro 404 (Model Not Found), verifique se o nome do modelo está correto na sua conta OpenAI.
   const completion = await client.chat.completions.create({
     model: "gpt-5-nano",
     messages: [
@@ -117,6 +117,32 @@ async function checkGate(uid: string, type: string, key: string): Promise<boolea
 // ===============================
 // FUNCTIONS
 // ===============================
+
+export const deleteUserAccountAndData = onCall(async (request) => {
+  const uid = requireAuth(request.auth?.uid);
+
+  try {
+    const userRef = db.collection("users").doc(uid);
+
+    // Delete insights
+    const insights = await userRef.collection("aiInsights").get();
+    for (const doc of insights.docs) await doc.ref.delete();
+
+    // Delete daily tips
+    const tips = await userRef.collection("dailyTips").get();
+    for (const doc of tips.docs) await doc.ref.delete();
+
+    // Delete main doc
+    await userRef.delete();
+
+    // 2. Delete Authentication record
+    await auth.deleteUser(uid);
+
+    return { success: true };
+  } catch (error: any) {
+    throw new HttpsError("internal", error.message);
+  }
+});
 
 export const unlockAiContent = onCall(async (request) => {
   const uid = requireAuth(request.auth?.uid);

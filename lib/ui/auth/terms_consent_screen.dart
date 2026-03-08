@@ -34,32 +34,66 @@ class _TermsConsentScreenState extends State<TermsConsentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.termsTitle)),
-      body: Shell(
-        child: Column(
-          children: [
-            Expanded(
-              child: PrimaryCard(
-                child: SingleChildScrollView(
-                  child: Text(l10n.termsContent, style: TextStyle(color: cs.onSurface)),
+      appBar: AppBar(
+        title: Text(l10n.termsTitle),
+        elevation: 0,
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          color: theme.scaffoldBackgroundColor,
+        ),
+        child: Shell(
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              // Header title only
+              Center(
+                child: Text(
+                  l10n.appTitle,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                    color: cs.primary,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: loading ? null : _accept,
-              child: loading ? const LoadingWidget(size: 24) : Text(l10n.acceptAndContinue),
-            ),
-            const SizedBox(height: 8),
-            TextButton(
-              onPressed: () => FirebaseAuth.instance.signOut(),
-              child: Text(l10n.cancelAndExit),
-            ),
-          ],
+              const SizedBox(height: 24),
+              Expanded(
+                child: PrimaryCard(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(4),
+                    child: Text(
+                      AppTerms.termsText, 
+                      style: TextStyle(
+                        color: cs.onSurface,
+                        fontSize: 14,
+                        height: 1.5,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: loading ? null : _accept,
+                child: loading ? const LoadingWidget(size: 24) : Text(l10n.acceptAndContinue),
+              ),
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed: () => FirebaseAuth.instance.signOut(),
+                child: Text(
+                  l10n.cancelAndExit,
+                  style: TextStyle(color: cs.onSurfaceVariant),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
         ),
       ),
     );

@@ -10,7 +10,6 @@ import '../../ai_actions.dart';
 import '../../utils/astro_utils.dart';
 import '../loading_widget.dart';
 import '../widgets/common_ui.dart';
-import 'profile_input_screen.dart';
 
 class ProfileSummaryScreen extends StatefulWidget {
   const ProfileSummaryScreen({super.key});
@@ -47,16 +46,35 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
     }
   }
 
-  String _firstName(String fullName) {
-    final parts = fullName.trim().split(RegExp(r'\s+'));
-    return parts.isEmpty ? '' : parts.first;
-  }
-
   String _formatDateStr(String? key, String defaultTitle) {
     if (key == null || !key.contains('-')) return defaultTitle;
     final parts = key.split('-');
     if (parts.length != 3) return key;
     return '${parts[2]}-${parts[1]}-${parts[0]}';
+  }
+
+  Widget _sectionHeader(String title, {bool isFirst = false}) {
+    return Padding(
+      padding: EdgeInsets.only(left: 12, bottom: 8, top: isFirst ? 4 : 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900, letterSpacing: 0.5, color: Colors.white),
+          ),
+          const SizedBox(height: 4),
+          Container(
+            height: 3,
+            width: 30,
+            decoration: BoxDecoration(
+              color: const Color(0xFFE6B325),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -66,264 +84,224 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
     final insightsRef = userRef.collection('aiInsights').doc('latest');
     final lastTipQuery = userRef.collection('dailyTips').orderBy('dateKey', descending: true).limit(1);
     final l10n = AppLocalizations.of(context)!;
+    const goldColor = Color(0xFFE6B325);
 
-    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-      stream: userRef.snapshots(),
-      builder: (context, userSnap) {
-        if (userSnap.connectionState == ConnectionState.waiting && !userSnap.hasData) {
-          return const Center(child: LoadingWidget());
-        }
+    final mainButtonStyle = FilledButton.styleFrom(
+      backgroundColor: Colors.white.withOpacity(0.05),
+      foregroundColor: goldColor,
+      side: BorderSide(color: goldColor.withOpacity(0.4)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      padding: const EdgeInsets.symmetric(vertical: 14),
+    );
 
-        final u = userSnap.data?.data() ?? {};
-        final fullName = (u['name'] ?? '').toString().trim();
-        final first = _firstName(fullName);
-        final birthDateStr = (u['birthDateStr'] ?? '').toString();
-        final birthTimeStr = (u['birthTimeStr'] ?? '').toString();
-        final birthDateText = [birthDateStr, birthTimeStr].where((s) => s.trim().isNotEmpty).join(' • ');
-        final placeLabel = (u['birthPlaceLabel'] ?? (u['place'] as Map?)?['label'] ?? '').toString();
+    return Container(
+      color: const Color(0xFF0F0B1E),
+      child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+        stream: userRef.snapshots(),
+        builder: (context, userSnap) {
+          if (userSnap.connectionState == ConnectionState.waiting && !userSnap.hasData) {
+            return const Center(child: LoadingWidget());
+          }
 
-        final hdBase = (u['humanDesignBase'] as Map?)?.cast<String, dynamic>();
-        final astro = (u['astro'] as Map?)?.cast<String, dynamic>() ?? {};
+          final u = userSnap.data?.data() ?? {};
+          final hdBase = (u['humanDesignBase'] as Map?)?.cast<String, dynamic>();
+          final astro = (u['astro'] as Map?)?.cast<String, dynamic>() ?? {};
 
-        final sunSign = astro['sunSign'] ?? (findBodyLongitude(hdBase, true, 'Sun') != null ? getZodiacSign(context, findBodyLongitude(hdBase, true, 'Sun')!) : '—');
-        final ascSign = astro['ascendantSign'] ?? (astro['ascendantDeg'] != null ? getZodiacSign(context, (astro['ascendantDeg'] as num).toDouble()) : '—');
+          final sunSign = astro['sunSign'] ?? (findBodyLongitude(hdBase, true, 'Sun') != null ? getZodiacSign(context, findBodyLongitude(hdBase, true, 'Sun')!) : '—');
+          final ascSign = astro['ascendantSign'] ?? (astro['ascendantDeg'] != null ? getZodiacSign(context, (astro['ascendantDeg'] as num).toDouble()) : '—');
 
-        final storedNum = u['numerology'] as Map?;
-        final numerology = storedNum != null ? NumerologyResult(lifePath: storedNum['lifePath'], expression: storedNum['expression'], soul: storedNum['soul'], personality: storedNum['personality']) : null;
+          final storedNum = u['numerology'] as Map?;
+          final numerology = storedNum != null ? NumerologyResult(lifePath: storedNum['lifePath'], expression: storedNum['expression'], soul: storedNum['soul'], personality: storedNum['personality']) : null;
 
-        return ListView(
-          key: const PageStorageKey('profile_summary_list'),
-          children: [
-            PrimaryCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const CircleAvatar(
-                        radius: 22,
-                        backgroundColor: Colors.transparent,
-                        child: Image(image: AssetImage('assets/icon/card.png')),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          first.isEmpty ? l10n.greetingEmpty : l10n.greeting(first),
-                          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
-                        ),
-                      ),
-                      IconButton(
-                        tooltip: l10n.update,
-                        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfileInputScreen())),
-                        icon: const Icon(Icons.edit_outlined),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (birthDateText.isNotEmpty)
-                        Expanded(child: InfoRow(icon: Icons.cake_outlined, label: l10n.birthDate, value: birthDateText)),
-                      if (birthDateText.isNotEmpty && placeLabel.isNotEmpty) const SizedBox(width: 12),
-                      if (placeLabel.isNotEmpty)
-                        Expanded(child: InfoRow(icon: Icons.place_outlined, label: l10n.birthPlace, value: placeLabel, isRightAligned: true)),
-                    ],
-                  ),
-                ],
+          return ListView(
+            key: const PageStorageKey('profile_summary_list'),
+            padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+            children: [
+              _sectionHeader(l10n.hdTitle, isFirst: true),
+              PrimaryCard(
+                child: hdBase == null ? Text(l10n.hdCalculating, style: const TextStyle(color: Colors.white70)) : HumanDesignSection(hd: hdBase),
               ),
-            ),
-            const SizedBox(height: 12),
-            PrimaryCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(l10n.hdTitle, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
-                  const SizedBox(height: 12),
-                  if (hdBase == null) Text(l10n.hdCalculating) else HumanDesignSection(hd: hdBase),
-                ],
+              const SizedBox(height: 12),
+              
+              _sectionHeader(l10n.astroTitle),
+              PrimaryCard(
+                child: Card(
+                  elevation: 0,
+                  color: Colors.transparent,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      children: [
+                        KeyValueRow(icon: Icons.wb_sunny_outlined, label: l10n.zodiacSign, value: sunSign),
+                        const SizedBox(height: 10),
+                        KeyValueRow(icon: Icons.north_outlined, label: l10n.ascendant, value: ascSign),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            PrimaryCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(l10n.astroTitle, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
-                  const SizedBox(height: 12),
+              const SizedBox(height: 12),
+
+              _sectionHeader(l10n.numTitle),
+              PrimaryCard(
+                child: numerology == null ? const Text('—', style: TextStyle(color: Colors.white70)) :
                   Card(
                     elevation: 0,
+                    color: Colors.transparent,
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: Column(
                         children: [
-                          KeyValueRow(icon: Icons.wb_sunny_outlined, label: l10n.zodiacSign, value: sunSign),
+                          KeyValueRow(icon: Icons.tag_outlined, label: l10n.lifePath, value: numerology.lifePath.toString()),
                           const SizedBox(height: 10),
-                          KeyValueRow(icon: Icons.north_outlined, label: l10n.ascendant, value: ascSign),
+                          KeyValueRow(icon: Icons.tag_outlined, label: l10n.expression, value: numerology.expression.toString()),
+                          const SizedBox(height: 10),
+                          KeyValueRow(icon: Icons.tag_outlined, label: l10n.soul, value: numerology.soul.toString()),
+                          const SizedBox(height: 10),
+                          KeyValueRow(icon: Icons.tag_outlined, label: l10n.personality, value: numerology.personality.toString()),
                         ],
                       ),
                     ),
                   ),
-                ],
               ),
-            ),
-            const SizedBox(height: 12),
-            PrimaryCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(l10n.numTitle, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
-                  const SizedBox(height: 12),
-                  if (numerology == null) const Text('—') else
-                    Card(
-                      elevation: 0,
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Column(
-                          children: [
-                            KeyValueRow(icon: Icons.tag_outlined, label: l10n.lifePath, value: numerology.lifePath.toString()),
-                            const SizedBox(height: 10),
-                            KeyValueRow(icon: Icons.tag_outlined, label: l10n.expression, value: numerology.expression.toString()),
-                            const SizedBox(height: 10),
-                            KeyValueRow(icon: Icons.tag_outlined, label: l10n.soul, value: numerology.soul.toString()),
-                            const SizedBox(height: 10),
-                            KeyValueRow(icon: Icons.tag_outlined, label: l10n.personality, value: numerology.personality.toString()),
-                          ],
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 12),
-            StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-              stream: insightsRef.snapshots(),
-              builder: (context, insSnap) {
-                final isLoading = _loadingInsights || (insSnap.connectionState == ConnectionState.waiting && !insSnap.hasData);
-                final ins = insSnap.data?.data();
-                final exists = insSnap.data?.exists ?? false;
+              const SizedBox(height: 12),
 
-                Widget inner;
-                if (!exists) {
-                  inner = Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(l10n.profileInsights, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
-                      const SizedBox(height: 10),
-                      Text(l10n.noInsights),
-                      const SizedBox(height: 12),
-                      ElevatedButton(
-                        onPressed: isLoading ? null : () async {
-                          setState(() => _loadingInsights = true);
-                          await _ai.runInsightsBehindRewardedAd();
-                          if (mounted) setState(() => _loadingInsights = false);
-                        },
-                        child: Text(l10n.generateInsights),
-                      ),
-                    ],
-                  );
-                } else {
-                  final data = ins ?? {};
-                  inner = Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(child: Text(l10n.profileInsights, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900))),
-                          TextButton.icon(
+              _sectionHeader(l10n.profileInsights),
+              StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                stream: insightsRef.snapshots(),
+                builder: (context, insSnap) {
+                  final isLoading = _loadingInsights || (insSnap.connectionState == ConnectionState.waiting && !insSnap.hasData);
+                  final ins = insSnap.data?.data();
+                  final exists = insSnap.data?.exists ?? false;
+
+                  Widget inner;
+                  if (!exists) {
+                    inner = Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(l10n.noInsights, style: const TextStyle(color: Colors.white70)),
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          width: double.infinity,
+                          child: FilledButton.icon(
+                            style: mainButtonStyle,
                             onPressed: isLoading ? null : () async {
                               setState(() => _loadingInsights = true);
                               await _ai.runInsightsBehindRewardedAd();
                               if (mounted) setState(() => _loadingInsights = false);
                             },
                             icon: const Icon(Icons.auto_awesome_outlined),
-                            label: Text(l10n.update),
+                            label: Text(l10n.generateInsights.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      Text(data['summary']?.toString() ?? '—'),
-                      const SizedBox(height: 12),
-                      Text(l10n.profilePillars, style: const TextStyle(fontWeight: FontWeight.w900)),
-                      _bullets(data['insights'] ?? []),
+                        ),
+                      ],
+                    );
+                  } else {
+                    final data = ins ?? {};
+                    inner = Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Spacer(),
+                            TextButton.icon(
+                              onPressed: isLoading ? null : () async {
+                                setState(() => _loadingInsights = true);
+                                await _ai.runInsightsBehindRewardedAd();
+                                if (mounted) setState(() => _loadingInsights = false);
+                              },
+                              icon: const Icon(Icons.auto_awesome_outlined, color: goldColor),
+                              label: Text(l10n.update, style: const TextStyle(color: goldColor)),
+                            ),
+                          ],
+                        ),
+                        Text(data['summary']?.toString() ?? '—', style: const TextStyle(color: Colors.white)),
+                        const SizedBox(height: 12),
+                        Text(l10n.profilePillars, style: const TextStyle(fontWeight: FontWeight.w900, color: goldColor)),
+                        _bullets(data['insights'] ?? []),
+                      ],
+                    );
+                  }
+
+                  return PrimaryCard(
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Opacity(opacity: isLoading ? 0.4 : 1.0, child: inner),
+                        if (isLoading) const LoadingWidget(),
+                      ],
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 12),
+
+              _sectionHeader(l10n.dailyTip),
+              StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                stream: lastTipQuery.snapshots(),
+                builder: (context, tipsSnap) {
+                  final isLoading = _loadingTip || (tipsSnap.connectionState == ConnectionState.waiting && !tipsSnap.hasData);
+
+                  final tips = tipsSnap.data?.docs ?? [];
+                  final hasTodayTip = tips.isNotEmpty && tips.first.id == _ai.todayKeyLocal();
+                  final lastTipDoc = tips.isNotEmpty ? tips.first : null;
+                  final lastTipData = lastTipDoc?.data() ?? {};
+
+                  final formattedDate = lastTipDoc != null
+                      ? _formatDateStr(lastTipDoc.id, l10n.dailyTip)
+                      : _formatDateStr(_ai.todayKeyLocal(), l10n.dailyTip);
+
+                  final inner = Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(formattedDate, style: const TextStyle(fontWeight: FontWeight.w900, color: goldColor)),
+                      const SizedBox(height: 8),
+
+                      if (!hasTodayTip) ...[
+                        SizedBox(
+                          width: double.infinity,
+                          child: FilledButton.icon(
+                            style: mainButtonStyle,
+                            onPressed: isLoading ? null : () async {
+                              setState(() => _loadingTip = true);
+                              await _ai.runTipsBehindRewardedAd();
+                              if (mounted) setState(() => _loadingTip = false);
+                            },
+                            icon: const Icon(Icons.auto_awesome_outlined),
+                            label: Text(l10n.getDailyTip.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                      ],
+
+                      if (lastTipDoc != null)
+                        Text(lastTipData['text']?.toString() ?? '—', style: const TextStyle(color: Colors.white)),
                     ],
                   );
-                }
 
-                return PrimaryCard(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Opacity(opacity: isLoading ? 0.4 : 1.0, child: inner),
-                      if (isLoading) const LoadingWidget(),
-                    ],
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: 12),
-            StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-              stream: lastTipQuery.snapshots(),
-              builder: (context, tipsSnap) {
-                final isLoading = _loadingTip || (tipsSnap.connectionState == ConnectionState.waiting && !tipsSnap.hasData);
-
-                final tips = tipsSnap.data?.docs ?? [];
-                final hasTodayTip = tips.isNotEmpty && tips.first.id == _ai.todayKeyLocal();
-                final lastTipDoc = tips.isNotEmpty ? tips.first : null;
-                final lastTipData = lastTipDoc?.data() ?? {};
-
-                final formattedDate = lastTipDoc != null
-                    ? _formatDateStr(lastTipDoc.id, l10n.dailyTip)
-                    : _formatDateStr(_ai.todayKeyLocal(), l10n.dailyTip);
-
-                final inner = Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(l10n.dailyTip, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
-                    const SizedBox(height: 10),
-                    Text(formattedDate, style: const TextStyle(fontWeight: FontWeight.w900)),
-                    const SizedBox(height: 8),
-
-                    if (!hasTodayTip) ...[
-                      ElevatedButton.icon(
-                        onPressed: isLoading ? null : () async {
-                          setState(() => _loadingTip = true);
-                          await _ai.runTipsBehindRewardedAd();
-                          if (mounted) setState(() => _loadingTip = false);
-                        },
-                        icon: const Icon(Icons.auto_awesome_outlined),
-                        label: Text(l10n.getDailyTip),
-                      ),
-                      const SizedBox(height: 14),
-                    ],
-
-                    if (lastTipDoc != null)
-                      Text(lastTipData['text']?.toString() ?? '—'),
-                  ],
-                );
-
-                return PrimaryCard(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Opacity(opacity: isLoading ? 0.4 : 1.0, child: inner),
-                      if (isLoading) const LoadingWidget(),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ],
-        );
-      },
+                  return PrimaryCard(
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Opacity(opacity: isLoading ? 0.4 : 1.0, child: inner),
+                        if (isLoading) const LoadingWidget(),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 
   Widget _bullets(List items) {
-    if (items.isEmpty) return const Text('—');
+    if (items.isEmpty) return const Text('—', style: TextStyle(color: Colors.white70));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: items.map((t) => Padding(padding: const EdgeInsets.symmetric(vertical: 4), child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [const Text('• '), Expanded(child: Text(t.toString()))]))).toList(),
+      children: items.map((t) => Padding(padding: const EdgeInsets.symmetric(vertical: 4), child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [const Text('• ', style: TextStyle(color: Color(0xFFE6B325))), Expanded(child: Text(t.toString(), style: const TextStyle(color: Colors.white)))]))).toList(),
     );
   }
 }

@@ -22,6 +22,7 @@ class HumanDesignSection extends StatelessWidget {
   // We give more space to the side columns (Design/Personality) to avoid clipping and allow more detail.
   static const int _flexPlanet = 2;
   static const int _flexPill = 3;
+  static const Color goldColor = Color(0xFFE6B325);
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +67,8 @@ class HumanDesignSection extends StatelessWidget {
         // 1) KPI zone
         Card(
           elevation: 0,
+          color: Colors.black26,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: Column(
@@ -104,13 +107,15 @@ class HumanDesignSection extends StatelessWidget {
         // 3) Activations table
         Card(
           elevation: 0,
+          color: Colors.black26,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: Column(
               children: [
                 const _ActivationHeader(),
                 const SizedBox(height: 10),
-                const Divider(height: 1),
+                Divider(height: 1, color: Colors.white.withOpacity(0.1)),
                 const SizedBox(height: 10),
                 ...rows.map((r) => _ActivationCompareRow(row: r)),
               ],
@@ -443,23 +448,15 @@ class _InfoLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final labelStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
-          fontWeight: FontWeight.w600,
-          fontSize: (Theme.of(context).textTheme.bodyMedium?.fontSize ?? 14) + 1,
-        );
-    final valueStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
-          fontSize: (Theme.of(context).textTheme.titleSmall?.fontSize ?? 14) + 1,
-        );
-
     return Row(
       children: [
         Expanded(
           flex: 5,
           child: Row(
             children: [
-              Icon(icon, size: 18),
+              Icon(icon, size: 18, color: HumanDesignSection.goldColor),
               const SizedBox(width: 8),
-              Expanded(child: Text(label, style: labelStyle)),
+              Expanded(child: Text(label, style: const TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w600))),
             ],
           ),
         ),
@@ -467,7 +464,7 @@ class _InfoLine extends StatelessWidget {
           flex: 7,
           child: Align(
             alignment: Alignment.centerRight,
-            child: Text(value, style: valueStyle, textAlign: TextAlign.right),
+            child: Text(value, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold), textAlign: TextAlign.right),
           ),
         ),
       ],
@@ -516,27 +513,25 @@ class _CentersChannelsTable extends StatelessWidget {
     final channelItems = definedChannels;
     final maxLen = allCenterKeys.length > channelItems.length ? allCenterKeys.length : channelItems.length;
 
-    final titleStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
-          fontSize: (Theme.of(context).textTheme.titleSmall?.fontSize ?? 14) + 1,
-        );
-
     final authorityLabel = authorityCenter == null ? null : HumanDesignSection.centerL10n(context, authorityCenter!);
 
     return Card(
       elevation: 0,
+      color: Colors.black26,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
           children: [
             Row(
               children: [
-                Expanded(child: Center(child: Text(l10n.hdEnergyCenters, style: titleStyle))),
+                Expanded(child: Center(child: Text(l10n.hdEnergyCenters, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)))),
                 const SizedBox(width: 10),
-                Expanded(child: Center(child: Text(l10n.hdChannels, style: titleStyle))),
+                Expanded(child: Center(child: Text(l10n.hdChannels, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)))),
               ],
             ),
             const SizedBox(height: 10),
-            const Divider(height: 1),
+            Divider(height: 1, color: Colors.white10),
             const SizedBox(height: 10),
             ...List.generate(maxLen, (i) {
               final cKey = i < allCenterKeys.length ? allCenterKeys[i] : null;
@@ -574,15 +569,13 @@ class _CentersChannelsTable extends StatelessWidget {
               );
             }),
             if (authorityLabel != null) ...[
-              const Divider(height: 1),
+              Divider(height: 1, color: Colors.white10),
               const SizedBox(height: 10),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   l10n.hdAuthorityNotice(authorityLabel),
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontSize: (Theme.of(context).textTheme.bodySmall?.fontSize ?? 12) + 1,
-                      ),
+                  style: const TextStyle(color: Colors.white54, fontSize: 12),
                 ),
               ),
             ],
@@ -614,40 +607,19 @@ class _ActivationHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final titleStyle = Theme.of(context).textTheme.titleSmall?.copyWith(
-          fontSize: (Theme.of(context).textTheme.titleSmall?.fontSize ?? 14) + 1,
-        );
-    final subStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
-          fontSize: (Theme.of(context).textTheme.bodySmall?.fontSize ?? 12) + 1,
-        );
-
-    Widget headerCell(String top, String bottom) {
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            top,
-            style: titleStyle,
-            softWrap: false,
-            overflow: TextOverflow.ellipsis,
-          ),
-          Text(
-            bottom,
-            style: subStyle,
-            softWrap: false,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      );
-    }
-
     return Row(
       children: [
         Flexible(
           flex: _flexPill,
           child: Align(
             alignment: Alignment.center,
-            child: headerCell(l10n.hdDesign, l10n.hdUnconscious),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(l10n.hdDesign, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
+                Text(l10n.hdUnconscious, style: const TextStyle(color: Colors.white38, fontSize: 11)),
+              ],
+            ),
           ),
         ),
         const SizedBox(width: 12),
@@ -655,7 +627,7 @@ class _ActivationHeader extends StatelessWidget {
           flex: _flexPlanet,
           child: Align(
             alignment: Alignment.center,
-            child: Text(l10n.hdPlanets, style: titleStyle),
+            child: Text(l10n.hdPlanets, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
           ),
         ),
         const SizedBox(width: 12),
@@ -663,7 +635,13 @@ class _ActivationHeader extends StatelessWidget {
           flex: _flexPill,
           child: Align(
             alignment: Alignment.center,
-            child: headerCell(l10n.hdPersonality, l10n.hdConscious),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(l10n.hdPersonality, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
+                Text(l10n.hdConscious, style: const TextStyle(color: Colors.white38, fontSize: 11)),
+              ],
+            ),
           ),
         ),
       ],
@@ -698,13 +676,11 @@ class _ActivationCompareRow extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(sym, style: const TextStyle(fontSize: 17)),
+                Text(sym, style: const TextStyle(fontSize: 17, color: HumanDesignSection.goldColor)),
                 const SizedBox(width: 4),
                 Text(
                   name,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontSize: (Theme.of(context).textTheme.bodyMedium?.fontSize ?? 14) + 1,
-                      ),
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
                 ),
               ],
             ),
@@ -764,50 +740,41 @@ class _Pill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDash = text.trim() == '—';
-
     Color border;
     Color bg;
+    Color fg = Colors.white;
 
     switch (tone) {
       case _PillTone.conscious:
-        border = Colors.white.withValues(alpha: 0.35);
-        bg = Colors.white.withValues(alpha: 0.08);
+        border = Colors.white.withOpacity(0.15);
+        bg = Colors.white10;
         break;
       case _PillTone.design:
-        border = Colors.redAccent.withValues(alpha: 0.45);
-        bg = Colors.redAccent.withValues(alpha: 0.07);
+        border = Colors.redAccent.withOpacity(0.2);
+        bg = Colors.redAccent.withOpacity(0.08);
         break;
       case _PillTone.authority:
-        border = Colors.purpleAccent.withValues(alpha: 0.45);
-        bg = Colors.purpleAccent.withValues(alpha: 0.12);
+        border = Colors.purpleAccent.withOpacity(0.3);
+        bg = Colors.purpleAccent.withOpacity(0.12);
         break;
       case _PillTone.undefined:
-        border = Colors.white.withValues(alpha: 0.08);
+        border = Colors.white.withOpacity(0.05);
         bg = Colors.transparent;
+        fg = Colors.white38;
         break;
     }
 
-    final Color fg = (isDash || tone == _PillTone.undefined)
-        ? (Theme.of(context).textTheme.bodySmall?.color?.withValues(alpha: 0.5) ?? Colors.white.withValues(alpha: 0.5))
-        : (Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white);
-
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         color: bg,
         border: Border.all(color: border),
       ),
-      child: Align(
-        alignment: Alignment.center,
+      child: Center(
         child: Text(
           text,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color: fg,
-                fontSize: (Theme.of(context).textTheme.titleSmall?.fontSize ?? 14) + 1,
-              ),
+          style: TextStyle(color: fg, fontSize: 13, fontWeight: FontWeight.w600),
         ),
       ),
     );
