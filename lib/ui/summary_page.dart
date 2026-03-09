@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import '../utils/astro_utils.dart';
 import 'bodygraph/bodygraph_widget.dart';
+import 'bodygraph/bodygraph_data.dart';
 
 class SummaryPage extends StatelessWidget {
   const SummaryPage({
@@ -54,6 +55,7 @@ class SummaryPage extends StatelessWidget {
               title: 'Mapa do Corpo',
               subtitle: 'A tua estrutura energética visual.',
               child: BodygraphWidget(data: _buildBodygraphData(hdBase!)),
+              contentPadding: EdgeInsets.zero, // Reduzir o padding
             ),
 
           _Section(
@@ -219,8 +221,8 @@ class _CosmicDNABadge extends StatelessWidget {
 }
 
 class _Section extends StatelessWidget {
-  const _Section({required this.title, required this.child, this.subtitle});
-  final String title; final Widget child; final String? subtitle;
+  const _Section({required this.title, required this.child, this.subtitle, this.contentPadding = const EdgeInsets.all(20)});
+  final String title; final Widget child; final String? subtitle; final EdgeInsets contentPadding;
   @override
   Widget build(BuildContext context) {
     const goldColor = Color(0xFFE6B325);
@@ -245,7 +247,7 @@ class _Section extends StatelessWidget {
           child: Card(
             elevation: 0, color: Colors.white.withOpacity(0.04), margin: EdgeInsets.zero,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20), side: BorderSide(color: Colors.white.withOpacity(0.08))),
-            child: Padding(padding: const EdgeInsets.all(20), child: child),
+            child: Padding(padding: contentPadding, child: child),
           ),
         ),
         const SizedBox(height: 36),

@@ -290,7 +290,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get hdIncarnationCross => 'Encarnação';
 
   @override
-  String get hdEnergyCenters => 'Centros energéticos';
+  String get hdEnergyCenters => 'Centros';
+
+  @override
+  String get hdEnergyCentersChannels => 'Centros, canais e portas';
 
   @override
   String get hdDefinedCenters => 'Centros Definidos';
@@ -311,6 +314,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get hdUnconscious => '(Inconsciente)';
+
+  @override
+  String get hdPlanetaryActivation => 'Ativação Planetária';
 
   @override
   String get hdPlanets => 'Astros';
@@ -603,4 +609,10 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get astroMCNodes => '🎯 MC e Nodos Lunares';
+
+  @override
+  String get hdIndicators => 'Principais Indicadores';
+
+  @override
+  String get hdBodygraph => 'Mapa do Corpo (Bodygraph)';
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:human_match_app/l10n/app_localizations.dart';
 import '../ui/bodygraph/bodygraph_widget.dart';
+import '../ui/bodygraph/bodygraph_data.dart';
 
 class HumanDesignSection extends StatelessWidget {
   const HumanDesignSection({
@@ -59,73 +60,66 @@ class HumanDesignSection extends StatelessWidget {
     final profile = _computeProfile(hd, conscious, design);
     final rows = _buildCompareRows(conscious, design);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // 1) Visual Bodygraph (The heart of the request)
-        BodygraphWidget(data: bodygraphData),
-        
-        const SizedBox(height: 16),
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 1) Principais Indicadores
+          Text(l10n.hdIndicators, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 15)),
+          const SizedBox(height: 12),
+          _InfoLine(icon: Icons.person_outline, label: l10n.hdType, value: type),
+          const SizedBox(height: 10),
+          _InfoLine(icon: Icons.favorite_outline, label: l10n.hdAuthority, value: authority),
+          const SizedBox(height: 10),
+          _InfoLine(icon: Icons.alt_route_outlined, label: l10n.hdStrategy, value: strategy),
+          const SizedBox(height: 10),
+          _InfoLine(icon: Icons.badge_outlined, label: l10n.hdProfile, value: profile),
+          const SizedBox(height: 10),
+          _InfoLine(icon: Icons.auto_awesome_outlined, label: l10n.hdSignature, value: signature),
+          const SizedBox(height: 10),
+          _InfoLine(icon: Icons.warning_amber_outlined, label: l10n.hdNotSelf, value: notSelfTheme),
+          const SizedBox(height: 10),
+          _InfoLine(icon: Icons.hub_outlined, label: l10n.hdDefinition, value: definition),
+          const SizedBox(height: 10),
+          _InfoLine(icon: Icons.add_road_outlined, label: l10n.hdIncarnationCross, value: incarnationCross),
 
-        // 2) KPI zone
-        Card(
-          elevation: 0,
-          color: Colors.black26,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              children: [
-                _InfoLine(icon: Icons.person_outline, label: l10n.hdType, value: type),
-                const SizedBox(height: 10),
-                _InfoLine(icon: Icons.favorite_outline, label: l10n.hdAuthority, value: authority),
-                const SizedBox(height: 10),
-                _InfoLine(icon: Icons.alt_route_outlined, label: l10n.hdStrategy, value: strategy),
-                const SizedBox(height: 10),
-                _InfoLine(icon: Icons.badge_outlined, label: l10n.hdProfile, value: profile),
-                const SizedBox(height: 10),
-                _InfoLine(icon: Icons.auto_awesome_outlined, label: l10n.hdSignature, value: signature),
-                const SizedBox(height: 10),
-                _InfoLine(icon: Icons.warning_amber_outlined, label: l10n.hdNotSelf, value: notSelfTheme),
-                const SizedBox(height: 10),
-                _InfoLine(icon: Icons.hub_outlined, label: l10n.hdDefinition, value: definition),
-                const SizedBox(height: 10),
-                _InfoLine(icon: Icons.add_road_outlined, label: l10n.hdIncarnationCross, value: incarnationCross),
-              ],
-            ),
+          const SizedBox(height: 20),
+          const Divider(color: Colors.white12),
+          const SizedBox(height: 12),
+
+          // 2) Bodygraph (Moved here, after indicators)
+          Text(l10n.hdBodygraph, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 15)),
+          const SizedBox(height: 12),
+          BodygraphWidget(data: bodygraphData),
+
+          const SizedBox(height: 20),
+          const Divider(color: Colors.white12),
+          const SizedBox(height: 12),
+
+          // 3) Centros, canais e portas
+          Text(l10n.hdEnergyCentersChannels, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 15)),
+          const SizedBox(height: 16),
+          _CentersChannelsTable(
+            definedCenters: definedCenters.toList(),
+            definedChannels: (definedChannels.map(_normalizeChannel).toList()..sort()),
+            authorityCenter: authorityCenter,
           ),
-        ),
 
-        const SizedBox(height: 12),
+          const SizedBox(height: 20),
+          const Divider(color: Colors.white12),
+          const SizedBox(height: 12),
 
-        // 3) Centers + Channels
-        _CentersChannelsTable(
-          definedCenters: definedCenters.toList(),
-          definedChannels: (definedChannels.map(_normalizeChannel).toList()..sort()),
-          authorityCenter: authorityCenter,
-        ),
-
-        const SizedBox(height: 12),
-
-        // 4) Activations table
-        Card(
-          elevation: 0,
-          color: Colors.black26,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              children: [
-                const _ActivationHeader(),
-                const SizedBox(height: 10),
-                Divider(height: 1, color: Colors.white.withOpacity(0.1)),
-                const SizedBox(height: 10),
-                ...rows.map((r) => _ActivationCompareRow(row: r)),
-              ],
-            ),
-          ),
-        ),
-      ],
+          // 4) Ativações (Astros)
+          Text(l10n.hdPlanetaryActivation, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 15)),
+          const SizedBox(height: 16),
+          const _ActivationHeader(),
+          const SizedBox(height: 10),
+          Divider(height: 1, color: Colors.white.withOpacity(0.1)),
+          const SizedBox(height: 10),
+          ...rows.map((r) => _ActivationCompareRow(row: r)),
+        ],
+      ),
     );
   }
 
@@ -290,15 +284,15 @@ class _CentersChannelsTable extends StatelessWidget {
     final normDef = definedCenters.map(_norm).toSet();
     final authK = authorityCenter == null ? null : _norm(authorityCenter!);
     final maxLen = keys.length > definedChannels.length ? keys.length : definedChannels.length;
-    return Card(
-      elevation: 0, color: Colors.black26, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(padding: const EdgeInsets.all(12), child: Column(children: [
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         Row(children: [
-          Expanded(child: Center(child: Text(l10n.hdEnergyCenters, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)))),
+          Expanded(child: Center(child: Text(l10n.hdEnergyCenters, style: const TextStyle(color: Colors.white60, fontWeight: FontWeight.bold, fontSize: 12)))),
           const SizedBox(width: 10),
-          Expanded(child: Center(child: Text(l10n.hdChannels, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)))),
+          Expanded(child: Center(child: Text(l10n.hdChannels, style: const TextStyle(color: Colors.white60, fontWeight: FontWeight.bold, fontSize: 12)))),
         ]),
-        const SizedBox(height: 10), Divider(height: 1, color: Colors.white10), const SizedBox(height: 10),
+        const SizedBox(height: 10),
         ...List.generate(maxLen, (i) {
           final cK = i < keys.length ? keys[i] : null; final ch = i < definedChannels.length ? definedChannels[i] : null;
           final isDef = cK != null && normDef.contains(cK); final isAuth = cK != null && authK == cK;
@@ -308,7 +302,17 @@ class _CentersChannelsTable extends StatelessWidget {
             Expanded(child: ch == null ? const SizedBox() : _Pill(text: ch, tone: _PillTone.conscious)),
           ]));
         }),
-      ])),
+        if (authorityCenter != null) ...[
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Text(
+              l10n.hdAuthorityNotice(HumanDesignSection.centerL10n(context, authorityCenter!)),
+              style: const TextStyle(color: Colors.purpleAccent, fontSize: 11, fontStyle: FontStyle.italic, fontWeight: FontWeight.w500),
+            ),
+          ),
+        ],
+      ],
     );
   }
 }

@@ -651,8 +651,14 @@ abstract class AppLocalizations {
   /// No description provided for @hdEnergyCenters.
   ///
   /// In pt, this message translates to:
-  /// **'Centros energéticos'**
+  /// **'Centros'**
   String get hdEnergyCenters;
+
+  /// No description provided for @hdEnergyCentersChannels.
+  ///
+  /// In pt, this message translates to:
+  /// **'Centros, canais e portas'**
+  String get hdEnergyCentersChannels;
 
   /// No description provided for @hdDefinedCenters.
   ///
@@ -689,6 +695,12 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'(Inconsciente)'**
   String get hdUnconscious;
+
+  /// No description provided for @hdPlanetaryActivation.
+  ///
+  /// In pt, this message translates to:
+  /// **'Ativação Planetária'**
+  String get hdPlanetaryActivation;
 
   /// No description provided for @hdPlanets.
   ///
@@ -1235,6 +1247,18 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'🎯 MC e Nodos Lunares'**
   String get astroMCNodes;
+
+  /// No description provided for @hdIndicators.
+  ///
+  /// In pt, this message translates to:
+  /// **'Principais Indicadores'**
+  String get hdIndicators;
+
+  /// No description provided for @hdBodygraph.
+  ///
+  /// In pt, this message translates to:
+  /// **'Mapa do Corpo (Bodygraph)'**
+  String get hdBodygraph;
 }
 
 class _AppLocalizationsDelegate

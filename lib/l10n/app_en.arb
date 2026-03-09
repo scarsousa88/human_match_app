@@ -94,7 +94,8 @@
   "hdNotSelf": "Not-Self",
   "hdDefinition": "Definition",
   "hdIncarnationCross": "Incarnation Cross",
-  "hdEnergyCenters": "Energy Centers",
+  "hdEnergyCenters": "Centers",
+  "hdEnergyCentersChannels": "Centers, channels and gates",
   "hdDefinedCenters": "Defined Centers",
   "hdChannels": "Channels",
   "hdNoData": "No data available.",
@@ -102,7 +103,8 @@
   "@hdAuthorityNotice": { "placeholders": { "center": { "type": "String" } } },
   "hdDesign": "Design",
   "hdUnconscious": "(Unconscious)",
-  "hdPlanets": "Planets",
+  "hdPlanetaryActivation": "Planetary Activation",
+  "hdPlanets": "Astros",
   "hdPersonality": "Personality",
   "hdConscious": "(Conscious)",
 
@@ -192,5 +194,7 @@
   "astroBig3": "🌟 Big 3",
   "astroPersonalPlanets": "🪐 Personal Planets",
   "astroSocialGenerationalPlanets": "🪐 Social and Generational Planets",
-  "astroMCNodes": "🎯 MC and Lunar Nodes"
+  "astroMCNodes": "🎯 MC and Lunar Nodes",
+  "hdIndicators": "Main Indicators",
+  "hdBodygraph": "Bodygraph"
 }
