@@ -16,7 +16,9 @@ class InsightsRepo {
     final snap = await _doc().get();
     if (!snap.exists) return null;
 
-    final data = snap.data()!;
+    final data = snap.data();
+    if (data == null) return null;
+
     final text = (data['text'] ?? '').toString();
     final ts = data['updatedAt'];
     final pv = (data['promptVersion'] ?? 0) as int;
