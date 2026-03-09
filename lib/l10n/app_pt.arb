@@ -174,5 +174,19 @@
   "@verifyEmailSent": { "placeholders": { "email": { "type": "String" } } },
   "checkVerification": "Já verifiquei",
   "resendVerification": "Reenviar email",
-  "verificationResent": "Email de verificação reenviado."
+  "verificationResent": "Email de verificação reenviado.",
+  "orDivider": "OU",
+  "errorEmailAlreadyRegistered": "Este email já está registado. Tente fazer LOGIN em vez de criar conta.",
+  "errorInvalidCredentials": "Credenciais incorretas ou conta inexistente.",
+  "errorUserDisabled": "Conta desativada.",
+  "errorTooManyRequests": "Bloqueado temporariamente por excesso de tentativas.",
+  "errorAccountExistsGoogle": "Já existe uma conta com este email vinculada ao Google. Use \"Continuar com Google\".",
+  "errorUnexpected": "Erro inesperado: {error}",
+  "errorGoogle": "Erro Google: {error}",
+  "errorResetPassword": "Erro ao resetar: {error}",
+  "close": "Fechar",
+  "authError": "Erro de Autenticação: {error}",
+  "tryAgain": "Tentar novamente",
+  "loadProfileError": "Erro ao carregar perfil: {error}",
+  "logoutAndTryAgain": "Sair e Tentar Novamente"
 }

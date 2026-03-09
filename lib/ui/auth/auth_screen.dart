@@ -24,12 +24,6 @@ class _AuthScreenState extends State<AuthScreen> {
   final passCtrl = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    debugPrint('APP_VERSION: 1.1.1_DEBUG_AUTH');
-  }
-
-  @override
   void dispose() {
     emailCtrl.dispose();
     passCtrl.dispose();
@@ -38,14 +32,15 @@ class _AuthScreenState extends State<AuthScreen> {
 
   void _toast(String msg, {bool isError = true}) {
     if (!mounted) return;
+    final l10n = AppLocalizations.of(context)!;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(msg),
         backgroundColor: isError ? Colors.red : Colors.green,
         duration: const Duration(seconds: 4),
-        action: msg.contains('usado') || msg.contains('use') 
+        action: msg.contains(l10n.errorEmailAlreadyInUse) || msg.contains(l10n.login)
           ? SnackBarAction(
-              label: 'ENTRAR', 
+              label: l10n.login.toUpperCase(), 
               textColor: Colors.white,
               onPressed: () => setState(() => isLogin = true)
             ) 
@@ -61,16 +56,16 @@ class _AuthScreenState extends State<AuthScreen> {
     switch (e.code) {
       case 'user-not-found': return l10n.errorUserNotFound;
       case 'wrong-password': return l10n.errorWrongPassword;
-      case 'email-already-in-use': return 'Este email já está registado. Tente fazer LOGIN em vez de criar conta.';
+      case 'email-already-in-use': return l10n.errorEmailAlreadyRegistered;
       case 'invalid-credential':
-      case 'INVALID_LOGIN_CREDENTIALS': return 'Credenciais incorretas ou conta inexistente.';
+      case 'INVALID_LOGIN_CREDENTIALS': return l10n.errorInvalidCredentials;
       case 'weak-password': return l10n.errorWeakPassword;
       case 'invalid-email': return l10n.errorInvalidEmail;
-      case 'user-disabled': return 'Conta desativada.';
-      case 'too-many-requests': return 'Bloqueado temporariamente por excesso de tentativas.';
+      case 'user-disabled': return l10n.errorUserDisabled;
+      case 'too-many-requests': return l10n.errorTooManyRequests;
       case 'account-exists-with-different-credential': 
-        return 'Já existe uma conta com este email vinculada ao Google. Use "Continuar com Google".';
-      default: return 'Erro: ${e.code}';
+        return l10n.errorAccountExistsGoogle;
+      default: return l10n.errorGeneral(e.code);
     }
   }
 
@@ -100,10 +95,8 @@ class _AuthScreenState extends State<AuthScreen> {
         if (user != null) {
           final uid = user.uid;
           
-          // Enviar email de verificação
           await user.sendEmailVerification();
           
-          // Garantir criação do documento após registo com sucesso
           await FirebaseFirestore.instance.collection('users').doc(uid).set({
             'email': email,
             'acceptTerms': true,
@@ -117,13 +110,14 @@ class _AuthScreenState extends State<AuthScreen> {
     } on FirebaseAuthException catch (e) {
       if (mounted) _toast(_authMsg(context, e));
     } catch (e) {
-      if (mounted) _toast('Erro inesperado: $e');
+      if (mounted) _toast(l10n.errorUnexpected(e.toString()));
     } finally {
       if (mounted) setState(() => loading = false);
     }
   }
 
   Future<void> _signInWithGoogle() async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() => loading = true);
     try {
       if (kIsWeb) {
@@ -134,7 +128,7 @@ class _AuthScreenState extends State<AuthScreen> {
     } on FirebaseAuthException catch (e) {
       if (mounted) _toast(_authMsg(context, e));
     } catch (e) {
-      if (mounted) _toast('Erro Google: $e');
+      if (mounted) _toast(l10n.errorGoogle(e.toString()));
     } finally {
       if (mounted) setState(() => loading = false);
     }
@@ -151,7 +145,7 @@ class _AuthScreenState extends State<AuthScreen> {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       if (mounted) _toast(l10n.resetEmailSent, isError: false);
     } catch (e) {
-      if (mounted) _toast('Erro ao resetar: $e');
+      if (mounted) _toast(l10n.errorResetPassword(e.toString()));
     }
   }
 
@@ -243,7 +237,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                   title: Text(l10n.termsTitle, style: const TextStyle(color: Colors.white)),
                                   content: SingleChildScrollView(child: Text(AppTerms.termsText, style: const TextStyle(color: Colors.white70))),
                                   actions: [
-                                    TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Fechar', style: TextStyle(color: goldColor)))
+                                    TextButton(onPressed: () => Navigator.pop(ctx), child: Text(l10n.close, style: const TextStyle(color: goldColor)))
                                   ],
                                 ),
                               );
@@ -271,7 +265,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       Expanded(child: Divider(color: Colors.white.withOpacity(0.1))),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Text("OU", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white.withOpacity(0.3), fontSize: 12)),
+                        child: Text(l10n.orDivider, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white.withOpacity(0.3), fontSize: 12)),
                       ),
                       Expanded(child: Divider(color: Colors.white.withOpacity(0.1))),
                     ],
@@ -291,9 +285,9 @@ class _AuthScreenState extends State<AuthScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.network('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png', height: 22),
+                          Image.asset('assets/icon/google_logo.png', height: 22),
                           const SizedBox(width: 12),
-                          const Text("Continuar com Google", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                          Text(l10n.continueWithGoogle, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
                         ],
                       ),
                     ),
@@ -319,8 +313,6 @@ class _AuthScreenState extends State<AuthScreen> {
               ),
             ),
             const SizedBox(height: 30),
-            Center(child: Text('v1.1.1_DEBUG_AUTH', style: TextStyle(fontSize: 10, color: Colors.white.withOpacity(0.1)))),
-            const SizedBox(height: 20),
           ],
         ),
       ),

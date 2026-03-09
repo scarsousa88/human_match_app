@@ -19,7 +19,6 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   @override
   void initState() {
     super.initState();
-    // Opcional: Recarregar o utilizador automaticamente a cada 5 segundos
     timer = Timer.periodic(const Duration(seconds: 5), (_) => _checkEmailVerified());
   }
 
@@ -35,24 +34,24 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
       await user.reload();
       if (user.emailVerified && mounted) {
         timer?.cancel();
-        // O RootGate irá detetar a mudança no authState ou podemos forçar refresh
       }
     }
   }
 
   Future<void> _resendEmail() async {
+    final l10n = AppLocalizations.of(context)!;
     setState(() => isResending = true);
     try {
       await FirebaseAuth.instance.currentUser?.sendEmailVerification();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.verificationResent)),
+          SnackBar(content: Text(l10n.verificationResent)),
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro: $e'), backgroundColor: Colors.red),
+          SnackBar(content: Text(l10n.errorGeneral(e.toString())), backgroundColor: Colors.red),
         );
       }
     } finally {

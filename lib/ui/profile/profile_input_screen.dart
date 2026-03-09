@@ -107,8 +107,10 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
       _places = list;
       final countries = _countries();
 
+      // Se não houver país definido (novo perfil), tenta detetar pela localização/locale do dispositivo
       if (_country == null || !countries.contains(_country)) {
-        _country = countries.isNotEmpty ? countries.first : null;
+        final detected = _detectUserCountry(countries);
+        _country = detected ?? (countries.isNotEmpty ? countries.first : null);
       }
 
       final cities = _citiesForCountry(_country);
@@ -137,6 +139,34 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
     if (country == null) return [];
     final out = _places.where((p) => p.country == country).toList()..sort((a, b) => a.city.compareTo(b.city));
     return out;
+  }
+
+  String? _detectUserCountry(List<String> availableCountries) {
+    try {
+      final code = WidgetsBinding.instance.platformDispatcher.locale.countryCode?.toUpperCase();
+      if (code == null) return null;
+
+      const isoToCountry = {
+        'AL': 'Albania', 'AD': 'Andorra', 'AT': 'Austria', 'BY': 'Belarus', 'BE': 'Belgium',
+        'BA': 'Bosnia and Herzegovina', 'BG': 'Bulgaria', 'HR': 'Croatia', 'CY': 'Cyprus',
+        'CZ': 'Czechia', 'DK': 'Denmark', 'EE': 'Estonia', 'FI': 'Finland', 'FR': 'France',
+        'DE': 'Germany', 'GR': 'Greece', 'HU': 'Hungary', 'IS': 'Iceland', 'IE': 'Ireland',
+        'IT': 'Italy', 'LV': 'Latvia', 'LI': 'Liechtenstein', 'LT': 'Lithuania', 'LU': 'Luxembourg',
+        'MT': 'Malta', 'MD': 'Moldova', 'MC': 'Monaco', 'ME': 'Montenegro', 'NL': 'Netherlands',
+        'MK': 'North Macedonia', 'NO': 'Norway', 'PL': 'Poland', 'PT': 'Portugal', 'RO': 'Romania',
+        'SM': 'San Marino', 'RS': 'Serbia', 'SK': 'Slovakia', 'SI': 'Slovenia', 'ES': 'Spain',
+        'SE': 'Sweden', 'CH': 'Switzerland', 'TR': 'Turkey', 'UA': 'Ukraine', 'GB': 'United Kingdom',
+        'VA': 'Vatican City', 'US': 'United States', 'CA': 'Canada', 'MX': 'Mexico', 'BR': 'Brazil',
+        'AR': 'Argentina', 'CL': 'Chile', 'JP': 'Japan', 'CN': 'China', 'IN': 'India', 'SG': 'Singapore',
+        'AE': 'United Arab Emirates', 'AU': 'Australia', 'NZ': 'New Zealand',
+      };
+
+      final name = isoToCountry[code];
+      if (name != null && availableCountries.contains(name)) {
+        return name;
+      }
+    } catch (_) {}
+    return null;
   }
 
   void _toast(String msg) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));

@@ -49,6 +49,7 @@ flutter:
     - assets/places/europe_places.json
     - assets/ephe/
     - assets/icon/icon.png
+    - assets/icon/google_logo.png
     - assets/icon/card.png
     - assets/icon/compare.png
     - assets/icon/loading.svg

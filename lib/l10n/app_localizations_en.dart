@@ -497,4 +497,60 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get verificationResent => 'Verification email resent.';
+
+  @override
+  String get orDivider => 'OU';
+
+  @override
+  String get errorEmailAlreadyRegistered =>
+      'Este email já está registado. Tente fazer LOGIN em vez de criar conta.';
+
+  @override
+  String get errorInvalidCredentials =>
+      'Credenciais incorretas ou conta inexistente.';
+
+  @override
+  String get errorUserDisabled => 'Conta desativada.';
+
+  @override
+  String get errorTooManyRequests =>
+      'Bloqueado temporariamente por excesso de tentativas.';
+
+  @override
+  String get errorAccountExistsGoogle =>
+      'Já existe uma conta com este email vinculada ao Google. Use \"Continuar com Google\".';
+
+  @override
+  String errorUnexpected(Object error) {
+    return 'Erro inesperado: $error';
+  }
+
+  @override
+  String errorGoogle(Object error) {
+    return 'Erro Google: $error';
+  }
+
+  @override
+  String errorResetPassword(Object error) {
+    return 'Erro ao resetar: $error';
+  }
+
+  @override
+  String get close => 'Fechar';
+
+  @override
+  String authError(Object error) {
+    return 'Erro de Autenticação: $error';
+  }
+
+  @override
+  String get tryAgain => 'Tentar novamente';
+
+  @override
+  String loadProfileError(Object error) {
+    return 'Erro ao carregar perfil: $error';
+  }
+
+  @override
+  String get logoutAndTryAgain => 'Sair e Tentar Novamente';
 }

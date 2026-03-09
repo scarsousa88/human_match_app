@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../main.dart';
 import '../../app_terms.dart';
+import '../../l10n/app_localizations.dart';
 import '../loading_widget.dart';
 import '../auth/auth_screen.dart';
 import '../auth/terms_consent_screen.dart';
@@ -24,7 +25,6 @@ class _RootGateState extends State<RootGate> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    // userChanges() emite eventos quando o user faz reload, o que é útil para verificação de email
     _authStream = FirebaseAuth.instance.userChanges();
   }
 
@@ -48,6 +48,7 @@ class _RootGateState extends State<RootGate> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return StreamBuilder<User?>(
       stream: _authStream,
       builder: (context, snap) {
@@ -61,8 +62,8 @@ class _RootGateState extends State<RootGate> with WidgetsBindingObserver {
                   children: [
                     const Icon(Icons.error_outline, color: Colors.red, size: 48),
                     const SizedBox(height: 16),
-                    Text('Erro de Autenticação: ${snap.error}', textAlign: TextAlign.center),
-                    TextButton(onPressed: () => HumanMatchApp.restartApp(context), child: const Text('Tentar novamente')),
+                    Text(l10n.authError(snap.error.toString()), textAlign: TextAlign.center),
+                    TextButton(onPressed: () => HumanMatchApp.restartApp(context), child: Text(l10n.tryAgain)),
                   ],
                 ),
               ),
@@ -77,7 +78,6 @@ class _RootGateState extends State<RootGate> with WidgetsBindingObserver {
         final user = snap.data;
         if (user == null) return const AuthScreen();
         
-        // Se o email não estiver verificado, mostramos a tela de verificação
         if (!user.emailVerified) {
           return const VerifyEmailScreen();
         }
@@ -109,6 +109,7 @@ class _ProfileGateState extends State<ProfileGate> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     _initStream();
 
     if (_profileStream == null) return const AuthScreen();
@@ -126,11 +127,11 @@ class _ProfileGateState extends State<ProfileGate> {
                   children: [
                     const Icon(Icons.cloud_off, color: Colors.orange, size: 48),
                     const SizedBox(height: 16),
-                    Text('Erro ao carregar perfil: ${snap.error}', textAlign: TextAlign.center),
+                    Text(l10n.loadProfileError(snap.error.toString()), textAlign: TextAlign.center),
                     const SizedBox(height: 24),
                     ElevatedButton(
                       onPressed: () => FirebaseAuth.instance.signOut(),
-                      child: const Text('Sair e Tentar Novamente'),
+                      child: Text(l10n.logoutAndTryAgain),
                     ),
                   ],
                 ),

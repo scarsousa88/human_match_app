@@ -1055,6 +1055,90 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Email de verificação reenviado.'**
   String get verificationResent;
+
+  /// No description provided for @orDivider.
+  ///
+  /// In pt, this message translates to:
+  /// **'OU'**
+  String get orDivider;
+
+  /// No description provided for @errorEmailAlreadyRegistered.
+  ///
+  /// In pt, this message translates to:
+  /// **'Este email já está registado. Tente fazer LOGIN em vez de criar conta.'**
+  String get errorEmailAlreadyRegistered;
+
+  /// No description provided for @errorInvalidCredentials.
+  ///
+  /// In pt, this message translates to:
+  /// **'Credenciais incorretas ou conta inexistente.'**
+  String get errorInvalidCredentials;
+
+  /// No description provided for @errorUserDisabled.
+  ///
+  /// In pt, this message translates to:
+  /// **'Conta desativada.'**
+  String get errorUserDisabled;
+
+  /// No description provided for @errorTooManyRequests.
+  ///
+  /// In pt, this message translates to:
+  /// **'Bloqueado temporariamente por excesso de tentativas.'**
+  String get errorTooManyRequests;
+
+  /// No description provided for @errorAccountExistsGoogle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Já existe uma conta com este email vinculada ao Google. Use \"Continuar com Google\".'**
+  String get errorAccountExistsGoogle;
+
+  /// No description provided for @errorUnexpected.
+  ///
+  /// In pt, this message translates to:
+  /// **'Erro inesperado: {error}'**
+  String errorUnexpected(Object error);
+
+  /// No description provided for @errorGoogle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Erro Google: {error}'**
+  String errorGoogle(Object error);
+
+  /// No description provided for @errorResetPassword.
+  ///
+  /// In pt, this message translates to:
+  /// **'Erro ao resetar: {error}'**
+  String errorResetPassword(Object error);
+
+  /// No description provided for @close.
+  ///
+  /// In pt, this message translates to:
+  /// **'Fechar'**
+  String get close;
+
+  /// No description provided for @authError.
+  ///
+  /// In pt, this message translates to:
+  /// **'Erro de Autenticação: {error}'**
+  String authError(Object error);
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In pt, this message translates to:
+  /// **'Tentar novamente'**
+  String get tryAgain;
+
+  /// No description provided for @loadProfileError.
+  ///
+  /// In pt, this message translates to:
+  /// **'Erro ao carregar perfil: {error}'**
+  String loadProfileError(Object error);
+
+  /// No description provided for @logoutAndTryAgain.
+  ///
+  /// In pt, this message translates to:
+  /// **'Sair e Tentar Novamente'**
+  String get logoutAndTryAgain;
 }
 
 class _AppLocalizationsDelegate

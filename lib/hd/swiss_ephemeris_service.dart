@@ -1,5 +1,6 @@
 // lib/hd/swiss_ephemeris_service.dart
 
+import 'dart:collection';
 import 'package:flutter/foundation.dart';
 
 import 'ephe_assets.dart';
@@ -9,7 +10,7 @@ import 'swiss_ephemeris.dart';
 /// High-level service with:
 /// - one-time init
 /// - ephemeris assets copy + setEphePath
-/// - caching (per-minute JD key)
+/// - caching (per-minute JD key) with size limit
 /// - helpers for lon + speed, batch calls, and ascendant
 class SwissEphemerisService {
   static final SwissEphemerisService _instance = SwissEphemerisService._internal();
@@ -20,7 +21,10 @@ class SwissEphemerisService {
   bool _inited = false;
 
   // Cache key: (jdUt * 1440).round() => minute resolution
-  final Map<int, _PlanetCacheEntry> _cache = <int, _PlanetCacheEntry>{};
+  // Using LinkedHashMap to implement a simple LRU-like eviction if needed,
+  // or just a maximum size to prevent memory leaks.
+  final LinkedHashMap<int, _PlanetCacheEntry> _cache = LinkedHashMap<int, _PlanetCacheEntry>();
+  static const int _maxCacheSize = 1000;
 
   Future<void> init() async {
     if (_inited) return;
@@ -28,7 +32,6 @@ class SwissEphemerisService {
     _ffi = loadSwissEph();
 
     if (!kIsWeb) {
-      // Copy minimal ephe assets if available. If files are missing, native may fall back to Moshier.
       await EpheAssets.copyIfMissing([
         'sepl_18.se1',
         'semo_18.se1',
@@ -42,7 +45,6 @@ class SwissEphemerisService {
         debugPrint('Aviso: erro ao setEphePath: $e');
       }
     } else {
-      // No Web, o path costuma ser fixo ou pre-carregado no Wasm FS.
       try {
         _ffi.setEphePath('/assets/ephe');
       } catch (e) {
@@ -53,19 +55,19 @@ class SwissEphemerisService {
     _inited = true;
   }
 
-  // -------------------------
-  // Julian helpers (keeps conversions in one place)
-  // -------------------------
   double jdUtc(DateTime utc) => julianDayUtc(utc);
   DateTime utcFromJd(double jdUt) => utcFromJulianDayUtc(jdUt);
 
-  // -------------------------
-  // Single planet (lon)
-  // -------------------------
   double calcPlanetLonUtc(DateTime utc, int planetId) => calcPlanetLonJdUt(jdUtc(utc), planetId);
 
   double calcPlanetLonJdUt(double jdUt, int planetId) {
     final key = _cacheKey(jdUt);
+    
+    // Manage cache size
+    if (!_cache.containsKey(key) && _cache.length >= _maxCacheSize) {
+      _cache.remove(_cache.keys.first); // Evict oldest
+    }
+
     final entry = _cache.putIfAbsent(key, () => _PlanetCacheEntry(jdUt: jdUt));
 
     final cached = entry.lonByPlanet[planetId];
@@ -85,11 +87,13 @@ class SwissEphemerisService {
 
   double calcSunLongitudeJdUt(double jdUt) => calcPlanetLonJdUt(jdUt, 0);
 
-  // -------------------------
-  // Lon + speed (deg/day) — optional native support
-  // -------------------------
   ({double lon, double speedDegPerDay}) calcPlanetLonSpeedJdUt(double jdUt, int planetId) {
     final key = _cacheKey(jdUt);
+    
+    if (!_cache.containsKey(key) && _cache.length >= _maxCacheSize) {
+      _cache.remove(_cache.keys.first);
+    }
+
     final entry = _cache.putIfAbsent(key, () => _PlanetCacheEntry(jdUt: jdUt));
 
     final cached = entry.lonSpeedByPlanet[planetId];
@@ -103,7 +107,6 @@ class SwissEphemerisService {
       return out;
     }
 
-    // Fallback: lon-only + mean solar motion (used mainly for Sun solver)
     final lon = calcPlanetLonJdUt(jdUt, planetId);
     final out = (lon: lon, speedDegPerDay: 0.985647); // mean solar motion
     entry.lonSpeedByPlanet[planetId] = out;
@@ -113,14 +116,15 @@ class SwissEphemerisService {
   ({double lon, double speedDegPerDay}) calcSunLonSpeedJdUt(double jdUt) =>
       calcPlanetLonSpeedJdUt(jdUt, 0);
 
-  // -------------------------
-  // Batch (lon only) — optional native support
-  // -------------------------
   List<double> calcPlanetsLonJdUt(double jdUt, List<int> planetIds) {
     final key = _cacheKey(jdUt);
+    
+    if (!_cache.containsKey(key) && _cache.length >= _maxCacheSize) {
+      _cache.remove(_cache.keys.first);
+    }
+
     final entry = _cache.putIfAbsent(key, () => _PlanetCacheEntry(jdUt: jdUt));
 
-    // If everything is cached, return immediately
     var allCached = true;
     final out = List<double>.filled(planetIds.length, 0.0, growable: false);
     for (var i = 0; i < planetIds.length; i++) {
@@ -134,7 +138,6 @@ class SwissEphemerisService {
     }
     if (allCached) return out;
 
-    // Try native batch
     final batch = _ffi.calcPlanetsLonUt(jdUt: jdUt, planetIds: planetIds);
     if (batch != null) {
       for (var i = 0; i < planetIds.length; i++) {
@@ -143,16 +146,12 @@ class SwissEphemerisService {
       return batch;
     }
 
-    // Fallback: loop
     for (var i = 0; i < planetIds.length; i++) {
       out[i] = calcPlanetLonJdUt(jdUt, planetIds[i]);
     }
     return out;
   }
 
-  // -------------------------
-  // Ascendant
-  // -------------------------
   double calcAscendantLongitudeUtc(DateTime utc, {required double lat, required double lon}) {
     final jd = jdUtc(utc);
     final asc = _ffi.calcAscUt(jdUt: jd, lat: lat, lon: lon);
@@ -162,9 +161,6 @@ class SwissEphemerisService {
     return asc;
   }
 
-  // -------------------------
-  // Cache helpers
-  // -------------------------
   int _cacheKey(double jdUt) => (jdUt * 1440.0).round(); // minute
 
   void clearCache() => _cache.clear();
