@@ -67,7 +67,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get termsContent =>
-      'Política de Privacidad - Human Match\n\nEsta Política de Privacidade descreve como a Human Match, uma aplicação móvel que gera relatórios personalizados de Human Design, Astrologia e Numerologia com base no nome completo, data e local de nascimento dos utilizadores, recolhe, utiliza e protege os seus dados pessoais. Estamos comprometidos com a proteção da sua privacidade em conformidade com o Regulamento Geral de Proteção de Dados (RGPD) da União Europeia e legislação aplicável em Portugal.\n\nDados Recolhidos\nRecolhemos apenas os dados estritamente necessários para fornecer o serviço:\n\nNome completo;\n\nData de nascimento;\n\nLocal de nascimento.\n\nEstes dados são usados exclusivamente para calcular e gerar os seus relatórios personalizados de Human Design, Astrologia e Numerologia. Não recolhemos dados sensíveis adicionais, como endereço de email ou informações financeiras, a menos que sejam voluntariamente fornecidos para suporte ou registo de conta.\n\nFinalidades do Tratamento\nOs dados são tratados para:\n\nGerar relatórios precisos baseados nos inputs fornecidos;\n\nMelhorar a precisão dos cálculos astrológicos e de design humano;\n\nPermitir o armazenamento opcional de relatórios para acesso futuro (com o seu consentimento explícito).\n\nO tratamento é lícito com base no seu consentimento livre e informado, obtido no momento da submissão dos dados.\n\nPartilha de Dados\nNão partilhamos os seus dados pessoais com terceiros, exceptuando:\n\nPrestadores de serviços técnicos essenciais (ex.: servidores de cloud seguros na UE) sob acordos de processamento de dados que garantem confidencialidade;\n\nQuando exigido por lei ou autoridades competentes.\n\nOs relatórios gerados são privados e não são vendidos ou usados para marketing.\n​\n\nArmazenamento e Segurança\nOs dados são armazenados em servidores seguros localizado na União Europeia, com medidas técnicas como encriptação (AES-256), pseudonimização e controlos de acesso. Retemos os dados apenas pelo tempo necessário para o serviço (geralmente até 30 dias após o último acesso, salvo consentimento para armazenamento prolongado). Procedemos à eliminação segura automática após esse período.\n\nOs Seus Direitos\nPode exercer os seus direitos RGPD a qualquer momento:\n\nAcesso aos dados;\n\nRectificação ou correção;\n\nApagamento (\"direito ao esquecimento\");\n\nOposição ao tratamento;\n\nLimitação do tratamento;\n\nPortabilidade dos dados.\n\nPara solicitar a eliminação da sua conta e de todos os dados associados, poderá fazê-lo através do seguinte link: https://humanmatch.app/delete-account ou enviando um email para support@humanmatch.app.\n\nConsentimento e Alterações\nAo usar a app, você consente com esta política. Pode revogar o consentimento a cualquier momento, o que impedirá o acesso a relatórios existentes. Atualizaremos esta política conforme necessário, notifying os utilizadores via app.';
+      'Política de Privacidad - Human Match\n\nEsta Política de Privacidade descreve como a Human Match, uma aplicação móvel que gera relatórios personalizados de Human Design, Astrologia e Numerologia com base no nome completo, data e local de nascimento dos utilizadores, recolhe, utiliza e protege os seus dados pessoais. Estamos comprometidos com a proteção da sua privacidade em conformidade com o Regulamento Geral de Proteção de Dados (RGPD) da União Europeia e legislação aplicável em Portugal.\n\nDados Recolhidos\nRecolhemos apenas os dados estritamente necessários para fornecer o serviço:\n\nNome completo;\n\nData de nascimento;\n\nLocal de nascimento.\n\nEstes dados são usados exclusivamente para calcular e gerar os seus relatórios personalizados de Human Design, Astrologia e Numerologia. No recolhemos dados sensíveis adicionais, como endereço de email ou informações financeiras, a menos que sejam voluntariamente fornecidos para suporte ou registo de conta.\n\nFinalidades do Tratamento\nOs dados são tratados para:\n\nGerar relatórios precisos baseados nos inputs fornecidos;\n\nMelhorar a precisão dos cálculos astrológicos e de design humano;\n\nPermitir o armazenamento opcional de relatórios para acesso futuro (com o seu consentimento explícito).\n\nO tratamento é lícito com base no seu consentimento livre e informado, obtido no momento da submissão dos dados.\n\nPartilha de Dados\nNão partilhamos os seus dados pessoais com terceiros, exceptuando:\n\nPrestadores de serviços técnicos essenciais (ex.: servidores de cloud seguros na UE) sob acordos de processamento de dados que garantem confidencialidade;\n\nQuando exigido por lei ou autoridades competentes.\n\nOs relatórios gerados são privados e não são vendidos ou usados para marketing.\n​\n\nArmazenamento e Segurança\nOs dados são armazenados em servidores seguros localizado na União Europeia, com medidas técnicas como encriptação (AES-256), pseudonimização e controlos de acesso. Retemos os dados apenas pelo tempo necessário para o serviço (geralmente até 30 dias após o último acesso, salvo consentimento para armazenamento prolongado). Procedemos à eliminação segura automática após esse período.\n\nOs Seus Direitos\nPode exercer os seus direitos RGPD a qualquer momento:\n\nAcesso aos dados;\n\nRectificação ou correção;\n\nApagamento (\"direito ao esquecimento\");\n\nOposição ao tratamento;\n\nLimitação do tratamento;\n\nPortabilidade dos dados.\n\nPara solicitar a eliminação da sua conta e de todos os dados associados, poderá fazê-lo através do seguinte link: https://humanmatch.app/delete-account ou enviando um email para support@humanmatch.app.\n\nConsentimento e Alterações\nAo usar a app, você consente com esta política. Pode revogar o consentimento a cualquier momento, o que impedirá o acesso a relatórios existentes. Atualizaremos esta política conforme necessário, notifying os utilizadores via app.';
 
   @override
   String get processing => 'Procesando...';
@@ -275,7 +275,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get hdAuthority => 'Autoridad';
 
   @override
-  String get hdStrategy => 'Estrategia';
+  String get hdStrategy => 'Estratégia';
 
   @override
   String get hdProfile => 'Perfil';
@@ -376,55 +376,55 @@ class AppLocalizationsEs extends AppLocalizations {
   String get hdStrLun => 'Esperar un ciclo lunar';
 
   @override
-  String get hdSigSat => 'Satisfação';
+  String get hdSigSat => 'Satisfacción';
 
   @override
-  String get hdSigSuc => 'Sucesso';
+  String get hdSigSuc => 'Éxito';
 
   @override
   String get hdSigPea => 'Paz';
 
   @override
-  String get hdSigSur => 'Surpresa';
+  String get hdSigSur => 'Sorpresa';
 
   @override
-  String get hdNotFru => 'Frustração';
+  String get hdNotFru => 'Frustración';
 
   @override
   String get hdNotBit => 'Amargura';
 
   @override
-  String get hdNotAng => 'Raiva';
+  String get hdNotAng => 'Rabia';
 
   @override
-  String get hdNotDis => 'Desilusão';
+  String get hdNotDis => 'Desilusión';
 
   @override
-  String get hdDefSin => 'Definição Única';
+  String get hdDefSin => 'Definicón Única';
 
   @override
-  String get hdDefSpl => 'Definição Partida';
+  String get hdDefSpl => 'Definicón Partida';
 
   @override
-  String get hdDefTri => 'Definição Tripla';
+  String get hdDefTri => 'Triple Partida';
 
   @override
-  String get hdDefQua => 'Definição Quádrupla';
+  String get hdDefQua => 'Cuádruple Partida';
 
   @override
-  String get hdCrossRight => 'Ângulo Direito';
+  String get hdCrossRight => 'Ángulo Derecho';
 
   @override
-  String get hdCrossLeft => 'Ângulo Esquerdo';
+  String get hdCrossLeft => 'Ángulo Izquierdo';
 
   @override
-  String get hdCrossJuxta => 'Justaposição';
+  String get hdCrossJuxta => 'Justaposición';
 
   @override
   String get hdCrossOf => 'Cruz de';
 
   @override
-  String get hdCenterHead => 'Cabeça';
+  String get hdCenterHead => 'Cabeza';
 
   @override
   String get hdCenterAjna => 'Ajna';
@@ -436,10 +436,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get hdCenterG => 'Centro G';
 
   @override
-  String get hdCenterEgo => 'Coração';
+  String get hdCenterEgo => 'Corazón';
 
   @override
-  String get hdCenterSpleen => 'Baço';
+  String get hdCenterSpleen => 'Bazo';
 
   @override
   String get hdCenterSolar => 'Plexo Solar';
@@ -448,22 +448,22 @@ class AppLocalizationsEs extends AppLocalizations {
   String get hdCenterSacral => 'Sacral';
 
   @override
-  String get hdCenterRoot => 'Raiz';
+  String get hdCenterRoot => 'Raíz';
 
   @override
   String get hdPlanetSun => 'Sol';
 
   @override
-  String get hdPlanetEarth => 'Terra';
+  String get hdPlanetEarth => 'Tierra';
 
   @override
-  String get hdPlanetMoon => 'Lua';
+  String get hdPlanetMoon => 'Luna';
 
   @override
-  String get hdPlanetMercury => 'Mercúrio';
+  String get hdPlanetMercury => 'Mercurio';
 
   @override
-  String get hdPlanetVenus => 'Vénus';
+  String get hdPlanetVenus => 'Venus';
 
   @override
   String get hdPlanetMars => 'Marte';
@@ -481,30 +481,30 @@ class AppLocalizationsEs extends AppLocalizations {
   String get hdPlanetNeptune => 'Neptuno';
 
   @override
-  String get hdPlanetPluto => 'Plutão';
+  String get hdPlanetPluto => 'Plutón';
 
   @override
-  String get legalInfo => 'Informações Legais';
+  String get legalInfo => 'Información Legal';
 
   @override
-  String get deleteAccountData => 'Eliminação de Conta e Dados';
+  String get deleteAccountData => 'Eliminar Cuenta y Datos';
 
   @override
-  String get verifyEmailTitle => 'Verifica o teu Email';
+  String get verifyEmailTitle => 'Verifica tu Email';
 
   @override
   String verifyEmailSent(String email) {
-    return 'Enviámos um email de confirmação para $email. Por favor, verifica a tua caixa de entrada (e pasta de spam).';
+    return 'Hemos enviado un correo de confirmación a $email. Por favor, revisa tu bandeja de entrada (y carpeta de spam).';
   }
 
   @override
-  String get checkVerification => 'Já verifiquei';
+  String get checkVerification => 'Ya lo he verificado';
 
   @override
-  String get resendVerification => 'Reenviar email';
+  String get resendVerification => 'Reenviar correo';
 
   @override
-  String get verificationResent => 'Email de verificação reenviado.';
+  String get verificationResent => 'Correo de verificación reenviado.';
 
   @override
   String get orDivider => 'OU';
@@ -566,22 +566,22 @@ class AppLocalizationsEs extends AppLocalizations {
   String get astroMoonSign => 'Signo Lunar';
 
   @override
-  String get astroMercurySign => 'Mercúrio';
+  String get astroMercurySign => 'Mercurio';
 
   @override
-  String get astroVenusSign => 'Vénus';
+  String get astroVenusSign => 'Venus';
 
   @override
   String get astroMarsSign => 'Marte';
 
   @override
-  String get astroMC => 'Meio do Céu (MC)';
+  String get astroMC => 'Medio del Cielo (MC)';
 
   @override
   String get astroNorthNode => 'Nodo Norte';
 
   @override
-  String get astroSouthNode => 'Nodo Sul';
+  String get astroSouthNode => 'Nodo Sur';
 
   @override
   String get astroHouses => 'Casas Astrológicas';
@@ -592,18 +592,18 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get astroAspects => 'Aspetos Planetários';
+  String get astroAspects => 'Aspectos Planetarios';
 
   @override
   String get astroBig3 => '🌟 Big 3';
 
   @override
-  String get astroPersonalPlanets => '🪐 Planetas Pessoais';
+  String get astroPersonalPlanets => '🪐 Planetas Personales';
 
   @override
   String get astroSocialGenerationalPlanets =>
-      '🪐 Planetas Sociais e Geracionais';
+      '🪐 Planetas Sociales y Generacionales';
 
   @override
-  String get astroMCNodes => '🎯 MC e Nodos Lunares';
+  String get astroMCNodes => '🎯 MC y Nodos Lunares';
 }

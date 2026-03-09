@@ -579,7 +579,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get astroNorthNode => 'North Node';
 
   @override
-  String get astroSouthNode => 'Nodo Sul';
+  String get astroSouthNode => 'South Node';
 
   @override
   String get astroHouses => 'Astrological Houses';
@@ -590,18 +590,18 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get astroAspects => 'Aspetos Planetários';
+  String get astroAspects => 'Astrological Aspects';
 
   @override
   String get astroBig3 => '🌟 Big 3';
 
   @override
-  String get astroPersonalPlanets => '🪐 Planetas Pessoais';
+  String get astroPersonalPlanets => '🪐 Personal Planets';
 
   @override
   String get astroSocialGenerationalPlanets =>
-      '🪐 Planetas Sociais e Geracionais';
+      '🪐 Social and Generational Planets';
 
   @override
-  String get astroMCNodes => '🎯 MC e Nodos Lunares';
+  String get astroMCNodes => '🎯 MC and Lunar Nodes';
 }
