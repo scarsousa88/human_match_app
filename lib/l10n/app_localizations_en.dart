@@ -288,7 +288,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hdDefinition => 'Definition';
 
   @override
-  String get hdIncarnationCross => 'Cross';
+  String get hdIncarnationCross => 'Incarnation Cross';
 
   @override
   String get hdEnergyCenters => 'Energy Centers';
@@ -314,13 +314,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hdUnconscious => '(Unconscious)';
 
   @override
-  String get hdPlanets => 'Astros';
+  String get hdPlanets => 'Planets';
 
   @override
   String get hdPersonality => 'Personality';
 
   @override
-  String get hdConscious => '(Conscience)';
+  String get hdConscious => '(Conscious)';
 
   @override
   String get hdGen => 'Generator';
@@ -356,10 +356,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hdAuthMen => 'Mental';
 
   @override
+  String get hdAuthLun => 'Lunar';
+
+  @override
   String get hdStrInf => 'To inform';
 
   @override
-  String get hdStrResp => 'Wait to respond';
+  String get hdStrResp => 'To respond';
+
+  @override
+  String get hdStrRespInf => 'To respond and inform';
 
   @override
   String get hdStrInv => 'Wait for invitation';
@@ -380,7 +386,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hdSigSur => 'Surprise';
 
   @override
-  String get hdNotFru => 'Frustración';
+  String get hdNotFru => 'Frustration';
 
   @override
   String get hdNotBit => 'Bitterness';
@@ -410,7 +416,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hdCrossLeft => 'Left Angle';
 
   @override
-  String get hdCrossJuxta => 'Juxtaposition';
+  String get hdCrossJuxta => 'Justaposição';
 
   @override
   String get hdCrossOf => 'Cross of';
@@ -553,4 +559,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get logoutAndTryAgain => 'Sair e Tentar Novamente';
+
+  @override
+  String get astroMoonSign => 'Moon Sign';
+
+  @override
+  String get astroMercurySign => 'Mercury';
+
+  @override
+  String get astroVenusSign => 'Venus';
+
+  @override
+  String get astroMarsSign => 'Mars';
+
+  @override
+  String get astroMC => 'Midheaven (MC)';
+
+  @override
+  String get astroNorthNode => 'North Node';
+
+  @override
+  String get astroSouthNode => 'Nodo Sul';
+
+  @override
+  String get astroHouses => 'Astrological Houses';
+
+  @override
+  String astroHouseN(int n) {
+    return 'House $n';
+  }
+
+  @override
+  String get astroAspects => 'Aspetos Planetários';
+
+  @override
+  String get astroBig3 => '🌟 Big 3';
+
+  @override
+  String get astroPersonalPlanets => '🪐 Planetas Pessoais';
+
+  @override
+  String get astroSocialGenerationalPlanets =>
+      '🪐 Planetas Sociais e Geracionais';
+
+  @override
+  String get astroMCNodes => '🎯 MC e Nodos Lunares';
 }

@@ -93,7 +93,7 @@
   "hdSignature": "Signature",
   "hdNotSelf": "Not-Self",
   "hdDefinition": "Definition",
-  "hdIncarnationCross": "Cross",
+  "hdIncarnationCross": "Incarnation Cross",
   "hdEnergyCenters": "Energy Centers",
   "hdDefinedCenters": "Defined Centers",
   "hdChannels": "Channels",
@@ -102,9 +102,9 @@
   "@hdAuthorityNotice": { "placeholders": { "center": { "type": "String" } } },
   "hdDesign": "Design",
   "hdUnconscious": "(Unconscious)",
-  "hdPlanets": "Astros",
+  "hdPlanets": "Planets",
   "hdPersonality": "Personality",
-  "hdConscious": "(Conscience)",
+  "hdConscious": "(Conscious)",
 
   "hdGen": "Generator",
   "hdMG": "Manifesting Generator",
@@ -118,9 +118,11 @@
   "hdAuthEgo": "Ego",
   "hdAuthSelf": "Self-projected",
   "hdAuthMen": "Mental",
+  "hdAuthLun": "Lunar",
 
   "hdStrInf": "To inform",
-  "hdStrResp": "Wait to respond",
+  "hdStrResp": "To respond",
+  "hdStrRespInf": "To respond and inform",
   "hdStrInv": "Wait for invitation",
   "hdStrLun": "Wait a lunar cycle",
 
@@ -129,7 +131,7 @@
   "hdSigPea": "Peace",
   "hdSigSur": "Surprise",
 
-  "hdNotFru": "Frustración",
+  "hdNotFru": "Frustration",
   "hdNotBit": "Bitterness",
   "hdNotAng": "Anger",
   "hdNotDis": "Disappointment",
@@ -141,7 +143,7 @@
 
   "hdCrossRight": "Right Angle",
   "hdCrossLeft": "Left Angle",
-  "hdCrossJuxta": "Juxtaposition",
+  "hdCrossJuxta": "Justaposição",
   "hdCrossOf": "Cross of",
 
   "hdCenterHead": "Head",
@@ -174,5 +176,21 @@
   "@verifyEmailSent": { "placeholders": { "email": { "type": "String" } } },
   "checkVerification": "I've verified",
   "resendVerification": "Resend email",
-  "verificationResent": "Verification email resent."
+  "verificationResent": "Verification email resent.",
+
+  "astroMoonSign": "Moon Sign",
+  "astroMercurySign": "Mercury",
+  "astroVenusSign": "Venus",
+  "astroMarsSign": "Mars",
+  "astroMC": "Midheaven (MC)",
+  "astroNorthNode": "North Node",
+  "astroSouthNode": "South Node",
+  "astroHouses": "Astrological Houses",
+  "astroHouseN": "House {n}",
+  "@astroHouseN": { "placeholders": { "n": { "type": "int" } } },
+  "astroAspects": "Astrological Aspects",
+  "astroBig3": "🌟 Big 3",
+  "astroPersonalPlanets": "🪐 Personal Planets",
+  "astroSocialGenerationalPlanets": "🪐 Social and Generational Planets",
+  "astroMCNodes": "🎯 MC and Lunar Nodes"
 }

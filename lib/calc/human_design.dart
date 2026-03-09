@@ -104,7 +104,6 @@ class HumanDesignCalculator {
     final targetLon = _norm360(sunLonBirth - 88.0);
     
     // Design Sun is exactly 88 degrees before birth.
-    // This typically occurs 88-92 days before birth.
     final designUtc = _findUtcWhenSunAtLongitude(
       targetLon: targetLon,
       startGuessUtc: bUtc.subtract(const Duration(days: 88)),
@@ -160,18 +159,9 @@ class HumanDesignCalculator {
   }
 
   List<HdActivation> _buildPlanetSet(DateTime utc, {required bool conscious}) {
-    // 0 Sun, 1 Moon, 2 Mercury, 3 Venus, 4 Mars, 5 Jupiter, 6 Saturn, 7 Uranus, 8 Neptune, 9 Pluto
     const bodies = {
-      'Sun': 0, 
-      'Moon': 1, 
-      'Mercury': 2, 
-      'Venus': 3, 
-      'Mars': 4, 
-      'Jupiter': 5, 
-      'Saturn': 6, 
-      'Uranus': 7, 
-      'Neptune': 8, 
-      'Pluto': 9,
+      'Sun': 0, 'Moon': 1, 'Mercury': 2, 'Venus': 3, 'Mars': 4, 
+      'Jupiter': 5, 'Saturn': 6, 'Uranus': 7, 'Neptune': 8, 'Pluto': 9,
     };
     
     final list = <HdActivation>[];
@@ -180,7 +170,6 @@ class HumanDesignCalculator {
       list.add(HdActivation(body: e.key, conscious: conscious, lon: lon, gl: _gateLineFromLon(lon)));
     }
 
-    // Earth is always opposite Sun
     final sunLon = list.firstWhere((a) => a.body == 'Sun').lon;
     final earthLon = _norm360(sunLon + 180.0);
     list.add(HdActivation(body: 'Earth', conscious: conscious, lon: earthLon, gl: _gateLineFromLon(earthLon)));
@@ -200,12 +189,10 @@ class HumanDesignCalculator {
     DateTime a = startGuessUtc.isAfter(maxUtc) ? maxUtc.subtract(const Duration(days: 1)) : startGuessUtc;
     DateTime b = maxUtc;
 
-    // Bracketing: Ensure target is between SunLon(a) and SunLon(b)
     double fa = _shortestAngleDiff(_norm360(swe.calcSunLongitudeUtc(a)), target);
     double fb = _shortestAngleDiff(_norm360(swe.calcSunLongitudeUtc(b)), target);
 
     if (fa.sign == fb.sign) {
-      // Expand window backwards until we bracket the root (Sun always moves forward, so searching back is predictable)
       for (int i = 0; i < 20; i++) {
         a = a.subtract(const Duration(days: 5));
         fa = _shortestAngleDiff(_norm360(swe.calcSunLongitudeUtc(a)), target);
@@ -213,7 +200,6 @@ class HumanDesignCalculator {
       }
     }
 
-    // Bisection
     for (int i = 0; i < 40; i++) {
       final mid = DateTime.fromMillisecondsSinceEpoch((a.millisecondsSinceEpoch + b.millisecondsSinceEpoch) ~/ 2, isUtc: true);
       final fm = _shortestAngleDiff(_norm360(swe.calcSunLongitudeUtc(mid)), target);
@@ -237,21 +223,21 @@ class HumanDesignCalculator {
 
   String _strategyForType(HdType t) {
     switch (t) {
-      case HdType.generator: return 'Responder';
-      case HdType.manifestingGenerator: return 'Responder e informar';
-      case HdType.manifestor: return 'Informar';
-      case HdType.projector: return 'Esperar pelo convite';
-      case HdType.reflector: return 'Esperar um ciclo lunar';
+      case HdType.generator: return 'To respond';
+      case HdType.manifestingGenerator: return 'To respond and inform';
+      case HdType.manifestor: return 'To inform';
+      case HdType.projector: return 'Wait for invitation';
+      case HdType.reflector: return 'Wait a lunar cycle';
     }
   }
 
   String _authorityForCenters(HdType type, Set<HdCenter> centers, Map<HdCenter, Set<HdCenter>> graph) {
-    if (centers.contains(HdCenter.solarPlexus)) return 'Emocional';
+    if (centers.contains(HdCenter.solarPlexus)) return 'Emotional';
     if (centers.contains(HdCenter.sacral)) return 'Sacral';
-    if (centers.contains(HdCenter.spleen)) return 'Esplénica';
+    if (centers.contains(HdCenter.spleen)) return 'Splenic';
     if (centers.contains(HdCenter.ego)) return 'Ego';
     if (centers.contains(HdCenter.g) && centers.contains(HdCenter.throat)) return 'Self-Projected';
-    if (type == HdType.projector && (centers.contains(HdCenter.ajna) || centers.contains(HdCenter.head))) return 'Mental (Projector)';
+    if (type == HdType.projector && (centers.contains(HdCenter.ajna) || centers.contains(HdCenter.head))) return 'Mental';
     return 'Lunar';
   }
 
@@ -290,11 +276,11 @@ class HumanDesignCalculator {
       case HdCenter.solarPlexus: return 'Solar Plexus'; case HdCenter.sacral: return 'Sacral'; case HdCenter.root: return 'Root';
     }
   }
-  String _signatureForType(HdType t) => t == HdType.generator || t == HdType.manifestingGenerator ? 'Satisfação' : (t == HdType.manifestor ? 'Paz' : (t == HdType.projector ? 'Sucesso' : 'Surpresa'));
-  String _notSelfThemeForType(HdType t) => t == HdType.generator || t == HdType.manifestingGenerator ? 'Frustração' : (t == HdType.manifestor ? 'Raiva' : (t == HdType.projector ? 'Amargura' : 'Desapontamento'));
+  String _signatureForType(HdType t) => t == HdType.generator || t == HdType.manifestingGenerator ? 'Satisfaction' : (t == HdType.manifestor ? 'Peace' : (t == HdType.projector ? 'Success' : 'Surprise'));
+  String _notSelfThemeForType(HdType t) => t == HdType.generator || t == HdType.manifestingGenerator ? 'Frustration' : (t == HdType.manifestor ? 'Anger' : (t == HdType.projector ? 'Bitterness' : 'Disappointment'));
 
   String _definitionFromCenters(Set<HdCenter> centers, Map<HdCenter, Set<HdCenter>> graph) {
-    if (centers.isEmpty) return 'Nenhuma';
+    if (centers.isEmpty) return 'None';
     final visited = <HdCenter>{};
     var comp = 0;
     for (final c in centers) {
@@ -322,11 +308,11 @@ class HumanDesignCalculator {
 
   String _authorityCenterId(String auth) {
     final a = auth.toLowerCase();
-    if (a.contains('emoc')) return 'solarPlexus';
+    if (a.contains('emot')) return 'solarPlexus';
     if (a.contains('sacral')) return 'sacral';
-    if (a.contains('espl')) return 'spleen';
+    if (a.contains('splen')) return 'spleen';
     if (a.contains('ego')) return 'ego';
-    if (a.contains('self') || a.contains('auto')) return 'g';
+    if (a.contains('self')) return 'g';
     if (a.contains('mental')) return 'ajna';
     return 'root';
   }

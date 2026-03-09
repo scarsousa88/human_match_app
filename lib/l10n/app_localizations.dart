@@ -213,13 +213,13 @@ abstract class AppLocalizations {
   /// No description provided for @termsTitle.
   ///
   /// In pt, this message translates to:
-  /// **'Termos e Condições'**
+  /// **'Terms and Conditions'**
   String get termsTitle;
 
   /// No description provided for @termsContent.
   ///
   /// In pt, this message translates to:
-  /// **'Política de Privacidade - Human Match\n\nEsta Política de Privacidade descreve como a Human Match, uma aplicação móvel que gera relatórios personalizados de Human Design, Astrologia e Numerologia com base no nome completo, data e local de nascimento dos utilizadores, recolhe, utiliza e protege os seus dados pessoais. Estamos comprometidos com a proteção da sua privacidade em conformidade com o Regulamento Geral de Proteção de Dados (RGPD) da União Europeia e legislação aplicável em Portugal.\n\nDados Recolhidos\nRecolhemos apenas os dados estritamente necessários para fornecer o serviço:\n\nNome completo;\n\nData de nascimento;\n\nLocal de nascimento.\n\nEstes dados são usados exclusivamente para calcular e gerar os seus relatórios personalizados de Human Design, Astrologia e Numerologia. Não recolhemos dados sensíveis adicionais, como endereço de email ou informações financeiras, a menos que sejam voluntariamente fornecidos para suporte ou registo de conta.\n\nFinalidades do Tratamento\nOs dados são tratados para:\n\nGerar relatórios precisos baseados nos inputs fornecidos;\n\nMelhorar a precisão dos cálculos astrológicos e de design humano;\n\nPermitir o armazenamento opcional de relatórios para acesso futuro (com o seu consentimento explícito).\n\nO tratamento é lícito com base no seu consentimento livre e informado, obtido no momento da submissão dos dados.\n\nPartilha de Dados\nNão partilhamos os seus dados pessoais com terceiros, exceto:\n\nPrestadores de serviços técnicos essenciais (ex.: servidores de cloud seguros na UE) sob acordos de processamento de dados que garantem confidencialidade;\n\nQuando exigido por lei ou autoridades competentes.\n\nOs relatórios gerados são privados e não são vendidos ou usados para marketing.\n​\n\nArmazenamento e Segurança\nOs dados são armazenados em servidores seguros localizados na União Europeia, com medidas técnicas como encriptação (AES-256), pseudonimização e controlos de acesso. Retemos os dados apenas pelo tempo necessário para o serviço (geralmente até 30 dias após o último acesso, salvo consentimento para armazenamento prolongado). Procedemos à eliminação segura automática após esse período.\n\nOs Seus Direitos\nPode exercer os seus direitos RGPD a qualquer momento:\n\nAcesso aos dados;\n\nRectificação ou correção;\n\nApagamento (\"direito ao esquecimento\");\n\nOposição ao tratamento;\n\nLimitação do tratamento;\n\nPortabilidade dos dados.\n\nPara solicitar a eliminação da sua conta e de todos os dados associados, poderá fazê-lo através do seguinte link: https://humanmatch.app/delete-account ou enviando um email para support@humanmatch.app.\n\nConsentimento e Alterações\nAo usar a app, você consente com esta política. Pode revogar o consentimento a qualquer momento, o que impedirá o acesso a relatórios existentes. Atualizaremos esta política conforme necessário, notificando os utilizadores via app.'**
+  /// **'Política de Privacidade - Human Match\n\nEsta Política de Privacidade descreve como a Human Match, uma aplicação móvel que gera relatórios personalizados de Human Design, Astrologia e Numerologia com base no nome completo, data e local de nascimento dos utilizadores, recolhe, utiliza e protege os seus dados pessoais. Estamos comprometidos com a proteção da sua privacidade em conformidade com o Regulamento Geral de Proteção de Dados (RGPD) da União Europeia e legislação aplicável em Portugal.\n\nDados Recolhidos\nRecolhemos apenas os dados estritamente necessários para fornecer o serviço:\n\nNome completo;\n\nData de nascimento;\n\nLocal de nascimento.\n\nEstes dados são usados exclusivamente para calcular e gerar os seus relatórios personalizados de Human Design, Astrologia e Numerologia. Não recolhemos dados sensíveis adicionais, como endereço de email ou informações financeiras, a menos que sejam voluntariamente fornecidos para suporte ou registo de conta.\n\nFinalidades do Tratamento\nOs dados são tratados para:\n\nGerar relatórios precisos baseados nos inputs fornecidos;\n\nMelhorar a precisão dos cálculos astrológicos e de design humano;\n\nPermitir o armazenamento opcional de relatórios para acesso futuro (com o seu consentimento explícito).\n\nO tratamento é lícito com base no seu consentimento livre e informado, obtido no momento da submissão dos dados.\n\nPartilha de Dados\nNão partilhamos os seus dados pessoais com terceiros, exceto:\n\nPrestadores de serviços técnicos essenciais (ex.: servidores de cloud seguros na UE) sob acordos de processamento de dados que garantem confidencialidade;\n\nQuando exigido por lei ou autoridades competentes.\n\nOs relatórios gerados são privados e não são vendidos ou usados para marketing.\n​\n\nArmazenamento e Segurança\nOs dados são armazenados em servidores seguros localizados na União Europeia, with medidas técnicas como encriptação (AES-256), pseudonimização e controlos de acesso. Retemos os dados apenas pelo tempo necessário para o serviço (geralmente até 30 dias após o último acesso, salvo consentimento para armazenamento prolongado). Procedemos à eliminação segura automática após esse período.\n\nOs Seus Direitos\nPode exercer os seus direitos RGPD a qualquer momento:\n\nAcesso aos dados;\n\nRectificação ou correção;\n\nApagamento (\"direito ao esquecimento\");\n\nOposição ao tratamento;\n\nLimitação do tratamento;\n\nPortabilidade dos dados.\n\nPara solicitar a eliminação da sua conta e de todos os dados associados, poderá fazê-lo através do seguinte link: https://humanmatch.app/delete-account ou enviando um email para support@humanmatch.app.\n\nConsentimento e Alterações\nAo usar a app, você consente com esta política. Pode revogar o consentimento a qualquer momento, o que impedirá o acesso a relatórios existentes. Atualizaremos esta política conforme necessário, notificando os utilizadores via app.'**
   String get termsContent;
 
   /// No description provided for @processing.
@@ -525,7 +525,7 @@ abstract class AppLocalizations {
   /// No description provided for @errorSavingProfile.
   ///
   /// In pt, this message translates to:
-  /// **'Erro ao guardar/calcular: {error}'**
+  /// **'Erro ao guardar/calculando: {error}'**
   String errorSavingProfile(String error);
 
   /// No description provided for @signAries.
@@ -774,6 +774,12 @@ abstract class AppLocalizations {
   /// **'Mental'**
   String get hdAuthMen;
 
+  /// No description provided for @hdAuthLun.
+  ///
+  /// In pt, this message translates to:
+  /// **'Lunar'**
+  String get hdAuthLun;
+
   /// No description provided for @hdStrInf.
   ///
   /// In pt, this message translates to:
@@ -783,8 +789,14 @@ abstract class AppLocalizations {
   /// No description provided for @hdStrResp.
   ///
   /// In pt, this message translates to:
-  /// **'Esperar para responder'**
+  /// **'Responder'**
   String get hdStrResp;
+
+  /// No description provided for @hdStrRespInf.
+  ///
+  /// In pt, this message translates to:
+  /// **'Responder e informar'**
+  String get hdStrRespInf;
 
   /// No description provided for @hdStrInv.
   ///
@@ -1139,6 +1151,90 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Sair e Tentar Novamente'**
   String get logoutAndTryAgain;
+
+  /// No description provided for @astroMoonSign.
+  ///
+  /// In pt, this message translates to:
+  /// **'Signo Lunar'**
+  String get astroMoonSign;
+
+  /// No description provided for @astroMercurySign.
+  ///
+  /// In pt, this message translates to:
+  /// **'Mercúrio'**
+  String get astroMercurySign;
+
+  /// No description provided for @astroVenusSign.
+  ///
+  /// In pt, this message translates to:
+  /// **'Vénus'**
+  String get astroVenusSign;
+
+  /// No description provided for @astroMarsSign.
+  ///
+  /// In pt, this message translates to:
+  /// **'Marte'**
+  String get astroMarsSign;
+
+  /// No description provided for @astroMC.
+  ///
+  /// In pt, this message translates to:
+  /// **'Meio do Céu (MC)'**
+  String get astroMC;
+
+  /// No description provided for @astroNorthNode.
+  ///
+  /// In pt, this message translates to:
+  /// **'Nodo Norte'**
+  String get astroNorthNode;
+
+  /// No description provided for @astroSouthNode.
+  ///
+  /// In pt, this message translates to:
+  /// **'Nodo Sul'**
+  String get astroSouthNode;
+
+  /// No description provided for @astroHouses.
+  ///
+  /// In pt, this message translates to:
+  /// **'Casas Astrológicas'**
+  String get astroHouses;
+
+  /// No description provided for @astroHouseN.
+  ///
+  /// In pt, this message translates to:
+  /// **'Casa {n}'**
+  String astroHouseN(int n);
+
+  /// No description provided for @astroAspects.
+  ///
+  /// In pt, this message translates to:
+  /// **'Aspetos Planetários'**
+  String get astroAspects;
+
+  /// No description provided for @astroBig3.
+  ///
+  /// In pt, this message translates to:
+  /// **'🌟 Big 3'**
+  String get astroBig3;
+
+  /// No description provided for @astroPersonalPlanets.
+  ///
+  /// In pt, this message translates to:
+  /// **'🪐 Planetas Pessoais'**
+  String get astroPersonalPlanets;
+
+  /// No description provided for @astroSocialGenerationalPlanets.
+  ///
+  /// In pt, this message translates to:
+  /// **'🪐 Planetas Sociais e Geracionais'**
+  String get astroSocialGenerationalPlanets;
+
+  /// No description provided for @astroMCNodes.
+  ///
+  /// In pt, this message translates to:
+  /// **'🎯 MC e Nodos Lunares'**
+  String get astroMCNodes;
 }
 
 class _AppLocalizationsDelegate

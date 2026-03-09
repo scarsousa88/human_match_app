@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
+import '../utils/astro_utils.dart';
 
 class SummaryPage extends StatelessWidget {
   const SummaryPage({
@@ -12,6 +14,7 @@ class SummaryPage extends StatelessWidget {
     required this.numerologyMap,
     required this.insightsText,
     required this.onRequestTips,
+    this.astroData,
   });
 
   final String fullName;
@@ -23,12 +26,14 @@ class SummaryPage extends StatelessWidget {
   final Map<String, String> numerologyMap;
   final String insightsText;
   final Future<void> Function(BuildContext context) onRequestTips;
+  final Map<String, dynamic>? astroData;
 
   @override
   Widget build(BuildContext context) {
     // Cores fiéis ao estilo "Cosmic"
     const cosmicBg = Color(0xFF0F0B1E); // Roxo muito escuro/preto
     const goldColor = Color(0xFFE6B325); // Dourado do website
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: cosmicBg,
@@ -61,13 +66,171 @@ class SummaryPage extends StatelessWidget {
           ),
 
           _Section(
-            title: 'Astrologia',
+            title: l10n.astroTitle,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _InfoRow(icon: Icons.wb_sunny_outlined, label: 'Signo', value: zodiacSign),
+                // --- BIG 3 ---
+                Text(l10n.astroBig3, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 15)),
                 const SizedBox(height: 12),
-                _InfoRow(icon: Icons.north_outlined, label: 'Ascendente', value: ascendant),
+                _AstroRow(symbol: '☉', label: l10n.zodiacSign, value: zodiacSign),
+                const SizedBox(height: 12),
+                _AstroRow(symbol: '☾', label: l10n.astroMoonSign, value: getSign(astroData?['moon'])),
+                const SizedBox(height: 12),
+                _AstroRow(symbol: '⬆️', label: l10n.ascendant, value: ascSignFromData),
+
+                const SizedBox(height: 20),
+                const Divider(color: Colors.white12),
+                const SizedBox(height: 12),
+
+                // --- PLANETAS PESSOAIS ---
+                Text(l10n.astroPersonalPlanets, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 15)),
+                const SizedBox(height: 12),
+                _AstroRow(symbol: '☿', label: l10n.astroMercurySign, value: getSign(astroData?['mercury'])),
+                const SizedBox(height: 12),
+                _AstroRow(symbol: '♀', label: l10n.astroVenusSign, value: getSign(astroData?['venus'])),
+                const SizedBox(height: 12),
+                _AstroRow(symbol: '♂', label: l10n.astroMarsSign, value: getSign(astroData?['mars'])),
+
+                const SizedBox(height: 20),
+                const Divider(color: Colors.white12),
+                const SizedBox(height: 12),
+
+                // --- PLANETAS SOCIAIS E GERACIONAIS ---
+                Text(l10n.astroSocialGenerationalPlanets, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 15)),
+                const SizedBox(height: 12),
+                _AstroRow(symbol: '♃', label: l10n.hdPlanetJupiter, value: getSign(astroData?['jupiter'])),
+                const SizedBox(height: 12),
+                _AstroRow(symbol: '♄', label: l10n.hdPlanetSaturn, value: getSign(astroData?['saturn'])),
+                const SizedBox(height: 12),
+                _AstroRow(symbol: '♅', label: l10n.hdPlanetUranus, value: getSign(astroData?['uranus'])),
+                const SizedBox(height: 12),
+                _AstroRow(symbol: '♆', label: l10n.hdPlanetNeptune, value: getSign(astroData?['neptune'])),
+                const SizedBox(height: 12),
+                _AstroRow(symbol: '♇', label: l10n.hdPlanetPluto, value: getSign(astroData?['pluto'])),
+
+                const SizedBox(height: 20),
+                const Divider(color: Colors.white12),
+                const SizedBox(height: 12),
+
+                // --- MC E NODOS LUNARES ---
+                Text(l10n.astroMCNodes, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 15)),
+                const SizedBox(height: 12),
+                _AstroRow(symbol: '🎯', label: l10n.astroMC, value: astroData?['mcSign'] ?? '—'),
+                const SizedBox(height: 12),
+                _AstroRow(symbol: '☊', label: l10n.astroNorthNode, value: getSign(astroData?['northNode'])),
+                const SizedBox(height: 12),
+                _AstroRow(symbol: '☋', label: l10n.astroSouthNode, value: getSign(astroData?['southNode'])),
+                
+                if (astroData?['houses'] != null) ...[
+                  const SizedBox(height: 24),
+                  const Divider(color: Colors.white12),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      const Icon(Icons.home_outlined, color: goldColor, size: 18),
+                      const SizedBox(width: 8),
+                      Text(l10n.astroHouses, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 14)),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.zero,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 3.8,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 8,
+                    ),
+                    itemCount: (astroData!['houses'] as List).length,
+                    itemBuilder: (context, index) {
+                      final houseNum = index + 1;
+                      final lon = (astroData!['houses'] as List)[index] as num;
+                      final sign = getZodiacSign(context, lon.toDouble());
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.03),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.white.withOpacity(0.05)),
+                        ),
+                        child: Row(
+                          children: [
+                            Text(
+                              '$houseNum',
+                              style: const TextStyle(color: goldColor, fontWeight: FontWeight.w900, fontSize: 11),
+                            ),
+                            const VerticalDivider(color: Colors.white12, indent: 4, endIndent: 4, width: 16),
+                            Expanded(
+                              child: Text(
+                                sign,
+                                style: const TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.w500),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ],
+
+                if (astroData?['aspects'] != null && (astroData!['aspects'] as List).isNotEmpty) ...[
+                  const SizedBox(height: 24),
+                  const Divider(color: Colors.white12),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      const Icon(Icons.link, color: goldColor, size: 18),
+                      const SizedBox(width: 8),
+                      Text(l10n.astroAspects, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 14)),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: (astroData!['aspects'] as List).map((a) {
+                      final aspect = a as Map;
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.03),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.white.withOpacity(0.05)),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                aspect['p1Name'].toString(),
+                                style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text(
+                                aspect['type'].toString(),
+                                style: const TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 0.5),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Text(
+                                aspect['p2Name'].toString(),
+                                style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ],
               ],
             ),
           ),
@@ -117,6 +280,13 @@ class SummaryPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String get ascSignFromData => astroData?['ascSign'] ?? ascendant;
+
+  String getSign(dynamic data) {
+    if (data is Map && data['sign'] != null) return data['sign'];
+    return '—';
   }
 
   void _showPromptDialog(BuildContext context) {
@@ -284,6 +454,48 @@ class _InfoRow extends StatelessWidget {
   }
 }
 
+class _AstroRow extends StatelessWidget {
+  const _AstroRow({required this.symbol, required this.label, required this.value});
+  final String symbol;
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    const goldColor = Color(0xFFE6B325);
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 24,
+          child: Text(symbol, style: const TextStyle(fontSize: 18, color: goldColor), textAlign: TextAlign.center),
+        ),
+        const SizedBox(width: 14),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(color: Colors.white38, fontSize: 11, letterSpacing: 0.5),
+              ),
+              const SizedBox(height: 3),
+              Text(
+                value,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _MultilineBox extends StatelessWidget {
   const _MultilineBox({required this.text});
   final String text;
@@ -321,7 +533,7 @@ Regras:
 - "Essência": 2-3 frases.
 - "Forças": 3 bullets.
 - "Atenções": 3 bullets (tom cuidadoso, sem alarmismo).
-- "Próximo passo": 1 ação concreta para hoje, em 1 frase.
+- "Próximo passo": 1 action concreta para hoje, em 1 frase.
 - Não incluir cronogramas, dias da semana, nem "plano semanal".
 
 Contexto do utilizador:

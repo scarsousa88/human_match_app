@@ -35,13 +35,29 @@ class SwissEphFfi {
     return (res as JSNumber).toDartDouble;
   }
 
+  ({List<double> cusps, List<double> ascmc})? calcHousesFullUt({
+    required double jdUt,
+    required double lat,
+    required double lon,
+    int hsys = 80,
+  }) {
+    // Web implementation (WASM) does not have full houses yet, 
+    // but we can return the Ascendant in the expected format for now.
+    final asc = calcAscUt(jdUt: jdUt, lat: lat, lon: lon);
+    if (asc == null) return null;
+    
+    return (
+      cusps: List.filled(13, 0.0), 
+      ascmc: [asc, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    );
+  }
+
   JSAny? _callInternal(String name, List<JSAny?> args) {
     final mod = _module;
     if (mod == null) return null;
 
     final internalName = '_' + name;
     
-    // Verificação de propriedade sem usar extensões customizadas que podem falhar
     if (mod.containsKey(internalName)) {
       final fn = mod.getProperty(internalName);
       if (fn != null && fn is JSFunction) {

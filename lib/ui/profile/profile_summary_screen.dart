@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../calc/numerology.dart';
@@ -104,8 +103,30 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
           final hdBase = (u['humanDesignBase'] as Map?)?.cast<String, dynamic>();
           final astro = (u['astro'] as Map?)?.cast<String, dynamic>() ?? {};
 
-          final sunSign = astro['sunSign'] ?? (findBodyLongitude(hdBase, true, 'Sun') != null ? getZodiacSign(context, findBodyLongitude(hdBase, true, 'Sun')!) : '—');
-          final ascSign = astro['ascendantSign'] ?? (astro['ascendantDeg'] != null ? getZodiacSign(context, (astro['ascendantDeg'] as num).toDouble()) : '—');
+          // Helper to get sign name from stored map or compute if missing
+          String getSign(dynamic data, String? fallback) {
+            if (data is Map && data['sign'] != null) return data['sign'];
+            if (fallback != null) return fallback;
+            return '—';
+          }
+
+          final sunSign = getSign(astro['sun'], astro['sunSign']);
+          final moonSign = getSign(astro['moon'], null);
+          final mercurySign = getSign(astro['mercury'], null);
+          final venusSign = getSign(astro['venus'], null);
+          final marsSign = getSign(astro['mars'], null);
+          final jupiterSign = getSign(astro['jupiter'], null);
+          final saturnSign = getSign(astro['saturn'], null);
+          final uranusSign = getSign(astro['uranus'], null);
+          final neptuneSign = getSign(astro['neptune'], null);
+          final plutoSign = getSign(astro['pluto'], null);
+          final ascSign = astro['ascSign'] ?? astro['ascendantSign'] ?? '—';
+          final mcSign = astro['mcSign'] ?? '—';
+          final northNodeSign = getSign(astro['northNode'], null);
+          final southNodeSign = getSign(astro['southNode'], null);
+          
+          final housesList = (astro['houses'] as List?)?.cast<num>();
+          final aspectsList = (astro['aspects'] as List?)?.cast<Map>();
 
           final storedNum = u['numerology'] as Map?;
           final numerology = storedNum != null ? NumerologyResult(lifePath: storedNum['lifePath'], expression: storedNum['expression'], soul: storedNum['soul'], personality: storedNum['personality']) : null;
@@ -122,18 +143,171 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
               
               _sectionHeader(l10n.astroTitle),
               PrimaryCard(
-                child: Card(
-                  elevation: 0,
-                  color: Colors.transparent,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      children: [
-                        KeyValueRow(icon: Icons.wb_sunny_outlined, label: l10n.zodiacSign, value: sunSign),
-                        const SizedBox(height: 10),
-                        KeyValueRow(icon: Icons.north_outlined, label: l10n.ascendant, value: ascSign),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // --- BIG 3 ---
+                      Text(l10n.astroBig3, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 15)),
+                      const SizedBox(height: 12),
+                      _AstroRow(symbol: '☉', label: l10n.zodiacSign, value: sunSign),
+                      const SizedBox(height: 10),
+                      _AstroRow(symbol: '☾', label: l10n.astroMoonSign, value: moonSign),
+                      const SizedBox(height: 10),
+                      _AstroRow(symbol: '⬆️', label: l10n.ascendant, value: ascSign),
+                      
+                      const SizedBox(height: 20),
+                      const Divider(color: Colors.white12),
+                      const SizedBox(height: 12),
+
+                      // --- PLANETAS PESSOAIS ---
+                      Text(l10n.astroPersonalPlanets, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 15)),
+                      const SizedBox(height: 12),
+                      _AstroRow(symbol: '☿', label: l10n.astroMercurySign, value: mercurySign),
+                      const SizedBox(height: 10),
+                      _AstroRow(symbol: '♀', label: l10n.astroVenusSign, value: venusSign),
+                      const SizedBox(height: 10),
+                      _AstroRow(symbol: '♂', label: l10n.astroMarsSign, value: marsSign),
+
+                      const SizedBox(height: 20),
+                      const Divider(color: Colors.white12),
+                      const SizedBox(height: 12),
+
+                      // --- PLANETAS SOCIAIS E GERACIONAIS ---
+                      Text(l10n.astroSocialGenerationalPlanets, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 15)),
+                      const SizedBox(height: 12),
+                      _AstroRow(symbol: '♃', label: l10n.hdPlanetJupiter, value: jupiterSign),
+                      const SizedBox(height: 10),
+                      _AstroRow(symbol: '♄', label: l10n.hdPlanetSaturn, value: saturnSign),
+                      const SizedBox(height: 10),
+                      _AstroRow(symbol: '♅', label: l10n.hdPlanetUranus, value: uranusSign),
+                      const SizedBox(height: 10),
+                      _AstroRow(symbol: '♆', label: l10n.hdPlanetNeptune, value: neptuneSign),
+                      const SizedBox(height: 10),
+                      _AstroRow(symbol: '♇', label: l10n.hdPlanetPluto, value: plutoSign),
+
+                      const SizedBox(height: 20),
+                      const Divider(color: Colors.white12),
+                      const SizedBox(height: 12),
+
+                      // --- MC E NODOS LUNARES ---
+                      Text(l10n.astroMCNodes, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 15)),
+                      const SizedBox(height: 12),
+                      _AstroRow(symbol: '🎯', label: l10n.astroMC, value: mcSign),
+                      const SizedBox(height: 10),
+                      _AstroRow(symbol: '☊', label: l10n.astroNorthNode, value: northNodeSign),
+                      const SizedBox(height: 10),
+                      _AstroRow(symbol: '☋', label: l10n.astroSouthNode, value: southNodeSign),
+                      
+                      if (housesList != null && housesList.isNotEmpty) ...[
+                        const SizedBox(height: 24),
+                        const Divider(color: Colors.white12),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            const Icon(Icons.home_outlined, color: goldColor, size: 18),
+                            const SizedBox(width: 8),
+                            Text(l10n.astroHouses, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 14)),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 3.8,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 8,
+                          ),
+                          itemCount: housesList.length,
+                          itemBuilder: (context, index) {
+                            final houseNum = index + 1;
+                            final sign = getZodiacSign(context, housesList[index].toDouble());
+                            return Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.03),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: Colors.white.withOpacity(0.05)),
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    '$houseNum',
+                                    style: const TextStyle(color: goldColor, fontWeight: FontWeight.w900, fontSize: 11),
+                                  ),
+                                  const VerticalDivider(color: Colors.white12, indent: 4, endIndent: 4, width: 16),
+                                  Expanded(
+                                    child: Text(
+                                      sign,
+                                      style: const TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.w500),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
                       ],
-                    ),
+
+                      if (aspectsList != null && aspectsList.isNotEmpty) ...[
+                        const SizedBox(height: 24),
+                        const Divider(color: Colors.white12),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            const Icon(Icons.link, color: goldColor, size: 18),
+                            const SizedBox(width: 8),
+                            Text(l10n.astroAspects, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 14)),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: aspectsList.map((a) {
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 8),
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.03),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: Colors.white.withOpacity(0.05)),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      a['p1Name'].toString(),
+                                      style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+                                      textAlign: TextAlign.right,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                                    child: Text(
+                                      a['type'].toString(),
+                                      style: const TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 0.5),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Text(
+                                      a['p2Name'].toString(),
+                                      style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ],
                   ),
                 ),
               ),
@@ -142,22 +316,18 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
               _sectionHeader(l10n.numTitle),
               PrimaryCard(
                 child: numerology == null ? const Text('—', style: TextStyle(color: Colors.white70)) :
-                  Card(
-                    elevation: 0,
-                    color: Colors.transparent,
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        children: [
-                          KeyValueRow(icon: Icons.tag_outlined, label: l10n.lifePath, value: numerology.lifePath.toString()),
-                          const SizedBox(height: 10),
-                          KeyValueRow(icon: Icons.tag_outlined, label: l10n.expression, value: numerology.expression.toString()),
-                          const SizedBox(height: 10),
-                          KeyValueRow(icon: Icons.tag_outlined, label: l10n.soul, value: numerology.soul.toString()),
-                          const SizedBox(height: 10),
-                          KeyValueRow(icon: Icons.tag_outlined, label: l10n.personality, value: numerology.personality.toString()),
-                        ],
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      children: [
+                        KeyValueRow(icon: Icons.tag_outlined, label: l10n.lifePath, value: numerology.lifePath.toString()),
+                        const SizedBox(height: 10),
+                        KeyValueRow(icon: Icons.tag_outlined, label: l10n.expression, value: numerology.expression.toString()),
+                        const SizedBox(height: 10),
+                        KeyValueRow(icon: Icons.tag_outlined, label: l10n.soul, value: numerology.soul.toString()),
+                        const SizedBox(height: 10),
+                        KeyValueRow(icon: Icons.tag_outlined, label: l10n.personality, value: numerology.personality.toString()),
+                      ],
                     ),
                   ),
               ),
@@ -299,6 +469,52 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: items.map((t) => Padding(padding: const EdgeInsets.symmetric(vertical: 4), child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [const Text('• ', style: TextStyle(color: Color(0xFFE6B325))), Expanded(child: Text(t.toString(), style: const TextStyle(color: Colors.white)))]))).toList(),
+    );
+  }
+}
+
+class _AstroRow extends StatelessWidget {
+  const _AstroRow({required this.symbol, required this.label, required this.value});
+  final String symbol;
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    const goldColor = Color(0xFFE6B325);
+    final labelStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
+      fontWeight: FontWeight.w600,
+      color: Colors.white70,
+    );
+    final valueStyle = Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.white);
+
+    return Row(
+      children: [
+        Expanded(
+          flex: 3,
+          child: Row(
+            children: [
+              SizedBox(
+                width: 24,
+                child: Text(symbol, style: const TextStyle(fontSize: 18, color: goldColor), textAlign: TextAlign.center),
+              ),
+              const SizedBox(width: 8),
+              Expanded(child: Text(label, style: labelStyle)),
+            ],
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              value,
+              style: valueStyle,
+              textAlign: TextAlign.right,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

@@ -100,7 +100,7 @@ int hm_swe_calc_planets_lon_ut(double jd_ut, const int* planets, int count, doub
 }
 
 // ------------------------------------------------------------
-// Ascendant
+// Ascendant (kept for compatibility)
 // ------------------------------------------------------------
 int hm_swe_calc_asc_ut(double jd_ut, double geo_lat, double geo_lon, double* out_asc_deg) {
 
@@ -110,7 +110,7 @@ int hm_swe_calc_asc_ut(double jd_ut, double geo_lat, double geo_lon, double* out
     double ascmc[10];
     char serr[256];
 
-    int hsys = 'P';
+    int hsys = 'P'; // Placidus
 
     int flags = SEFLG_SWIEPH;
 
@@ -124,6 +124,29 @@ int hm_swe_calc_asc_ut(double jd_ut, double geo_lat, double geo_lon, double* out
     if (ret < 0) return -3;
 
     *out_asc_deg = ascmc[0];
+
+    return 0;
+}
+
+// ------------------------------------------------------------
+// Full Houses Calculation
+// out_cusps: array of 13 doubles (index 1 to 12 are houses 1 to 12)
+// out_ascmc: array of 10 doubles (index 0=Asc, 1=MC, 2=ARMC, 3=Vertex, etc.)
+// ------------------------------------------------------------
+int hm_swe_calc_houses_full_ut(double jd_ut, double geo_lat, double geo_lon, int hsys, double* out_cusps, double* out_ascmc) {
+    if (out_cusps == NULL || out_ascmc == NULL) return -2;
+
+    char serr[256];
+    int flags = SEFLG_SWIEPH;
+
+    int ret = swe_houses_ex2(jd_ut, flags, geo_lat, geo_lon, hsys, out_cusps, out_ascmc, NULL, NULL, serr);
+
+    if (ret < 0) {
+        flags = SEFLG_MOSEPH;
+        ret = swe_houses_ex2(jd_ut, flags, geo_lat, geo_lon, hsys, out_cusps, out_ascmc, NULL, NULL, serr);
+    }
+
+    if (ret < 0) return -3;
 
     return 0;
 }

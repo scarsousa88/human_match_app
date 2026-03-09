@@ -20,9 +20,6 @@ class SwissEphemerisService {
   late final SwissEphFfi _ffi;
   bool _inited = false;
 
-  // Cache key: (jdUt * 1440).round() => minute resolution
-  // Using LinkedHashMap to implement a simple LRU-like eviction if needed,
-  // or just a maximum size to prevent memory leaks.
   final LinkedHashMap<int, _PlanetCacheEntry> _cache = LinkedHashMap<int, _PlanetCacheEntry>();
   static const int _maxCacheSize = 1000;
 
@@ -63,9 +60,8 @@ class SwissEphemerisService {
   double calcPlanetLonJdUt(double jdUt, int planetId) {
     final key = _cacheKey(jdUt);
     
-    // Manage cache size
     if (!_cache.containsKey(key) && _cache.length >= _maxCacheSize) {
-      _cache.remove(_cache.keys.first); // Evict oldest
+      _cache.remove(_cache.keys.first);
     }
 
     final entry = _cache.putIfAbsent(key, () => _PlanetCacheEntry(jdUt: jdUt));
@@ -82,48 +78,18 @@ class SwissEphemerisService {
     return lon;
   }
 
-  double calcSunLongitudeUtc(DateTime utc) => calcPlanetLonUtc(utc, 0); // SE_SUN
-  double calcMoonLongitudeUtc(DateTime utc) => calcPlanetLonUtc(utc, 1); // SE_MOON
+  double calcSunLongitudeUtc(DateTime utc) => calcPlanetLonUtc(utc, 0);
+  double calcMoonLongitudeUtc(DateTime utc) => calcPlanetLonUtc(utc, 1);
 
-  double calcSunLongitudeJdUt(double jdUt) => calcPlanetLonJdUt(jdUt, 0);
-
-  ({double lon, double speedDegPerDay}) calcPlanetLonSpeedJdUt(double jdUt, int planetId) {
-    final key = _cacheKey(jdUt);
+  List<double> calcPlanetsLonUtc(DateTime utc, List<int> planetIds) {
+    final jd = jdUtc(utc);
+    final key = _cacheKey(jd);
     
     if (!_cache.containsKey(key) && _cache.length >= _maxCacheSize) {
       _cache.remove(_cache.keys.first);
     }
 
-    final entry = _cache.putIfAbsent(key, () => _PlanetCacheEntry(jdUt: jdUt));
-
-    final cached = entry.lonSpeedByPlanet[planetId];
-    if (cached != null) return cached;
-
-    final res = _ffi.calcLonSpeedUt(jdUt: jdUt, planetId: planetId);
-    if (res != null) {
-      final out = (lon: res.lon, speedDegPerDay: res.speed);
-      entry.lonByPlanet[planetId] = out.lon;
-      entry.lonSpeedByPlanet[planetId] = out;
-      return out;
-    }
-
-    final lon = calcPlanetLonJdUt(jdUt, planetId);
-    final out = (lon: lon, speedDegPerDay: 0.985647); // mean solar motion
-    entry.lonSpeedByPlanet[planetId] = out;
-    return out;
-  }
-
-  ({double lon, double speedDegPerDay}) calcSunLonSpeedJdUt(double jdUt) =>
-      calcPlanetLonSpeedJdUt(jdUt, 0);
-
-  List<double> calcPlanetsLonJdUt(double jdUt, List<int> planetIds) {
-    final key = _cacheKey(jdUt);
-    
-    if (!_cache.containsKey(key) && _cache.length >= _maxCacheSize) {
-      _cache.remove(_cache.keys.first);
-    }
-
-    final entry = _cache.putIfAbsent(key, () => _PlanetCacheEntry(jdUt: jdUt));
+    final entry = _cache.putIfAbsent(key, () => _PlanetCacheEntry(jdUt: jd));
 
     var allCached = true;
     final out = List<double>.filled(planetIds.length, 0.0, growable: false);
@@ -138,7 +104,7 @@ class SwissEphemerisService {
     }
     if (allCached) return out;
 
-    final batch = _ffi.calcPlanetsLonUt(jdUt: jdUt, planetIds: planetIds);
+    final batch = _ffi.calcPlanetsLonUt(jdUt: jd, planetIds: planetIds);
     if (batch != null) {
       for (var i = 0; i < planetIds.length; i++) {
         entry.lonByPlanet[planetIds[i]] = batch[i];
@@ -147,7 +113,7 @@ class SwissEphemerisService {
     }
 
     for (var i = 0; i < planetIds.length; i++) {
-      out[i] = calcPlanetLonJdUt(jdUt, planetIds[i]);
+      out[i] = calcPlanetLonJdUt(jd, planetIds[i]);
     }
     return out;
   }
@@ -161,7 +127,16 @@ class SwissEphemerisService {
     return asc;
   }
 
-  int _cacheKey(double jdUt) => (jdUt * 1440.0).round(); // minute
+  ({List<double> cusps, List<double> ascmc}) calcHousesFullUtc(DateTime utc, {required double lat, required double lon}) {
+    final jd = jdUtc(utc);
+    final res = _ffi.calcHousesFullUt(jdUt: jd, lat: lat, lon: lon);
+    if (res == null) {
+      throw Exception('swe_houses_ex2 falhou jd=$jd lat=$lat lon=$lon');
+    }
+    return res;
+  }
+
+  int _cacheKey(double jdUt) => (jdUt * 1440.0).round();
 
   void clearCache() => _cache.clear();
 }

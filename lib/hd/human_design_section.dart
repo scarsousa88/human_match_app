@@ -19,7 +19,6 @@ class HumanDesignSection extends StatelessWidget {
   final Map<String, dynamic> hd;
 
   // Keep table alignment consistent between header and rows.
-  // We give more space to the side columns (Design/Personality) to avoid clipping and allow more detail.
   static const int _flexPlanet = 2;
   static const int _flexPill = 3;
   static const Color goldColor = Color(0xFFE6B325);
@@ -182,7 +181,6 @@ class HumanDesignSection extends StatelessWidget {
       'Pluto',
     ];
 
-    // Added 'North Node' and 'South Node' to hidden list to clean up UI from legacy data
     const hiddenBodies = <String>{
       'TrueNode', 
       'SouthNode', 
@@ -256,14 +254,19 @@ class HumanDesignSection extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     switch (type.trim().toLowerCase()) {
       case 'generator':
+      case 'gerador':
         return l10n.hdGen;
       case 'manifesting generator':
+      case 'gerador manifestador':
         return l10n.hdMG;
       case 'manifestor':
+      case 'manifestador':
         return l10n.hdMan;
       case 'projector':
+      case 'projetor':
         return l10n.hdProj;
       case 'reflector':
+      case 'refletor':
         return l10n.hdRef;
       default:
         return _titleCase(type);
@@ -294,6 +297,8 @@ class HumanDesignSection extends StatelessWidget {
         return l10n.hdAuthSelf;
       case 'mental':
         return l10n.hdAuthMen;
+      case 'lunar':
+        return l10n.hdAuthLun;
       default:
         return _titleCase(t);
     }
@@ -307,19 +312,26 @@ class HumanDesignSection extends StatelessWidget {
       case 'informar':
       case 'to inform':
         return l10n.hdStrInf;
+      case 'responder':
+      case 'to respond':
       case 'esperar para responder':
       case 'wait to respond':
         return l10n.hdStrResp;
+      case 'responder e informar':
+      case 'to respond and inform':
+        return l10n.hdStrRespInf;
       case 'esperar convite':
       case 'esperar pelo convite':
       case 'wait for the invitation':
       case 'esperar la invitación':
       case 'attendre l\'invitation':
+      case 'wait for invitation':
         return l10n.hdStrInv;
       case 'esperar ciclo lunar':
       case 'wait a lunar cycle':
       case 'esperar un ciclo lunar':
       case 'attendre um cycle lunaire':
+      case 'wait for a lunar cycle':
         return l10n.hdStrLun;
       default:
         return _titleCase(t);
@@ -332,12 +344,16 @@ class HumanDesignSection extends StatelessWidget {
     if (t.isEmpty || t == '—') return '—';
     switch (t) {
       case 'satisfaction':
+      case 'satisfação':
         return l10n.hdSigSat;
       case 'success':
+      case 'sucesso':
         return l10n.hdSigSuc;
       case 'peace':
+      case 'paz':
         return l10n.hdSigPea;
       case 'surprise':
+      case 'surpresa':
         return l10n.hdSigSur;
       default:
         return _titleCase(s);
@@ -350,12 +366,17 @@ class HumanDesignSection extends StatelessWidget {
     if (t.isEmpty || t == '—') return '—';
     switch (t) {
       case 'frustration':
+      case 'frustração':
         return l10n.hdNotFru;
       case 'bitterness':
+      case 'amargura':
         return l10n.hdNotBit;
       case 'anger':
+      case 'raiva':
         return l10n.hdNotAng;
       case 'disappointment':
+      case 'desilusão':
+      case 'desapontamento':
         return l10n.hdNotDis;
       default:
         return _titleCase(s);
@@ -369,15 +390,19 @@ class HumanDesignSection extends StatelessWidget {
     switch (t) {
       case 'single':
       case 'single definition':
+      case 'definição única':
         return l10n.hdDefSin;
       case 'split':
       case 'split definition':
+      case 'definição partida':
         return l10n.hdDefSpl;
       case 'triple split':
       case 'triple split definition':
+      case 'definição tripla':
         return l10n.hdDefTri;
       case 'quadruple split':
       case 'quadruple split definition':
+      case 'definição quádrupla':
         return l10n.hdDefQua;
       default:
         return _titleCase(s);
@@ -501,7 +526,6 @@ class _CentersChannelsTable extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    // Fixed order as requested
     const allCenterKeys = [
       'head',
       'ajna',

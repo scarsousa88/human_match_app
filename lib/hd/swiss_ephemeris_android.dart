@@ -177,6 +177,41 @@ class SwissEphFfi {
       malloc.free(out);
     }
   }
+
+  // -----------------------------------------------------------
+  // HOUSES FULL
+  // -----------------------------------------------------------
+
+  late final int Function(double, double, double, int, Pointer<Double>, Pointer<Double>) _calcHousesFullUt =
+  _lib.lookupFunction<
+      Int32 Function(Double, Double, Double, Int32, Pointer<Double>, Pointer<Double>),
+      int Function(double, double, double, int, Pointer<Double>, Pointer<Double>)>(
+    'hm_swe_calc_houses_full_ut',
+  );
+
+  ({List<double> cusps, List<double> ascmc})? calcHousesFullUt({
+    required double jdUt,
+    required double lat,
+    required double lon,
+    int hsys = 80, // 'P' = Placidus
+  }) {
+    final cuspsPtr = malloc<Double>(13);
+    final ascmcPtr = malloc<Double>(10);
+
+    try {
+      final rc = _calcHousesFullUt(jdUt, lat, lon, hsys, cuspsPtr, ascmcPtr);
+
+      if (rc != 0) return null;
+
+      return (
+        cusps: List.generate(13, (i) => cuspsPtr[i]),
+        ascmc: List.generate(10, (i) => ascmcPtr[i]),
+      );
+    } finally {
+      malloc.free(cuspsPtr);
+      malloc.free(ascmcPtr);
+    }
+  }
 }
 
 SwissEphFfi loadSwissEph() => SwissEphFfi();

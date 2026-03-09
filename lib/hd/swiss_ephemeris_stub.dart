@@ -14,6 +14,13 @@ class SwissEphFfi {
 
   double? calcAscUt({required double jdUt, required double lat, required double lon}) =>
       throw UnsupportedError('Swiss Ephemeris não suportado nesta plataforma.');
+
+  ({List<double> cusps, List<double> ascmc})? calcHousesFullUt({
+    required double jdUt,
+    required double lat,
+    required double lon,
+    int hsys = 80,
+  }) => throw UnsupportedError('Swiss Ephemeris não suportado nesta plataforma.');
 }
 
 SwissEphFfi loadSwissEph() => throw UnsupportedError('Swiss Ephemeris não suportado nesta plataforma.');

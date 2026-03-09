@@ -10,6 +10,7 @@ import '../../places/places.dart';
 import '../../hd/swiss_ephemeris_service.dart';
 import '../../calc/human_design.dart';
 import '../../calc/numerology.dart';
+import '../../calc/astrology.dart';
 import '../../utils/astro_utils.dart';
 import '../loading_widget.dart';
 import '../widgets/common_ui.dart';
@@ -255,13 +256,11 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
     try {
       final swe = SwissEphemerisService();
       await swe.init();
-      final asc = swe.calcAscendantLongitudeUtc(birthUtc, lat: place.lat, lon: place.lon);
+      
+      final astroRes = await computeAstrology(swe: swe, birthUtc: birthUtc, lat: place.lat, lon: place.lon);
       final hd = HumanDesignCalculator(swe);
       final hdRes = await hd.calculate(birthUtc: birthUtc, lat: place.lat, lon: place.lon);
       final numRes = computeNumerology(fullName: name, birthDate: birthDate!);
-
-      final hdData = hdRes.toJson();
-      final sunLon = findBodyLongitude(hdData, true, 'Sun') ?? 0.0;
 
       final userRef = FirebaseFirestore.instance.collection('users').doc(uid);
 
@@ -281,13 +280,8 @@ class _ProfileInputScreenState extends State<ProfileInputScreen> {
         'birthTimeStr': '${_p2(birthTime!.hour)}:${_p2(birthTime!.minute)}',
         'birthUtc': birthUtc.toIso8601String(),
         'birthTzId': place.tzId,
-        'astro': {
-          'ascendantDeg': asc,
-          'ascendantSign': getZodiacSign(context, asc),
-          'sunSign': getZodiacSign(context, sunLon),
-          'sunDeg': sunLon,
-        },
-        'humanDesignBase': hdData,
+        'astro': astroRes.toJson(),
+        'humanDesignBase': hdRes.toJson(),
         'numerology': numRes.toJson(),
         'updatedAt': FieldValue.serverTimestamp(),
         'aiGates': {
