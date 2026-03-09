@@ -16,9 +16,12 @@ void main() async {
 
   tz.initializeTimeZones();
 
+  // Inicializa a Swiss Ephemeris em ambas as plataformas.
+  // No Web, ela tentará carregar o módulo Wasm via JS Interop.
+  await SwissEphemerisService().init();
+
   if (!kIsWeb) {
     await MobileAds.instance.initialize();
-    await SwissEphemerisService().init();
   }
 
   runApp(const HumanMatchApp());

@@ -25,24 +25,29 @@ class SwissEphemerisService {
   Future<void> init() async {
     if (_inited) return;
 
-    if (kIsWeb) {
-      throw UnsupportedError('Swiss Ephemeris não suportado no Web.');
-    }
-
     _ffi = loadSwissEph();
 
-    // Copy minimal ephe assets if available. If files are missing, native may fall back to Moshier.
-    await EpheAssets.copyIfMissing([
-      'sepl_18.se1',
-      'semo_18.se1',
-    ]);
+    if (!kIsWeb) {
+      // Copy minimal ephe assets if available. If files are missing, native may fall back to Moshier.
+      await EpheAssets.copyIfMissing([
+        'sepl_18.se1',
+        'semo_18.se1',
+      ]);
 
-    final dir = await EpheAssets.ensureEpheDir();
+      final dir = await EpheAssets.ensureEpheDir();
 
-    try {
-      _ffi.setEphePath(dir.path);
-    } catch (e) {
-      debugPrint('Aviso: erro ao setEphePath: $e');
+      try {
+        _ffi.setEphePath(dir.path);
+      } catch (e) {
+        debugPrint('Aviso: erro ao setEphePath: $e');
+      }
+    } else {
+      // No Web, o path costuma ser fixo ou pre-carregado no Wasm FS.
+      try {
+        _ffi.setEphePath('/assets/ephe');
+      } catch (e) {
+        debugPrint('Aviso: erro ao setEphePath no Web: $e');
+      }
     }
 
     _inited = true;
