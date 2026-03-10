@@ -318,5 +318,16 @@
   "astroValSignAquarius": "Originality, humanitarian vision, independence, and innovative, progressive thinking.",
   "astroValSignPisces": "Vast empathy, sharp intuition, imagination, and a strong connection to the spiritual and emotional world.",
   "onlyMobile": "Only available on mobile devices.",
-  "downloadApp": "Download the app to access this feature:"
+  "downloadApp": "Download the app to access this feature:",
+
+  "menuCosmicDNA": "COSMIC DNA",
+  "menuHumanDesign": "Human Design",
+  "menuAstrology": "Astrology",
+  "menuNumerology": "Numerology",
+  "menuChineseSign": "Chinese Sign",
+  "menuBondConnections": "BOND CONNECTIONS",
+  "menuFriendship": "Friendship",
+  "menuCasualMeetings": "Casual meetings",
+  "menuPartnerForLife": "Partner for life",
+  "menuRelateBetter": "RELATE BETTER"
 }

@@ -4,229 +4,394 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Human Match - Know Yourself, Relate Better</title>
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="app/assets/assets/icon/icon.png">
-
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #EAB308;
-            --primary-rgb: 234, 179, 8;
-            --bg: #05050a;
-            --card-bg: rgba(255, 255, 255, 0.03);
+            --primary: #E6B325;
+            --primary-rgb: 230, 179, 37;
+            --bg: #0F0B1E; /* Cosmic Deep Purple */
+            --card-bg: rgba(255, 255, 255, 0.04);
             --text: #ffffff;
             --text-muted: #a1a1aa;
+            --accent: #a855f7;
+            --header-height: 80px;
         }
 
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; scroll-behavior: smooth; }
         body {
             margin: 0;
             font-family: 'Inter', sans-serif;
             background-color: var(--bg);
             color: var(--text);
-            line-height: 1.6;
+            line-height: 1.5;
             overflow-x: hidden;
+            padding-top: var(--header-height);
         }
 
+        [id] { scroll-margin-top: calc(var(--header-height) + 20px); }
+
+        /* NEBULOSA BACKGROUND EFFECTS */
         .glow {
             position: absolute;
             border-radius: 50%;
-            filter: blur(120px);
+            filter: blur(150px);
             z-index: 0;
             pointer-events: none;
+            opacity: 0.5;
         }
 
         header {
-            height: 80px;
+            height: var(--header-height);
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 5%;
-            position: sticky;
-            top: 0;
-            background: rgba(5, 5, 10, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 100;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: white; font-weight: bold; }
-        .logo img { height: 40px; border-radius: 8px; }
-
-        .nav-links { display: none; }
-        @media (min-width: 768px) {
-            .nav-links { display: flex; gap: 30px; }
-            .nav-links a {
-                color: var(--text);
-                text-decoration: none;
-                font-size: 13px;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                opacity: 0.8;
-                transition: 0.3s;
-            }
-            .nav-links a:hover { opacity: 1; color: var(--primary); }
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            background: rgba(15, 11, 30, 0.95);
+            backdrop-filter: blur(30px);
+            z-index: 10000;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
         }
 
+        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; color: white; font-weight: bold; flex-shrink: 0; }
+        .logo img { height: 42px; border-radius: 9px; }
+
+        .nav-links { display: flex; gap: 5px; align-items: center; height: 100%; }
+        .nav-item-wrapper { position: relative; height: 100%; display: flex; align-items: center; }
+        .nav-item {
+            color: var(--text); text-decoration: none; font-size: 10px; text-transform: uppercase;
+            letter-spacing: 1.5px; opacity: 0.7; transition: 0.3s; font-weight: 700;
+            padding: 0 15px; height: 100%; display: flex; align-items: center; gap: 5px; cursor: pointer;
+        }
+        .nav-item:hover { opacity: 1; color: var(--primary); }
+
+        @media (max-width: 1024px) { .nav-links { display: none; } }
+
+        .dropdown-content {
+            display: none; position: absolute; background: rgba(26, 22, 43, 0.98);
+            min-width: 240px; box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            border-radius: 16px; border: 1px solid rgba(255,255,255,0.1);
+            top: 90%; left: 0; padding: 12px 0; animation: fadeIn 0.3s ease-out;
+        }
+        .nav-item-wrapper:hover .dropdown-content { display: block; }
+        .dropdown-content a {
+            padding: 12px 24px; color: rgba(255,255,255,0.6); text-decoration: none;
+            display: flex; justify-content: space-between; align-items: center; font-size: 13px; transition: 0.2s;
+        }
+        .dropdown-content a:hover { color: var(--primary); background: rgba(255,255,255,0.05); padding-left: 30px; }
+
+        .badge-soon {
+            font-size: 8px; background: rgba(230, 179, 37, 0.15); color: var(--primary);
+            padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(230, 179, 37, 0.3); font-weight: 900;
+        }
+
+        /* HERO - PREMIUM ORIGINAL STYLE */
         .hero {
-            position: relative;
-            padding: 120px 5% 80px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
+            position: relative; padding: 60px 5% 40px; display: flex; flex-direction: column; align-items: center; text-align: center;
+            background: radial-gradient(circle at center, rgba(230, 179, 37, 0.08) 0%, transparent 70%);
         }
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: clamp(40px, 8vw, 72px);
-            margin: 20px 0;
-            line-height: 1.1;
-        }
-        .hero h1 span {
-            background: linear-gradient(90deg, var(--primary), #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .hero p {
-            max-width: 700px;
-            font-size: 18px;
-            color: var(--text-muted);
-            margin-bottom: 40px;
-        }
+        .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(40px, 8vw, 85px); margin: 0 0 15px; line-height: 1.1; font-weight: 900; }
+        .hero h1 span { background: linear-gradient(90deg, var(--primary), #f59e0b, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { max-width: 750px; font-size: clamp(16px, 1.8vw, 21px); color: var(--text-muted); margin-bottom: 30px; font-weight: 300; }
+        .mockups { width: 100%; max-width: 650px; margin-top: 20px; }
+        .mockup-img { width: 100%; border-radius: 24px; box-shadow: 0 30px 70px rgba(0,0,0,0.7); border: 1px solid rgba(255,255,255,0.1); }
 
-        .btn-group { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
-        .btn {
-            padding: 16px 32px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 700;
-            transition: 0.3s;
-            font-size: 16px;
-        }
-        .btn-primary {
-            background: var(--primary);
-            color: #000;
-            box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.3);
-        }
-        .btn-outline {
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            background: rgba(255,255,255,0.05);
-        }
-        .btn:hover { transform: translateY(-3px); opacity: 0.9; }
+        .btn-group { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+        .btn { padding: 18px 40px; border-radius: 16px; text-decoration: none; font-weight: 800; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-size: 15px; }
+        .btn-primary { background: var(--primary); color: #000; box-shadow: 0 15px 40px rgba(var(--primary-rgb), 0.3); }
+        .btn-outline { border: 1px solid rgba(255,255,255,0.2); color: white; background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); }
+        .btn:hover { transform: translateY(-5px) scale(1.02); }
 
-        .mockups {
-            margin-top: 60px;
-            position: relative;
-            width: 100%;
-            max-width: 800px;
-            display: flex;
-            justify-content: center;
-        }
-        .mockup-img {
-            width: 100%;
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
+        /* MASTER SECTIONS */
+        .master-section { padding: 80px 5% 40px; max-width: 1400px; margin: 0 auto; position: relative; }
+        .master-header { text-align: center; margin-bottom: 50px; }
+        .master-header h2 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 6vw, 56px); font-weight: 900; letter-spacing: 2px; }
+        .master-header p { color: var(--primary); font-weight: 800; font-size: 13px; letter-spacing: 4px; text-transform: uppercase; margin-top: 10px; }
 
-        .pillars {
-            padding: 100px 5%;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
+        /* DASHBOARD BOXES */
+        .hub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px; margin-bottom: 30px; }
+        .hub-box {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 28px;
+            padding: 45px 25px; text-align: center; cursor: pointer; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative; overflow: hidden; backdrop-filter: blur(10px);
         }
-        .pillar-card {
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 20px;
-            border: 1px solid rgba(234, 179, 8, 0.1);
-            transition: 0.3s;
+        .hub-box::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at top left, rgba(var(--primary-rgb), 0.1), transparent 70%);
+            opacity: 0; transition: 0.5s;
         }
-        .pillar-card:hover { border-color: var(--primary); background: rgba(234, 179, 8, 0.05); }
-        .pillar-card h3 { font-family: 'Playfair Display', serif; font-size: 24px; margin: 15px 0; }
-        .pillar-card p { color: var(--text-muted); font-size: 15px; }
+        .hub-box:hover { transform: translateY(-12px); background: rgba(255, 255, 255, 0.06); border-color: var(--primary); }
+        .hub-box:hover::before { opacity: 1; }
+        .hub-box.active { border-color: var(--primary); background: rgba(var(--primary-rgb), 0.08); box-shadow: 0 0 30px rgba(var(--primary-rgb), 0.1); }
+        .hub-box .icon { font-size: 44px; margin-bottom: 20px; display: block; filter: drop-shadow(0 0 15px rgba(var(--primary-rgb), 0.4)); }
+        .hub-box h3 { font-family: 'Playfair Display', serif; font-size: 24px; margin: 0; font-weight: 800; }
+        .hub-box .click-hint { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: var(--primary); margin-top: 15px; opacity: 0.6; font-weight: 900; }
 
-        footer {
-            padding: 80px 5% 40px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            text-align: center;
+        /* REVEAL CONTENT AREA */
+        .reveal-content {
+            display: none; padding: 40px; background: rgba(255, 255, 255, 0.02); border-radius: 32px;
+            border: 1px dashed rgba(255, 255, 255, 0.12); margin-top: 20px; animation: slideIn 0.5s ease-out;
         }
-        .footer-logo { height: 40px; margin-bottom: 30px; border-radius: 8px; }
-        .footer-links { margin-bottom: 40px; }
-        .footer-links a { color: var(--text-muted); text-decoration: none; margin: 0 15px; font-size: 14px; }
-        .copy { font-size: 12px; color: rgba(255,255,255,0.3); }
+        .reveal-content.active { display: block; }
+
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
+        .feature-card {
+            background: rgba(255, 255, 255, 0.04); padding: 35px; border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.06);
+            position: relative; transition: 0.3s;
+        }
+        .feature-card:hover { background: rgba(255, 255, 255, 0.06); transform: scale(1.02); }
+        .feature-card h4 { font-family: 'Playfair Display', serif; font-size: 22px; margin: 0 0 12px; color: var(--primary); font-weight: 800; }
+        .feature-card p { font-size: 15px; color: var(--text-muted); line-height: 1.7; font-weight: 400; }
+
+        .soon-overlay { opacity: 0.6; filter: grayscale(0.8); cursor: default; }
+        .box-soon-tag { position: absolute; top: 20px; right: 20px; }
+
+        footer { padding: 100px 5% 50px; background: #030307; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); }
+        .footer-links { margin-bottom: 40px; display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 15px; transition: 0.3s; }
+        .footer-links a:hover { color: var(--primary); }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-    <div class="glow" style="top: -10%; right: -10%; width: 600px; height: 600px; background: rgba(234, 179, 8, 0.15);"></div>
-    <div class="glow" style="bottom: 20%; left: -10%; width: 500px; height: 500px; background: rgba(168, 85, 247, 0.1);"></div>
+    <!-- NEBULAS -->
+    <div class="glow" style="top: -10%; right: -10%; width: 800px; height: 800px; background: rgba(230, 179, 37, 0.15);"></div>
+    <div class="glow" style="bottom: 10%; left: -5%; width: 700px; height: 700px; background: rgba(168, 85, 247, 0.1);"></div>
 
     <header>
-        <a href="/" class="logo">
-            <img src="app/assets/assets/icon/icon.png" alt="HM" onerror="this.src='https://raw.githubusercontent.com/flutter/brand-resources/main/Flutter-Mark-Color.png'">
-            <span>Human Match</span>
-        </a>
+        <a href="/" class="logo"><img src="app/assets/assets/icon/icon.png" alt="HM"><span>Human Match</span></a>
         <nav class="nav-links">
-            <a href="#about">Human Design</a>
-            <a href="#astrology">Astrologia</a>
-            <a href="#numerology">Numerologia</a>
+            <div class="nav-item-wrapper">
+                <a href="#cosmic-dna" class="nav-item">COSMIC DNA ▾</a>
+                <div class="dropdown-content">
+                    <a href="javascript:void(0)" onclick="reveal('hd', 'cosmic-dna')">Human Design</a>
+                    <a href="javascript:void(0)" onclick="reveal('astro', 'cosmic-dna')">Astrologia</a>
+                    <a href="javascript:void(0)" onclick="reveal('num', 'cosmic-dna')">Numerology</a>
+                    <a href="javascript:void(0)" onclick="reveal('chinese', 'cosmic-dna')">Signo Chinês <span class="badge-soon">Soon</span></a>
+                </div>
+            </div>
+            <div class="nav-item-wrapper">
+                <a href="#bond-connections" class="nav-item">BOND CONNECTIONS ▾</a>
+                <div class="dropdown-content">
+                    <a href="javascript:void(0)" onclick="reveal('friendship', 'bond-connections')">Friendship <span class="badge-soon">Soon</span></a>
+                    <a href="javascript:void(0)" onclick="reveal('casual', 'bond-connections')">Casual meetings <span class="badge-soon">Soon</span></a>
+                    <a href="javascript:void(0)" onclick="reveal('partner', 'bond-connections')">Partner for life <span class="badge-soon">Soon</span></a>
+                </div>
+            </div>
+            <a href="#relate-better" class="nav-item">RELATE BETTER <span class="badge-soon" style="margin-left: 8px;">Soon</span></a>
         </nav>
-        <a href="/app/" class="btn btn-outline" style="padding: 10px 20px; font-size: 12px;">Abrir Web App</a>
+        <a href="/app/" class="btn btn-outline" style="padding: 12px 24px; font-size: 13px; border-radius: 12px;">Open App</a>
     </header>
 
-    <section class="hero">
-        <div style="color: var(--primary); background: rgba(234, 179, 8, 0.1); padding: 5px 15px; border-radius: 20px; font-size: 12px; border: 1px solid var(--primary); margin-bottom: 20px;">
-            DISCOVER YOUR COSMIC DNA
-        </div>
+    <!-- NIVEL 1: HUMAN MATCH - RESTORED PREMIUM HERO -->
+    <section id="human-match" class="hero">
         <h1>Know Yourself,<br><span>relate better!</span></h1>
-        <p>Desbloqueia os segredos do teu Tipo, Estratégia e Autoridade. Alinha-te com a tua verdadeira natureza através do Human Design, Astrologia e Numerologia.</p>
-
+        <p>A síntese definitiva entre sabedoria ancestral e tecnologia moderna. Decifra o teu mapa energético único e transforma a forma como te conectas com o mundo.</p>
         <div class="btn-group">
-            <a href="https://play.google.com/store/apps/details?id=com.opinto.humanmatch" class="btn btn-primary">Google Play</a>
+            <a href="https://play.google.com/store/apps/details?id=com.opinto.humanmatch" class="btn btn-primary">Download App</a>
             <a href="/app/" class="btn btn-outline">Web Version</a>
         </div>
+        <div class="mockups"><img src="image_01.png" class="mockup-img" alt="App Preview" onerror="this.src='image_02.png';"></div>
+    </section>
 
-        <div class="mockups">
-            <!-- Usa as tuas novas imagens em public/ -->
-            <img src="image_01.png" class="mockup-img" alt="App Preview" onerror="this.src='image_02.png'; this.onerror=null;">
+    <!-- NIVEL 2: COSMIC DNA -->
+    <section id="cosmic-dna" class="master-section">
+        <div class="master-header">
+            <h2>COSMIC DNA</h2>
+            <p>O Teu Código Energético Individual</p>
+        </div>
+
+        <div class="hub-grid">
+            <div id="box-hd" class="hub-box" onclick="toggleReveal('reveal-hd', this)">
+                <span class="icon">🧬</span>
+                <h3>Human Design</h3>
+                <div class="click-hint">Explorar Pilar ▾</div>
+            </div>
+            <div id="box-astro" class="hub-box" onclick="toggleReveal('reveal-astro', this)">
+                <span class="icon">☀️</span>
+                <h3>Astrologia</h3>
+                <div class="click-hint">Explorar Pilar ▾</div>
+            </div>
+            <div id="box-num" class="hub-box" onclick="toggleReveal('reveal-num', this)">
+                <span class="icon">🔢</span>
+                <h3>Numerologia</h3>
+                <div class="click-hint">Explorar Pilar ▾</div>
+            </div>
+            <div id="box-chinese" class="hub-box soon-overlay" onclick="toggleReveal('reveal-chinese', this)">
+                <div class="box-soon-tag"><span class="badge-soon">Soon</span></div>
+                <span class="icon">🐉</span>
+                <h3>Signo Chinês</h3>
+                <div class="click-hint">Brevemente ▾</div>
+            </div>
+        </div>
+
+        <div id="reveal-hd" class="reveal-content">
+            <div class="feature-grid">
+                <div class="feature-card"><h4>Mecânica da Aura</h4><p>Entende se o teu design é para iniciar, guiar, responder ou refletir o ambiente.</p></div>
+                <div class="feature-card"><h4>Centros e Circuitos</h4><p>Análise dos 9 centros de energia e como os canais definem a tua força vital.</p></div>
+                <div class="feature-card"><h4>Cruz de Encarnação</h4><p>O propósito específico que a tua alma veio realizar nesta encarnação.</p></div>
+            </div>
+        </div>
+
+        <div id="reveal-astro" class="reveal-content">
+            <div class="feature-grid">
+                <div class="feature-card"><h4>Análise de Casas</h4><p>Como os planetas se distribuem pelas 12 casas astrológicas e áreas da vida.</p></div>
+                <div class="feature-card"><h4>Aspetos Planetários</h4><p>As conversas entre os astros que criam os teus talentos e desafios.</p></div>
+                <div class="feature-card"><h4>Nodos e Quíron</h4><p>A ferida sagrada e o caminho de evolução cármica da tua alma.</p></div>
+            </div>
+        </div>
+
+        <div id="reveal-num" class="reveal-content">
+            <div class="feature-grid">
+                <div class="feature-card"><h4>Desejo da Alma</h4><p>O número que revela o que realmente te traz felicidade interior profunda.</p></div>
+                <div class="feature-card"><h4>Número de Maturidade</h4><p>A energia que se torna predominante na segunda metade da tua vida.</p></div>
+                <div class="feature-card"><h4>Anos Pessoais</h4><p>Previsões numerológicas baseadas no teu ciclo atual de evolução.</p></div>
+            </div>
+        </div>
+
+        <div id="reveal-chinese" class="reveal-content">
+            <div class="feature-grid">
+                <div class="feature-card soon-overlay"><div class="box-soon-tag"><span class="badge-soon">Soon</span></div><h4>Pilar do Destino 🐉</h4><p>A combinação única entre o teu animal anual e o elemento regente.</p></div>
+                <div class="feature-card soon-overlay"><div class="box-soon-tag"><span class="badge-soon">Soon</span></div><h4>Trindades 🔥</h4><p>Descobre quais os animais que formam a tua trindade de afinidade.</p></div>
+                <div class="feature-card soon-overlay"><div class="box-soon-tag"><span class="badge-soon">Soon</span></div><h4>Yin Yang ☯️</h4><p>A polaridade energética e como harmonizar as tuas forças vitais.</p></div>
+            </div>
         </div>
     </section>
 
-    <section class="pillars">
-        <div class="pillar-card">
-            <h3>Human Design</h3>
-            <p>Descobre o teu mapa energético único. Entende o teu Tipo e Autoridade para navegar na vida com facilidade e alinhamento.</p>
+    <!-- NIVEL 3: BOND CONNECTIONS -->
+    <section id="bond-connections" class="master-section" style="background: rgba(168, 85, 247, 0.02);">
+        <div class="master-header">
+            <h2>BOND CONNECTIONS</h2>
+            <p>Dinâmicas de Sinergia e Compatibilidade</p>
         </div>
-        <div class="pillar-card">
-            <h3>Astrologia</h3>
-            <p>Mergulha profundamente nos teus signos, ascendentes e influências planetárias para revelar o teu potencial cósmico.</p>
+
+        <div class="hub-grid">
+            <div id="box-friendship" class="hub-box soon-overlay" onclick="toggleReveal('reveal-friendship', this)">
+                <div class="box-soon-tag"><span class="badge-soon">Soon</span></div>
+                <span class="icon">🤝</span>
+                <h3>Friendship</h3>
+                <div class="click-hint">Ver Sinergia ▾</div>
+            </div>
+            <div id="box-casual" class="hub-box soon-overlay" onclick="toggleReveal('reveal-casual', this)">
+                <div class="box-soon-tag"><span class="badge-soon">Soon</span></div>
+                <span class="icon">⚡</span>
+                <h3>Casual meetings</h3>
+                <div class="click-hint">Ver Química ▾</div>
+            </div>
+            <div id="box-partner" class="hub-box soon-overlay" onclick="toggleReveal('reveal-partner', this)">
+                <div class="box-soon-tag"><span class="badge-soon">Soon</span></div>
+                <span class="icon">❤️</span>
+                <h3>Partner for life</h3>
+                <div class="click-hint">Ver Conexão ▾</div>
+            </div>
         </div>
-        <div class="pillar-card">
-            <h3>Numerologia</h3>
-            <p>Decifra a linguagem sagrada dos números. Explora o teu Caminho de Vida para entender o propósito da tua alma.</p>
+
+        <div id="reveal-friendship" class="reveal-content">
+            <div class="feature-grid">
+                <div class="feature-card soon-overlay"><div class="box-soon-tag"><span class="badge-soon">Soon</span></div><h4>Sinergia Consciente</h4><p>Como os vossos centros interagem para criar parcerias profissionais e amizades.</p></div>
+                <div class="feature-card soon-overlay"><div class="box-soon-tag"><span class="badge-soon">Soon</span></div><h4>Zonas de Atrito</h4><p>Identifica onde os designs chocam e aprende a transformar conflito em união.</p></div>
+                <div class="feature-card soon-overlay"><div class="box-soon-tag"><span class="badge-soon">Soon</span></div><h4>Composites</h4><p>O mapa conjunto que revela a "terceira energia" da relação.</p></div>
+            </div>
+        </div>
+
+        <div id="reveal-casual" class="reveal-content">
+            <div class="feature-grid">
+                <div class="feature-card soon-overlay"><div class="box-soon-tag"><span class="badge-soon">Soon</span></div><h4>Química do Agora</h4><p>Momentos de alta voltagem energética para encontros espontâneos.</p></div>
+                <div class="feature-card soon-overlay"><div class="box-soon-tag"><span class="badge-soon">Soon</span></div><h4>Estratégia Áurica</h4><p>Sabe como agir no momento exato do encontro para evitar mal-entendidos.</p></div>
+                <div class="feature-card soon-overlay"><div class="box-soon-tag"><span class="badge-soon">Soon</span></div><h4>Canais Electromagnéticos</h4><p>A atração física imediata explicada pela ciência do design humano.</p></div>
+            </div>
+        </div>
+
+        <div id="reveal-partner" class="reveal-content">
+            <div class="feature-grid">
+                <div class="feature-card soon-overlay"><div class="box-soon-tag"><span class="badge-soon">Soon</span></div><h4>Alinhamento Definitivo</h4><p>Cruzamento profundo de mapas para entender a dinâmica de longo prazo.</p></div>
+                <div class="feature-card soon-overlay"><div class="box-soon-tag"><span class="badge-soon">Soon</span></div><h4>Definição Conjunta</h4><p>Análise técnica da fusão energética: do 9-0 ao 7-2.</p></div>
+                <div class="feature-card soon-overlay"><div class="box-soon-tag"><span class="badge-soon">Soon</span></div><h4>Nodos de Destino</h4><p>Verifica se os vossos caminhos de evolução de alma estão alinhados.</p></div>
+            </div>
         </div>
     </section>
 
-    <section style="padding: 80px 5%; text-align: center; background: rgba(255,255,255,0.02);">
-        <h2 style="font-family: 'Playfair Display', serif; font-size: 40px; color: var(--primary);">Synthesis of Self</h2>
-        <p style="max-width: 800px; margin: 0 auto; color: var(--text-muted); font-size: 18px;">
-            Além da superfície da personalidade reside a arquitetura da tua alma. Human Match tece a sabedoria ancestral numa única verdade unificada.
-        </p>
-        <div style="margin-top: 40px; max-width: 600px; margin-left: auto; margin-right: auto;">
-            <img src="image_03.png" class="mockup-img" alt="Synthesis" onerror="this.src='Image_04.webp'; this.onerror=null;">
+    <!-- NIVEL 4: RELATE BETTER -->
+    <section id="relate-better" class="master-section">
+        <div class="master-header">
+            <h2>RELATE BETTER</h2>
+            <p>Aplicação Prática Diária</p>
+        </div>
+
+        <div class="hub-grid">
+            <div id="box-tips" class="hub-box soon-overlay" onclick="toggleReveal('reveal-tips', this)">
+                <div class="box-soon-tag"><span class="badge-soon">Soon</span></div>
+                <span class="icon">✨</span>
+                <h3>Dicas Diárias</h3>
+                <div class="click-hint">Explorar ▾</div>
+            </div>
+            <div id="box-comm" class="hub-box soon-overlay" onclick="toggleReveal('reveal-comm', this)">
+                <div class="box-soon-tag"><span class="badge-soon">Soon</span></div>
+                <span class="icon">💬</span>
+                <h3>Comunicação</h3>
+                <div class="click-hint">Explorar ▾</div>
+            </div>
+            <div id="box-harm" class="hub-box soon-overlay" onclick="toggleReveal('reveal-harm', this)">
+                <div class="box-soon-tag"><span class="badge-soon">Soon</span></div>
+                <span class="icon">🧘</span>
+                <h3>Harmonia</h3>
+                <div class="click-hint">Explorar ▾</div>
+            </div>
+        </div>
+
+        <div id="reveal-tips" class="reveal-content">
+            <div class="feature-grid">
+                <div class="feature-card soon-overlay"><div class="box-soon-tag"><span class="badge-soon">Soon</span></div><h4>Clima Cósmico</h4><p>Notificações sobre como os trânsitos ativam o teu mapa energético.</p></div>
+            </div>
+        </div>
+        <div id="reveal-comm" class="reveal-content">
+            <div class="feature-grid">
+                <div class="feature-card soon-overlay"><div class="box-soon-tag"><span class="badge-soon">Soon</span></div><h4>A Arte de Falar</h4><p>Aprende a técnica da pergunta sacral e do reconhecimento.</p></div>
+            </div>
+        </div>
+        <div id="reveal-harm" class="reveal-content">
+            <div class="feature-grid">
+                <div class="feature-card soon-overlay"><div class="box-soon-tag"><span class="badge-soon">Soon</span></div><h4>Inteligência Aura</h4><p>Ferramentas para discernir as tuas emoções das pressões externas.</p></div>
+            </div>
         </div>
     </section>
 
     <footer>
-        <img src="app/assets/assets/icon/icon.png" class="footer-logo" alt="Logo">
+        <img src="app/assets/assets/icon/icon.png" style="height: 60px; margin-bottom: 40px; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
         <div class="footer-links">
             <a href="/app/">Web App</a>
             <a href="/Privacy-policy/">Política de Privacidade</a>
-            <a href="mailto:suporte@humanmatch.app">Suporte</a>
+            <a href="mailto:support@humanmatch.app">Suporte</a>
         </div>
-        <div class="copy">&copy; 2025 Human Match. Todos os direitos reservados.</div>
+        <div style="font-size: 13px; color: rgba(255,255,255,0.3);">&copy; 2025 Human Match. Sincronizando a tua energia com o universo.</div>
     </footer>
+
+    <script>
+        function toggleReveal(id, element) {
+            const reveal = document.getElementById(id);
+            const parent = reveal.parentElement;
+            const boxes = parent.querySelectorAll('.hub-box');
+            boxes.forEach(b => b.classList.remove('active'));
+            const contents = parent.querySelectorAll('.reveal-content');
+            let wasActive = reveal.classList.contains('active');
+            contents.forEach(c => c.classList.remove('active'));
+            if(!wasActive) {
+                reveal.classList.add('active');
+                element.classList.add('active');
+                setTimeout(() => { reveal.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
+            }
+        }
+        function reveal(id, sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => {
+                const box = document.getElementById('box-' + id);
+                if(box) toggleReveal('reveal-' + id, box);
+            }, 500);
+        }
+    </script>
 </body>
 </html>

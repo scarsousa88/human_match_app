@@ -988,4 +988,34 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get downloadApp =>
       'Descarrega a app para acederes a esta funcionalidade:';
+
+  @override
+  String get menuCosmicDNA => 'COSMIC DNA';
+
+  @override
+  String get menuHumanDesign => 'Human Design';
+
+  @override
+  String get menuAstrology => 'Astrology';
+
+  @override
+  String get menuNumerology => 'Numerology';
+
+  @override
+  String get menuChineseSign => 'Signo chinês';
+
+  @override
+  String get menuBondConnections => 'BOND CONNECTIONS';
+
+  @override
+  String get menuFriendship => 'Friendship';
+
+  @override
+  String get menuCasualMeetings => 'Casual meetings';
+
+  @override
+  String get menuPartnerForLife => 'Partner for life';
+
+  @override
+  String get menuRelateBetter => 'RELATE BETTER';
 }

@@ -1841,6 +1841,66 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Descarrega a app para acederes a esta funcionalidade:'**
   String get downloadApp;
+
+  /// No description provided for @menuCosmicDNA.
+  ///
+  /// In pt, this message translates to:
+  /// **'COSMIC DNA'**
+  String get menuCosmicDNA;
+
+  /// No description provided for @menuHumanDesign.
+  ///
+  /// In pt, this message translates to:
+  /// **'Human Design'**
+  String get menuHumanDesign;
+
+  /// No description provided for @menuAstrology.
+  ///
+  /// In pt, this message translates to:
+  /// **'Astrology'**
+  String get menuAstrology;
+
+  /// No description provided for @menuNumerology.
+  ///
+  /// In pt, this message translates to:
+  /// **'Numerology'**
+  String get menuNumerology;
+
+  /// No description provided for @menuChineseSign.
+  ///
+  /// In pt, this message translates to:
+  /// **'Signo chinês'**
+  String get menuChineseSign;
+
+  /// No description provided for @menuBondConnections.
+  ///
+  /// In pt, this message translates to:
+  /// **'BOND CONNECTIONS'**
+  String get menuBondConnections;
+
+  /// No description provided for @menuFriendship.
+  ///
+  /// In pt, this message translates to:
+  /// **'Friendship'**
+  String get menuFriendship;
+
+  /// No description provided for @menuCasualMeetings.
+  ///
+  /// In pt, this message translates to:
+  /// **'Casual meetings'**
+  String get menuCasualMeetings;
+
+  /// No description provided for @menuPartnerForLife.
+  ///
+  /// In pt, this message translates to:
+  /// **'Partner for life'**
+  String get menuPartnerForLife;
+
+  /// No description provided for @menuRelateBetter.
+  ///
+  /// In pt, this message translates to:
+  /// **'RELATE BETTER'**
+  String get menuRelateBetter;
 }
 
 class _AppLocalizationsDelegate

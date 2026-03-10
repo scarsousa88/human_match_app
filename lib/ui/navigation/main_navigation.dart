@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import '../../l10n/app_localizations.dart';
 import '../profile/profile_summary_screen.dart';
 import '../profile/profile_input_screen.dart';
@@ -37,20 +37,32 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     
     // Cor Cosmic
     const cosmicBg = Color(0xFF0F0B1E);
+    const goldColor = Color(0xFFE6B325);
 
     return Scaffold(
       backgroundColor: cosmicBg,
       appBar: AppBar(
         backgroundColor: cosmicBg,
         elevation: 0,
-        centerTitle: true,
+        centerTitle: kIsWeb ? false : true,
         iconTheme: const IconThemeData(color: Colors.white70),
-        title: _currentIndex == 0 ? const _CosmicDNABadge() : Text(_currentIndex == 1 ? l10n.tabCommunity : l10n.tabCompare, style: const TextStyle(color: Colors.white)),
+        title: kIsWeb 
+          ? Row(
+              children: [
+                const _CosmicDNABadge(),
+                const SizedBox(width: 20),
+                if (MediaQuery.of(context).size.width > 800) ...[
+                  _navItem(l10n.menuCosmicDNA),
+                  _navItem(l10n.menuBondConnections),
+                  _navItem(l10n.menuRelateBetter),
+                ]
+              ],
+            )
+          : (_currentIndex == 0 ? const _CosmicDNABadge() : Text(_currentIndex == 1 ? l10n.tabCommunity : l10n.tabCompare, style: const TextStyle(color: Colors.white))),
       ),
       drawer: Drawer(
         backgroundColor: const Color(0xFF1A162B),
@@ -87,15 +99,56 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 ),
               ),
             ),
-            _drawerTile(Icons.edit_outlined, l10n.editProfile, () {
-              Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfileInputScreen()));
-            }),
-            _drawerTile(Icons.description_outlined, l10n.termsTitle, () {
-              Navigator.pop(context);
-              launchUrl(Uri.parse('https://humanmatch.app/Privacy-policy/'), mode: LaunchMode.externalApplication);
-            }),
-            const Spacer(),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  _drawerTile(Icons.edit_outlined, l10n.editProfile, () {
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfileInputScreen()));
+                  }),
+                  
+                  const Divider(color: Colors.white10),
+                  
+                  // Novos Menus solicitados
+                  Theme(
+                    data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                    child: ExpansionTile(
+                      leading: const Icon(Icons.AutoAwesome, color: goldColor),
+                      title: Text(l10n.menuCosmicDNA, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
+                      children: [
+                        _subTile(l10n.menuHumanDesign),
+                        _subTile(l10n.menuAstrology),
+                        _subTile(l10n.menuNumerology),
+                        _subTile(l10n.menuChineseSign),
+                      ],
+                    ),
+                  ),
+                  
+                  Theme(
+                    data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                    child: ExpansionTile(
+                      leading: const Icon(Icons.favorite_border, color: goldColor),
+                      title: Text(l10n.menuBondConnections, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
+                      children: [
+                        _subTile(l10n.menuFriendship),
+                        _subTile(l10n.menuCasualMeetings),
+                        _subTile(l10n.menuPartnerForLife),
+                      ],
+                    ),
+                  ),
+
+                  _drawerTile(Icons.TipsAndUpdates, l10n.menuRelateBetter, () {}, color: Colors.white),
+
+                  const Divider(color: Colors.white10),
+
+                  _drawerTile(Icons.description_outlined, l10n.termsTitle, () {
+                    Navigator.pop(context);
+                    launchUrl(Uri.parse('https://humanmatch.app/Privacy-policy/'), mode: LaunchMode.externalApplication);
+                  }),
+                ],
+              ),
+            ),
             const Divider(color: Colors.white10),
             _drawerTile(Icons.logout, l10n.logout, () {
               Navigator.pop(context);
@@ -116,7 +169,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           _pageController.animateToPage(index, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
         },
         backgroundColor: const Color(0xFF120E22),
-        selectedItemColor: const Color(0xFFE6B325),
+        selectedItemColor: goldColor,
         unselectedItemColor: Colors.white38,
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w900),
         type: BottomNavigationBarType.fixed,
@@ -129,10 +182,25 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     );
   }
 
+  Widget _navItem(String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: Text(text, style: const TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1)),
+    );
+  }
+
+  Widget _subTile(String label) {
+    return ListTile(
+      contentPadding: const EdgeInsets.only(left: 72),
+      title: Text(label, style: const TextStyle(color: Colors.white60, fontSize: 13)),
+      onTap: () {},
+    );
+  }
+
   Widget _drawerTile(IconData icon, String label, VoidCallback onTap, {Color? color}) {
     return ListTile(
       leading: Icon(icon, color: color ?? Colors.white70),
-      title: Text(label, style: TextStyle(color: color ?? Colors.white70)),
+      title: Text(label, style: TextStyle(color: color ?? Colors.white70, fontWeight: FontWeight.w600)),
       onTap: onTap,
     );
   }
