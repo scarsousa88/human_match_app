@@ -45,7 +45,7 @@
     <polyline id="Gate4" points="466.89 183.91 467.26 213.93 449.86 214.09 449.49 183.73" fill="#fff" stroke="transparent" stroke-miterlimit="10" stroke-width="2" />
     <path id="Gate61" d="M412,183.54l-.35-30.15,17.4-.16.31,30.31" fill="#fff" stroke="transparent" stroke-miterlimit="10" stroke-width="2" />
     <path id="Gate64" d="M374.51,183.35l-.34-29.55,17.4-.16.34,29.71" fill="#fff" stroke="transparent" stroke-miterlimit="10" stroke-width="2" />
-    <polyline id="Gate17" data-name="Gate 17" points="374.7 350.15 373.82 266.79 391.22 266.62 392.1 350.34" fill="#fff" stroke="transparent" stroke-miterlimit="10" stroke-width="2" />
+    <polyline id="Gate17" points="374.7 350.15 373.82 266.79 391.22 266.62 392.1 350.34" fill="#fff" stroke="transparent" stroke-miterlimit="10" stroke-width="2" />
     <path id="Gate43" d="M411.9,373.22l-.24-32.28,17.4-.16.24,32.44" fill="#fff" stroke="transparent" stroke-miterlimit="10" stroke-width="2" />
     <polyline id="Gate11" points="449.65 350.52 448.79 272.34 466.19 272.17 467.05 350.15" fill="#fff" stroke="transparent" stroke-miterlimit="10" stroke-width="2" />
     <path id="Gate35" d="M656.89,690.37,480.23,418.14l15-8.82L671.37,680.74" fill="#fff" stroke="transparent" stroke-miterlimit="10" stroke-width="2" />
@@ -295,69 +295,69 @@
 <g id="GateTextBg64">
   <path d="M383.23,152.76a14.13,14.13,0,1,1,14.13-14.13h0A14.14,14.14,0,0,1,383.23,152.76Z" fill="transparent"/>
 </g>
-    <text fill="#B2A8A6" id="GateText59" transform="translate(466 1030)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">59</text>
-    <text fill="#B2A8A6" id="GateText27" transform="translate(353 1031)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">27</text>
-    <text fill="#B2A8A6" id="GateText34" transform="translate(353 984.5)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">34</text>
-    <text fill="#B2A8A6" id="GateText25" transform="translate(482 705)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">25</text>
-    <text fill="#B2A8A6" id="GateText51" transform="translate(571.51 800.95)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">51</text>
-    <text fill="#B2A8A6" id="GateText26" transform="translate(543.84 826.05)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">26</text>
-    <text fill="#B2A8A6" id="GateText21" transform="translate(594.91 771.84)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">21</text>
-    <text fill="#B2A8A6" id="GateText40" transform="translate(628.36 826.03)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">40</text>
-    <text fill="#B2A8A6" id="GateText37" transform="translate(738.87 964.19)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">37</text>
-    <text fill="#B2A8A6" id="GateText22" transform="translate(768.5 945)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">22</text>
-    <text fill="#B2A8A6" id="GateText36" transform="translate(801.5 923)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">36</text>
-    <text fill="#B2A8A6" id="GateText49" transform="translate(738.85 1000.17)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">49</text>
-    <text fill="#B2A8A6" id="GateText19" transform="translate(467.58 1208.69)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">19</text>
-    <text fill="#B2A8A6" id="GateText39" transform="translate(468.43 1244.62)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">39</text>
-    <text fill="#B2A8A6" id="GateText41" transform="translate(468.43 1280.66)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">41</text>
-    <text fill="#B2A8A6" id="GateText54" transform="translate(353.72 1208.69)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">54</text>
-    <text fill="#B2A8A6" id="GateText38" transform="translate(353.72 1244.62)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">38</text>
-    <text fill="#B2A8A6" id="GateText58" transform="translate(353.72 1280.66)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">58</text>
-    <text fill="#B2A8A6" id="GateText45" transform="translate(469.31 516.23)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">45</text>
-    <text fill="#B2A8A6" id="GateText35" transform="translate(469.31 448.4)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">35</text>
-    <text fill="#B2A8A6" id="GateText55" transform="translate(771.48 1019.45)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">55</text>
-    <text fill="#B2A8A6" id="GateText30" transform="translate(804.13 1037.88)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">30</text>
-    <text fill="#B2A8A6" id="GateText6" transform="translate(706.58 982.61)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">6</text>
-    <text fill="#B2A8A6" id="GateText44" transform="translate(85.83 963.33)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">44</text>
-    <text fill="#B2A8A6" id="GateText57" transform="translate(52.32 945.77)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">57</text>
-    <text fill="#B2A8A6" id="GateText48" transform="translate(17.5 923)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">48</text>
-    <text fill="#B2A8A6" id="GateText32" transform="translate(85.81 999.32)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">32</text>
-    <text fill="#B2A8A6" id="GateText28" transform="translate(52.3 1018.59)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">28</text>
-    <text fill="#B2A8A6" id="GateText18" transform="translate(16.61 1037.03)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">18</text>
-    <text fill="#B2A8A6" id="GateText50" transform="translate(121.75 982.61)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">50</text>
-    <text fill="#B2A8A6" id="GateText10" transform="translate(334.31 697.9)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">10</text>
-    <text fill="#B2A8A6" id="GateText8" transform="translate(415.9 546.37)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">8</text>
-    <text fill="#B2A8A6" id="GateText14" transform="translate(409.14 948.5)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">14</text>
-    <text fill="#B2A8A6" id="GateText3" transform="translate(415.9 1065.47)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">3</text>
-    <text fill="#B2A8A6" id="GateText60" transform="translate(410.13 1176.86)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">60</text>
-    <text fill="#B2A8A6" id="GateText1" transform="translate(415.9 622.01)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">1</text>
-    <text fill="#B2A8A6" id="GateText2" transform="translate(415.9 773.05)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">2</text>
-    <text fill="#B2A8A6" id="GateText33" transform="translate(448.15 546.37)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">33</text>
-    <text fill="#B2A8A6" id="GateText29" transform="translate(448.15 949.08)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">29</text>
-    <text fill="#B2A8A6" id="GateText9" transform="translate(453.92 1066.33)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">9</text>
-    <text fill="#B2A8A6" id="GateText52" transform="translate(448.15 1177.72)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">52</text>
-    <text fill="#B2A8A6" id="GateText13" transform="translate(447.29 657.34)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">13</text>
-    <text fill="#B2A8A6" id="GateText46" transform="translate(447 740.5)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">46</text>
-    <text fill="#B2A8A6" id="GateText31" transform="translate(374.04 547.19)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">31</text>
-    <text fill="#B2A8A6" id="GateText5" transform="translate(378.55 949.04)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">5</text>
-    <text fill="#B2A8A6" id="GateText42" transform="translate(373.18 1066.29)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">42</text>
-    <text fill="#B2A8A6" id="GateText53" transform="translate(373.18 1177.68)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">53</text>
-    <text fill="#B2A8A6" id="GateText7" transform="translate(378.09 658.16)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">7</text>
-    <text fill="#B2A8A6" id="GateText15" transform="translate(372.32 741.89)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">15</text>
-    <text fill="#B2A8A6" id="GateText12" transform="translate(468.45 482.09)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">12</text>
-    <text fill="#B2A8A6" id="GateText20" transform="translate(353.01 501.14)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">20</text>
-    <text fill="#B2A8A6" id="GateText16" transform="translate(351.3 453.4)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">16</text>
-    <text fill="#B2A8A6" id="GateText56" transform="translate(449.01 423.26)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">56</text>
-    <text fill="#B2A8A6" id="GateText23" transform="translate(410.67 422.4)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">23</text>
-    <text fill="#B2A8A6" id="GateText62" transform="translate(373.18 422.4)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">62</text>
-    <text fill="#B2A8A6" id="GateText43" transform="translate(410.67 331.4)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">43</text>
-    <text fill="#B2A8A6" id="GateText11" transform="translate(448.15 270.01)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">11</text>
-    <text fill="#B2A8A6" id="GateText17" transform="translate(372.32 268.33)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">17</text>
-    <text fill="#B2A8A6" id="GateText4" transform="translate(452.7 235.11)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">4</text>
-    <text fill="#B2A8A6" id="GateText24" transform="translate(410.67 235.13)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">24</text>
-    <text fill="#B2A8A6" id="GateText47" transform="translate(373.18 235.13)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">47</text>
-    <text fill="#B2A8A6" id="GateText63" transform="translate(448.15 146.38)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">63</text>
-    <text fill="#B2A8A6" id="GateText61" transform="translate(411.53 146.38)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">61</text>
-    <text fill="#B2A8A6" id="GateText64" transform="translate(373.18 146.38)" font-size="21" font-family="Proxima Sans, Helvetica, Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em" style="isolation: isolate">64</text>
+    <text fill="#000000" id="GateText59" transform="translate(466 1030)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">59</text>
+    <text fill="#000000" id="GateText27" transform="translate(353 1031)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">27</text>
+    <text fill="#000000" id="GateText34" transform="translate(353 984.5)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">34</text>
+    <text fill="#000000" id="GateText25" transform="translate(482 705)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">25</text>
+    <text fill="#000000" id="GateText51" transform="translate(571.51 800.95)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">51</text>
+    <text fill="#000000" id="GateText26" transform="translate(543.84 826.05)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">26</text>
+    <text fill="#000000" id="GateText21" transform="translate(594.91 771.84)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">21</text>
+    <text fill="#000000" id="GateText40" transform="translate(628.36 826.03)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">40</text>
+    <text fill="#000000" id="GateText37" transform="translate(738.87 964.19)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">37</text>
+    <text fill="#000000" id="GateText22" transform="translate(768.5 945)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">22</text>
+    <text fill="#000000" id="GateText36" transform="translate(801.5 923)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">36</text>
+    <text fill="#000000" id="GateText49" transform="translate(738.85 1000.17)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">49</text>
+    <text fill="#000000" id="GateText19" transform="translate(467.58 1208.69)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">19</text>
+    <text fill="#000000" id="GateText39" transform="translate(468.43 1244.62)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">39</text>
+    <text fill="#000000" id="GateText41" transform="translate(468.43 1280.66)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">41</text>
+    <text fill="#000000" id="GateText54" transform="translate(353.72 1208.69)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">54</text>
+    <text fill="#000000" id="GateText38" transform="translate(353.72 1244.62)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">38</text>
+    <text fill="#000000" id="GateText58" transform="translate(353.72 1280.66)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">58</text>
+    <text fill="#000000" id="GateText45" transform="translate(469.31 516.23)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">45</text>
+    <text fill="#000000" id="GateText35" transform="translate(469.31 448.4)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">35</text>
+    <text fill="#000000" id="GateText55" transform="translate(771.48 1019.45)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">55</text>
+    <text fill="#000000" id="GateText30" transform="translate(804.13 1037.88)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">30</text>
+    <text fill="#000000" id="GateText6" transform="translate(706.58 982.61)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">6</text>
+    <text fill="#000000" id="GateText44" transform="translate(85.83 963.33)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">44</text>
+    <text fill="#000000" id="GateText57" transform="translate(52.32 945.77)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">57</text>
+    <text fill="#000000" id="GateText48" transform="translate(17.5 923)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">48</text>
+    <text fill="#000000" id="GateText32" transform="translate(85.81 999.32)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">32</text>
+    <text fill="#000000" id="GateText28" transform="translate(52.3 1018.59)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">28</text>
+    <text fill="#000000" id="GateText18" transform="translate(16.61 1037.03)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">18</text>
+    <text fill="#000000" id="GateText50" transform="translate(121.75 982.61)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">50</text>
+    <text fill="#000000" id="GateText10" transform="translate(334.31 697.9)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">10</text>
+    <text fill="#000000" id="GateText8" transform="translate(415.9 546.37)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">8</text>
+    <text fill="#000000" id="GateText14" transform="translate(409.14 948.5)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">14</text>
+    <text fill="#000000" id="GateText3" transform="translate(415.9 1065.47)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">3</text>
+    <text fill="#000000" id="GateText60" transform="translate(410.13 1176.86)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">60</text>
+    <text fill="#000000" id="GateText1" transform="translate(415.9 622.01)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">1</text>
+    <text fill="#000000" id="GateText2" transform="translate(415.9 773.05)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">2</text>
+    <text fill="#000000" id="GateText33" transform="translate(448.15 546.37)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">33</text>
+    <text fill="#000000" id="GateText29" transform="translate(448.15 949.08)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">29</text>
+    <text fill="#000000" id="GateText9" transform="translate(453.92 1066.33)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">9</text>
+    <text fill="#000000" id="GateText52" transform="translate(448.15 1177.72)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">52</text>
+    <text fill="#000000" id="GateText13" transform="translate(447.29 657.34)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">13</text>
+    <text fill="#000000" id="GateText46" transform="translate(447 740.5)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">46</text>
+    <text fill="#000000" id="GateText31" transform="translate(374.04 547.19)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">31</text>
+    <text fill="#000000" id="GateText5" transform="translate(378.55 949.04)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">5</text>
+    <text fill="#000000" id="GateText42" transform="translate(373.18 1066.29)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">42</text>
+    <text fill="#000000" id="GateText53" transform="translate(373.18 1177.68)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">53</text>
+    <text fill="#000000" id="GateText7" transform="translate(378.09 658.16)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">7</text>
+    <text fill="#000000" id="GateText15" transform="translate(372.32 741.89)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">15</text>
+    <text fill="#000000" id="GateText12" transform="translate(468.45 482.09)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">12</text>
+    <text fill="#000000" id="GateText20" transform="translate(353.01 501.14)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">20</text>
+    <text fill="#000000" id="GateText16" transform="translate(351.3 453.4)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">16</text>
+    <text fill="#000000" id="GateText56" transform="translate(449.01 423.26)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">56</text>
+    <text fill="#000000" id="GateText23" transform="translate(410.67 422.4)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">23</text>
+    <text fill="#000000" id="GateText62" transform="translate(373.18 422.4)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">62</text>
+    <text fill="#000000" id="GateText43" transform="translate(410.67 331.4)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">43</text>
+    <text fill="#000000" id="GateText11" transform="translate(448.15 270.01)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">11</text>
+    <text fill="#000000" id="GateText17" transform="translate(372.32 268.33)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">17</text>
+    <text fill="#000000" id="GateText4" transform="translate(452.7 235.11)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">4</text>
+    <text fill="#000000" id="GateText24" transform="translate(410.67 235.13)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">24</text>
+    <text fill="#000000" id="GateText47" transform="translate(373.18 235.13)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">47</text>
+    <text fill="#000000" id="GateText63" transform="translate(448.15 146.38)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">63</text>
+    <text fill="#000000" id="GateText61" transform="translate(411.53 146.38)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">61</text>
+    <text fill="#000000" id="GateText64" transform="translate(373.18 146.38)" font-size="21" font-family="Arial, sans-serif" font-weight="normal" letter-spacing="-0.03em">64</text>
   </g>
 </svg>
