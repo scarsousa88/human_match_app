@@ -20,7 +20,7 @@
     <path id="Gate27" d="M241.79,989.74l105.77,26.54.16,17.4L239.43,1006.5" fill="#fff" stroke="transparent" stroke-miterlimit="10" stroke-width="2" />
     <path id="Gate6" d="M592,990.7l109.78-25.1.16,17.4L594,1007.68" fill="#fff" stroke="transparent" stroke-miterlimit="10" stroke-width="2" />
     <path id="Gate40" d="M690.61,891.54,647.73,833l17-3.8L703.37,882" fill="#fff" stroke="transparent" stroke-miterlimit="10" stroke-width="2" />
-    <path id="Gate10" data-name="Gate 10" d="M342.37,683.81l.15,15.4L224,700.67l-.14-15.39,118.48-1.47" fill="#fff" stroke="transparent" stroke-miterlimit="10" stroke-width="2" />
+    <path id="Gate10" d="M342.37,683.81l.15,15.4L224,700.67l-.14-15.39,118.48-1.47" fill="#fff" stroke="transparent" stroke-miterlimit="10" stroke-width="2" />
     <path id="Gate25" d="M523.68,744l-35.94-39.16L501.26,694l35.92,39.12" fill="#fff" stroke="transparent" stroke-miterlimit="10" stroke-width="2" />
     <path id="Gate57" d="M147.44,824.86,79.76,929.14l-15.32-8.22L133.78,814Z" fill="#fff" stroke="transparent" stroke-miterlimit="10" stroke-width="2" />
     <path id="Gate20" d="M207.63,700.23,347,485.46l15.32,8.23L228,700.69" fill="#fff" stroke="transparent" stroke-miterlimit="10" stroke-width="2" />
