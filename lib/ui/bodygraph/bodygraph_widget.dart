@@ -32,16 +32,12 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
 
   Future<void> _loadAndProcessSvg() async {
     try {
-      debugPrint('A carregar assets de bodygraph...');
-      
-      // Carregamento rigoroso dos assets
-      final String rawSvg = await rootBundle.loadString('assets/bodygraph/bodygraph_blank.svg').catchError((e) {
-        throw 'Falha ao carregar bodygraph_blank.svg: $e';
-      });
-      
-      final String silSvg = await rootBundle.loadString('assets/bodygraph/bodygraph_silhouette.svg').catchError((e) {
-        throw 'Falha ao carregar bodygraph_silhouette.svg: $e';
-      });
+      // Caminhos relativos sem a barra inicial para compatibilidade com base-href
+      const String blankPath = 'assets/bodygraph/bodygraph_blank.svg';
+      const String silPath = 'assets/bodygraph/bodygraph_silhouette.svg';
+
+      final String rawSvg = await rootBundle.loadString(blankPath);
+      final String silSvg = await rootBundle.loadString(silPath);
 
       String processedSil = silSvg.replaceAll('xlink:href', 'href');
       processedSil = processedSil.replaceAll('fill="transparent"', 'fill="none"');
@@ -59,10 +55,10 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
         });
       }
     } catch (e) {
-      debugPrint('ERRO CRÍTICO BodygraphWidget: $e');
+      debugPrint('ERRO BODYGRAPH: $e');
       if (mounted) {
         setState(() {
-          _error = e.toString();
+          _error = 'Certifique-se de que os assets existem em assets/bodygraph/\n$e';
         });
       }
     }
@@ -85,7 +81,7 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
     final allActiveGates = {...data.consciousGates, ...data.designGates};
     String dynamicGradients = '';
 
-    // Gradiente Unificado para Integração (Cluster 10-20-34-57)
+    // Gradiente Unificado para Integração (Evita sobreposição no 57-20)
     dynamicGradients += '<linearGradient id="gradIntegration" gradientUnits="userSpaceOnUse" x1="130" y1="830" x2="230" y2="690"><stop offset="50%" stop-color="#A44344" /><stop offset="50%" stop-color="white" /></linearGradient>';
 
     final centerColors = {
@@ -98,7 +94,6 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
       dynamicGradients += '<linearGradient id="${id.toLowerCase()}Gradient" x1="0%" y1="0%" x2="0%" y2="140%"><stop offset="0%" stop-color="$color" /><stop offset="100%" stop-color="$darker" /></linearGradient>';
     });
 
-    // Centros
     data.definedChannels.forEach((channel) {
       final parts = channel.split('-');
       if(parts.length != 2) return;
@@ -113,7 +108,6 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
       }
     });
 
-    // Gates e Canais Duplos
     for (int i = 1; i <= 64; i++) {
       if (!allActiveGates.contains(i)) continue;
       final isC = data.consciousGates.contains(i);
@@ -129,9 +123,7 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
           if (grad != null) {
             dynamicGradients += grad;
             fill = 'url(#gradGate$i)';
-          } else {
-            fill = 'white';
-          }
+          } else { fill = 'white'; }
         }
       } else {
         fill = isC ? 'white' : '#A44344';
@@ -145,12 +137,11 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
       processed = processed.replaceFirstMapped(bgRegex, (m) => '${m.group(1)}fill="#EFEFEF" fill-opacity="1.0"');
     }
 
-    // Canais de Integração
     final integrationIds = ['GateSpan', 'GateConnect10', 'GateConnect34'];
     for (var id in integrationIds) {
       bool isDefined = false;
       if (id == 'GateSpan') {
-        isDefined = data.definedChannels.any((c) => c.contains('57-20') || c.contains('20-57') || c.contains('10-20') || c.contains('20-10') || c.contains('10-57') || c.contains('57-10'));
+        isDefined = data.definedChannels.any((c) => c.contains('57-20') || c.contains('20-57') || c.contains('10-20') || c.contains('20-10'));
       } else if (id == 'GateConnect10') {
         isDefined = data.definedChannels.any((c) => c.contains('10-'));
       } else if (id == 'GateConnect34') {
@@ -243,7 +234,23 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (_error != null) return Center(child: Text('Erro Bodygraph: $_error', textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontSize: 12)));
+    if (_error != null) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.error_outline, color: Colors.red, size: 40),
+              const SizedBox(height: 10),
+              Text('Erro Bodygraph: $_error', textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontSize: 13)),
+              const SizedBox(height: 10),
+              ElevatedButton(onPressed: _loadAndProcessSvg, child: const Text('Tentar novamente')),
+            ],
+          ),
+        ),
+      );
+    }
     if (_svgString == null || _silhouetteSvg == null) return const Center(child: Padding(padding: EdgeInsets.symmetric(vertical: 40), child: CircularProgressIndicator()));
     return LayoutBuilder(builder: (context, constraints) {
       return Stack(alignment: Alignment.center, children: [
