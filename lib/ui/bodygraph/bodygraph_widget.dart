@@ -32,13 +32,21 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
 
   Future<void> _loadAndProcessSvg() async {
     try {
-      String rawSvg = await rootBundle.loadString('assets/bodygraph/bodygraph_blank.svg');
-      String silSvg = await rootBundle.loadString('assets/bodygraph/bodygraph_silhouette.svg');
+      debugPrint('A carregar assets de bodygraph...');
+      
+      // Carregamento rigoroso dos assets
+      final String rawSvg = await rootBundle.loadString('assets/bodygraph/bodygraph_blank.svg').catchError((e) {
+        throw 'Falha ao carregar bodygraph_blank.svg: $e';
+      });
+      
+      final String silSvg = await rootBundle.loadString('assets/bodygraph/bodygraph_silhouette.svg').catchError((e) {
+        throw 'Falha ao carregar bodygraph_silhouette.svg: $e';
+      });
 
-      silSvg = silSvg.replaceAll('xlink:href', 'href');
-      silSvg = silSvg.replaceAll('fill="transparent"', 'fill="none"');
-      if (!silSvg.contains('xmlns:xlink')) {
-        silSvg = silSvg.replaceFirst('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+      String processedSil = silSvg.replaceAll('xlink:href', 'href');
+      processedSil = processedSil.replaceAll('fill="transparent"', 'fill="none"');
+      if (!processedSil.contains('xmlns:xlink')) {
+        processedSil = processedSil.replaceFirst('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
       }
 
       String processedSvg = _processSvg(rawSvg, widget.data);
@@ -46,12 +54,12 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
       if (mounted) {
         setState(() {
           _svgString = processedSvg;
-          _silhouetteSvg = silSvg;
+          _silhouetteSvg = processedSil;
           _error = null;
         });
       }
     } catch (e) {
-      debugPrint('Erro no BodygraphWidget: $e');
+      debugPrint('ERRO CRÍTICO BodygraphWidget: $e');
       if (mounted) {
         setState(() {
           _error = e.toString();
@@ -77,6 +85,9 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
     final allActiveGates = {...data.consciousGates, ...data.designGates};
     String dynamicGradients = '';
 
+    // Gradiente Unificado para Integração (Cluster 10-20-34-57)
+    dynamicGradients += '<linearGradient id="gradIntegration" gradientUnits="userSpaceOnUse" x1="130" y1="830" x2="230" y2="690"><stop offset="50%" stop-color="#A44344" /><stop offset="50%" stop-color="white" /></linearGradient>';
+
     final centerColors = {
       'Head': '#F9F6C4', 'Ajna': '#48BB78', 'Throat': '#655144', 'Spleen': '#655144',
       'Ego': '#F56565', 'G': '#F9F6C4', 'SolarPlexus': '#655144', 'Sacral': '#F56565', 'Root': '#655144',
@@ -87,7 +98,7 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
       dynamicGradients += '<linearGradient id="${id.toLowerCase()}Gradient" x1="0%" y1="0%" x2="0%" y2="140%"><stop offset="0%" stop-color="$color" /><stop offset="100%" stop-color="$darker" /></linearGradient>';
     });
 
-    // Centros Definidos
+    // Centros
     data.definedChannels.forEach((channel) {
       final parts = channel.split('-');
       if(parts.length != 2) return;
@@ -102,57 +113,53 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
       }
     });
 
-    // Portões e Divisões Longitudinais
+    // Gates e Canais Duplos
     for (int i = 1; i <= 64; i++) {
       if (!allActiveGates.contains(i)) continue;
       final isC = data.consciousGates.contains(i);
       final isD = data.designGates.contains(i);
       
+      String fill;
       if (isC && isD) {
-        final pathMatch = RegExp('id="Gate$i"\\s+(?:d|points)="([^"]+)"').firstMatch(raw);
-        if (pathMatch != null) {
-          final d = pathMatch.group(1)!;
-          final grad = _generateDynamicGradient('Gate$i', d, '#A44344', 'white');
+        if ([10, 20, 34, 57].contains(i)) {
+          fill = 'url(#gradIntegration)';
+        } else {
+          final pathMatch = RegExp('id="Gate$i"\\s+(?:d|points)="([^"]+)"').firstMatch(raw);
+          final grad = pathMatch != null ? _generateDynamicGradient('Gate$i', pathMatch.group(1)!, '#A44344', 'white') : null;
           if (grad != null) {
             dynamicGradients += grad;
-            processed = processed.replaceFirstMapped(RegExp('id="Gate$i"\\s+[^>]*fill="[^"]*"(?:\\s+fill-opacity="[^"]*")?'), 
-              (m) => m.group(0)!.replaceFirst(RegExp('fill="[^"]*"'), 'fill="url(#gradGate$i)"').replaceFirst(RegExp('fill-opacity="[^"]*"'), 'fill-opacity="1.0"'));
+            fill = 'url(#gradGate$i)';
+          } else {
+            fill = 'white';
           }
         }
       } else {
-        String fill = isC ? 'white' : '#A44344';
-        processed = processed.replaceFirstMapped(RegExp('id="Gate$i"\\s+[^>]*fill="[^"]*"(?:\\s+fill-opacity="[^"]*")?'), 
-          (m) => m.group(0)!.replaceFirst(RegExp('fill="[^"]*"'), 'fill="$fill"').replaceFirst(RegExp('fill-opacity="[^"]*"'), 'fill-opacity="1.0"'));
+        fill = isC ? 'white' : '#A44344';
       }
 
+      processed = processed.replaceFirstMapped(RegExp('id="Gate$i"\\s+[^>]*fill="[^"]*"(?:\\s+fill-opacity="[^"]*")?'), 
+        (m) => m.group(0)!.replaceFirst(RegExp('fill="[^"]*"'), 'fill="$fill"').replaceFirst(RegExp('fill-opacity="[^"]*"'), 'fill-opacity="1.0"'));
+      
       processed = processed.replaceFirstMapped(RegExp('id="GateText$i"[^>]*fill="[^"]*"'), (m) => m.group(0)!.replaceFirst(RegExp('fill="[^"]*"'), 'fill="#343434"'));
       final bgRegex = RegExp('(<g id="GateTextBg$i"[^>]*>\\s*<(?:path|circle)[^>]*?)fill="[^"]*"(?:\\s+fill-opacity="[^"]*")?');
       processed = processed.replaceFirstMapped(bgRegex, (m) => '${m.group(1)}fill="#EFEFEF" fill-opacity="1.0"');
     }
 
     // Canais de Integração
-    final List<String> intIds = ['GateSpan', 'GateConnect10', 'GateConnect34'];
-    for (var id in intIds) {
-      final isC = _isIntegrationActive(id, data.consciousGates);
-      final isD = _isIntegrationActive(id, data.designGates);
-      
-      if (isC && isD) {
-        final pathMatch = RegExp('id="$id"\\s+(?:d|points)="([^"]+)"').firstMatch(raw);
-        if (pathMatch != null) {
-          final grad = _generateDynamicGradient(id, pathMatch.group(1)!, '#A44344', 'white');
-          if (grad != null) {
-            dynamicGradients += grad;
-            processed = processed.replaceFirstMapped(RegExp('id="$id"[^>]*fill="[^"]*"(?:\\s+fill-opacity="[^"]*")?'), 
-              (m) => m.group(0)!.replaceFirst(RegExp('fill="[^"]*"'), 'fill="url(#grad$id)"').replaceFirst(RegExp('fill-opacity="[^"]*"'), 'fill-opacity="1.0"'));
-            continue;
-          }
-        }
+    final integrationIds = ['GateSpan', 'GateConnect10', 'GateConnect34'];
+    for (var id in integrationIds) {
+      bool isDefined = false;
+      if (id == 'GateSpan') {
+        isDefined = data.definedChannels.any((c) => c.contains('57-20') || c.contains('20-57') || c.contains('10-20') || c.contains('20-10') || c.contains('10-57') || c.contains('57-10'));
+      } else if (id == 'GateConnect10') {
+        isDefined = data.definedChannels.any((c) => c.contains('10-'));
+      } else if (id == 'GateConnect34') {
+        isDefined = data.definedChannels.any((c) => c.contains('34-'));
       }
-      
-      if (isC || isD) {
-        String fill = isC ? 'white' : '#A44344';
+
+      if (isDefined) {
         processed = processed.replaceFirstMapped(RegExp('id="$id"[^>]*fill="[^"]*"(?:\\s+fill-opacity="[^"]*")?'), 
-          (m) => m.group(0)!.replaceFirst(RegExp('fill="[^"]*"'), 'fill="$fill"').replaceFirst(RegExp('fill-opacity="[^"]*"'), 'fill-opacity="1.0"'));
+          (m) => m.group(0)!.replaceFirst(RegExp('fill="[^"]*"'), 'fill="url(#gradIntegration)"').replaceFirst(RegExp('fill-opacity="[^"]*"'), 'fill-opacity="1.0"'));
       }
     }
 
@@ -165,17 +172,10 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
     return processed;
   }
 
-  bool _isIntegrationActive(String id, Set<int> gates) {
-    if (id == 'GateConnect34') return gates.contains(34);
-    if (id == 'GateConnect10') return gates.contains(10);
-    return gates.contains(34) || gates.contains(57) || gates.contains(20) || gates.contains(10);
-  }
-
   String? _generateDynamicGradient(String id, String d, String colorD, String colorC) {
     final List<Offset> points = [];
     final regExp = RegExp(r'([a-zA-Z])|([-+]?\d*\.?\d+)');
     final matches = regExp.allMatches(d);
-    
     String currentCommand = '';
     Offset currentPos = Offset.zero;
     List<double> params = [];
@@ -192,50 +192,35 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
           points.add(currentPos);
         }
       } else if (cmd == 'H') {
-        for (var v in params) {
-          currentPos = Offset(isRel ? currentPos.dx + v : v, currentPos.dy);
-          points.add(currentPos);
-        }
+        for (var v in params) { currentPos = Offset(isRel ? currentPos.dx + v : v, currentPos.dy); points.add(currentPos); }
       } else if (cmd == 'V') {
-        for (var v in params) {
-          currentPos = Offset(currentPos.dx, isRel ? currentPos.dy + v : v);
-          points.add(currentPos);
-        }
+        for (var v in params) { currentPos = Offset(currentPos.dx, isRel ? currentPos.dy + v : v); points.add(currentPos); }
       }
       params.clear();
     }
-
     for (final m in matches) {
       if (m.group(1) != null) { flush(); currentCommand = m.group(1)!; } 
       else { params.add(double.parse(m.group(2)!)); }
     }
     flush();
-    
-    // Fallback para polígono se não houver comandos
     if (points.isEmpty) {
       final parts = d.split(RegExp(r'[ ,]+')).where((s) => s.isNotEmpty).toList();
-      for (int i = 0; i < parts.length; i += 2) {
-        if (i+1 < parts.length) points.add(Offset(double.parse(parts[i]), double.parse(parts[i+1])));
-      }
+      for (int i = 0; i < parts.length; i += 2) if (i+1 < parts.length) points.add(Offset(double.parse(parts[i]), double.parse(parts[i+1])));
     }
-
     if (points.length < 3) return null;
     
-    // Rigor Geométrico: Encontrar o vetor de espessura (lado mais curto)
     double minLenSq = double.infinity;
     Offset start = points[0], end = points[1];
     for (int i = 0; i < points.length; i++) {
       final p1 = points[i], p2 = points[(i + 1) % points.length];
       final lenSq = (p2.dx - p1.dx) * (p2.dx - p1.dx) + (p2.dy - p1.dy) * (p2.dy - p1.dy);
-      if (lenSq > 1.0 && lenSq < minLenSq) { minLenSq = lenSq; start = p1; end = p2; }
+      if (lenSq > 10.0 && lenSq < minLenSq) { minLenSq = lenSq; start = p1; end = p2; }
     }
-
-    // Normalizar direção: Garantir que o gradiente corre perpendicular à linha principal
     if ((end.dx - start.dx).abs() > (end.dy - start.dy).abs()) {
        if (end.dx < start.dx) { final t = start; start = end; end = t; }
     } else if (end.dy < start.dy) { final t = start; start = end; end = t; }
 
-    return '<linearGradient id="grad$id" gradientUnits="userSpaceOnUse" x1="${start.dx}" y1="${start.dy}" x2="${end.dx}" y2="${end.dy}"><stop offset="50%" stop-color="$colorD" /><stop offset="50%" stop-color="$colorC" /></linearGradient>';
+    return '<linearGradient id="grad$id" gradientUnits="userSpaceOnUse" x1="${start.dx}" y1="${start.dy}" x2="${end.dx}" y2="${end.dy}"><stop offset="50%" stop-color="$colorD" /><stop offset="50%" stop-color="white" /></linearGradient>';
   }
 
   List<String> _getCenterPairForChannel(int gateA, int gateB) {
@@ -256,35 +241,15 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
       return channels[key] ?? [];
   }
 
-  String _applyIntegration(String svg, String fill) {
-    var res = svg;
-    for (var id in ['GateSpan', 'GateConnect10', 'GateConnect34']) {
-      res = res.replaceFirstMapped(RegExp('id="$id"[^>]*fill="[^"]*"(?:\\s+fill-opacity="[^"]*")?'), (m) => m.group(0)!.replaceFirst(RegExp('fill="[^"]*"'), 'fill="$fill"').replaceFirst(RegExp('fill-opacity="[^"]*"'), 'fill-opacity="1.0"'));
-    }
-    return res;
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (_error != null) return Center(child: Text('Erro: $_error', style: const TextStyle(color: Colors.white)));
+    if (_error != null) return Center(child: Text('Erro Bodygraph: $_error', textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontSize: 12)));
     if (_svgString == null || _silhouetteSvg == null) return const Center(child: Padding(padding: EdgeInsets.symmetric(vertical: 40), child: CircularProgressIndicator()));
-    
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Stack(
-          alignment: Alignment.center,
-          children: [
-            Opacity(
-              opacity: 0.6,
-              child: ColorFiltered(
-                colorFilter: const ColorFilter.mode(Colors.white54, BlendMode.srcIn),
-                child: SvgPicture.string(_silhouetteSvg!, width: constraints.maxWidth, fit: BoxFit.contain),
-              ),
-            ),
-            SvgPicture.string(_svgString!, width: constraints.maxWidth, fit: BoxFit.contain),
-          ],
-        );
-      },
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      return Stack(alignment: Alignment.center, children: [
+        Opacity(opacity: 0.6, child: ColorFiltered(colorFilter: const ColorFilter.mode(Colors.white54, BlendMode.srcIn), child: SvgPicture.string(_silhouetteSvg!, width: constraints.maxWidth, fit: BoxFit.contain))),
+        SvgPicture.string(_svgString!, width: constraints.maxWidth, fit: BoxFit.contain),
+      ]);
+    });
   }
 }
