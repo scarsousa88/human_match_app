@@ -35,7 +35,6 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
       String rawSvg = await rootBundle.loadString('assets/bodygraph/bodygraph_blank.svg');
       String silSvg = await rootBundle.loadString('assets/bodygraph/bodygraph_silhouette.svg');
 
-      // Corrigir a silhueta para garantir que o flutter_svg a renderize bem
       silSvg = silSvg.replaceAll('xlink:href', 'href');
       silSvg = silSvg.replaceAll('fill="transparent"', 'fill="none"');
       if (!silSvg.contains('xmlns:xlink')) {
@@ -71,28 +70,12 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
   }
 
   String _processSvg(String raw, BodygraphData data) {
-    // 1. Limpeza de filtros e sombras que podem ocultar a silhueta
     String processed = raw.replaceAll(RegExp(r'<filter[\s\S]*?</filter>'), '');
     processed = processed.replaceAll('filter="url(#drop-shadow)"', '');
-
-    // 2. Tornar áreas não definidas quase transparentes (fill-opacity="0.1")
-    // para que a silhueta no fundo apareça através delas.
     processed = processed.replaceAll('fill="#fff"', 'fill="#ffffff" fill-opacity="0.1"');
 
     final allActiveGates = {...data.consciousGates, ...data.designGates};
-
-    var gradients = '''
-    <linearGradient id="gradientForVerticalChannels" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="50%" stop-color="#A44344" /><stop offset="50%" stop-color="black" /></linearGradient>
-    <linearGradient id="gradientForHorizontalChannels" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="50%" stop-color="#A44344" /><stop offset="50%" stop-color="black" /></linearGradient>
-    <linearGradient id="gradientForDiagonalChannels" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="50%" stop-color="#A44344" /><stop offset="50%" stop-color="black" /></linearGradient>
-    <linearGradient id="gradientForSpleenRootChannels" x1="100%" y1="0%" x2="4%" y2="100%"><stop offset="50%" stop-color="#A44344" /><stop offset="50%" stop-color="black" /></linearGradient>
-    <linearGradient id="gradientForSolarPlexusRootChannels" x1="4%" y1="0%" x2="100%" y2="100%"><stop offset="50%" stop-color="#A44344" /><stop offset="50%" stop-color="black" /></linearGradient>
-    <linearGradient id="gradientFor59_6" x1="9%" y1="25%" x2="50%" y2="100%"><stop offset="50%" stop-color="#A44344" /><stop offset="50%" stop-color="black" /></linearGradient>
-    <linearGradient id="gradientFor50_27" x1="50%" y1="0%" x2="9%" y2="75%"><stop offset="50%" stop-color="#A44344" /><stop offset="50%" stop-color="black" /></linearGradient>
-    <linearGradient id="gradientFor25_51" x1="100%" y1="0%" x2="4%" y2="100%"><stop offset="50%" stop-color="#A44344" /><stop offset="50%" stop-color="black" /></linearGradient>
-    <linearGradient id="gradientForGate34" x1="100%" y1="0%" x2="4%" y2="100%"><stop offset="50%" stop-color="#A44344" /><stop offset="50%" stop-color="black" /></linearGradient>
-    <linearGradient id="gradientForGate10Connect" x1="100%" y1="90%" x2="0%" y2="0%"><stop offset="50%" stop-color="#A44344" /><stop offset="50%" stop-color="black" /></linearGradient>
-    ''';
+    String dynamicGradients = '';
 
     final centerColors = {
       'Head': '#F9F6C4', 'Ajna': '#48BB78', 'Throat': '#655144', 'Spleen': '#655144',
@@ -101,73 +84,158 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
 
     centerColors.forEach((id, color) {
       final darker = _darkenHex(color, 0.4);
-      gradients += '<linearGradient id="${id.toLowerCase()}Gradient" x1="0%" y1="0%" x2="0%" y2="140%"><stop offset="0%" stop-color="$color" /><stop offset="100%" stop-color="$darker" /></linearGradient>';
+      dynamicGradients += '<linearGradient id="${id.toLowerCase()}Gradient" x1="0%" y1="0%" x2="0%" y2="140%"><stop offset="0%" stop-color="$color" /><stop offset="100%" stop-color="$darker" /></linearGradient>';
     });
 
-    if (processed.contains('<defs>')) {
-      processed = processed.replaceFirst('<defs>', '<defs>$gradients');
-    } else {
-      processed = processed.replaceFirst('<svg', '<svg><defs>$gradients</defs>');
-    }
-
+    // Centros Definidos
     data.definedChannels.forEach((channel) {
       final parts = channel.split('-');
       if(parts.length != 2) return;
       final gateA = int.tryParse(parts[0]);
       final gateB = int.tryParse(parts[1]);
       if (gateA == null || gateB == null) return;
-
       final centerPair = _getCenterPairForChannel(gateA, gateB);
-      if (centerPair.isNotEmpty) {
-        for (var centerId in centerPair) {
-            final gradientFill = 'url(#${centerId.toLowerCase()}Gradient)';
-            // Substituir o fill-opacity="0.1" por opacity total quando o centro está definido
-            final regex = RegExp('(<g id="$centerId"[^>]*>\\s*<path[^>]*?)fill="[^"]*"(?:\\s+fill-opacity="[^"]*")?');
-            processed = processed.replaceFirstMapped(regex, (m) => '${m.group(1)}fill="$gradientFill" fill-opacity="1.0"');
-        }
+      for (var centerId in centerPair) {
+          final gradientFill = 'url(#${centerId.toLowerCase()}Gradient)';
+          final regex = RegExp('(<g id="$centerId"[^>]*>\\s*<path[^>]*?)fill="[^"]*"(?:\\s+fill-opacity="[^"]*")?');
+          processed = processed.replaceFirstMapped(regex, (m) => '${m.group(1)}fill="$gradientFill" fill-opacity="1.0"');
       }
     });
 
+    // Portões e Divisões Longitudinais
     for (int i = 1; i <= 64; i++) {
       if (!allActiveGates.contains(i)) continue;
-
       final isC = data.consciousGates.contains(i);
       final isD = data.designGates.contains(i);
-      String fill = isC ? 'black' : '#A44344';
+      
       if (isC && isD) {
-        fill = _getGradientForChannel(i);
+        final pathMatch = RegExp('id="Gate$i"\\s+(?:d|points)="([^"]+)"').firstMatch(raw);
+        if (pathMatch != null) {
+          final d = pathMatch.group(1)!;
+          final grad = _generateDynamicGradient('Gate$i', d, '#A44344', 'white');
+          if (grad != null) {
+            dynamicGradients += grad;
+            processed = processed.replaceFirstMapped(RegExp('id="Gate$i"\\s+[^>]*fill="[^"]*"(?:\\s+fill-opacity="[^"]*")?'), 
+              (m) => m.group(0)!.replaceFirst(RegExp('fill="[^"]*"'), 'fill="url(#gradGate$i)"').replaceFirst(RegExp('fill-opacity="[^"]*"'), 'fill-opacity="1.0"'));
+          }
+        }
+      } else {
+        String fill = isC ? 'white' : '#A44344';
+        processed = processed.replaceFirstMapped(RegExp('id="Gate$i"\\s+[^>]*fill="[^"]*"(?:\\s+fill-opacity="[^"]*")?'), 
+          (m) => m.group(0)!.replaceFirst(RegExp('fill="[^"]*"'), 'fill="$fill"').replaceFirst(RegExp('fill-opacity="[^"]*"'), 'fill-opacity="1.0"'));
       }
 
-      processed = processed.replaceFirstMapped(RegExp('id="Gate$i"\\s+[^>]*fill="[^"]*"(?:\\s+fill-opacity="[^"]*")?'), (m) => m.group(0)!.replaceFirst(RegExp('fill="[^"]*"'), 'fill="$fill"').replaceFirst(RegExp('fill-opacity="[^"]*"'), 'fill-opacity="1.0"'));
       processed = processed.replaceFirstMapped(RegExp('id="GateText$i"[^>]*fill="[^"]*"'), (m) => m.group(0)!.replaceFirst(RegExp('fill="[^"]*"'), 'fill="#343434"'));
       final bgRegex = RegExp('(<g id="GateTextBg$i"[^>]*>\\s*<(?:path|circle)[^>]*?)fill="[^"]*"(?:\\s+fill-opacity="[^"]*")?');
       processed = processed.replaceFirstMapped(bgRegex, (m) => '${m.group(1)}fill="#EFEFEF" fill-opacity="1.0"');
     }
 
-    if ((data.consciousGates.contains(34) && data.consciousGates.contains(20)) ||
-        (data.consciousGates.contains(34) && data.consciousGates.contains(10)) ||
-        (data.consciousGates.contains(57) && data.consciousGates.contains(20))) {
-      processed = _applyIntegration(processed, 'black');
-    } else if ((data.designGates.contains(34) && data.designGates.contains(20)) ||
-               (data.designGates.contains(34) && data.designGates.contains(10)) ||
-               (data.designGates.contains(57) && data.designGates.contains(20))) {
-      processed = _applyIntegration(processed, '#A44344');
+    // Canais de Integração
+    final List<String> intIds = ['GateSpan', 'GateConnect10', 'GateConnect34'];
+    for (var id in intIds) {
+      final isC = _isIntegrationActive(id, data.consciousGates);
+      final isD = _isIntegrationActive(id, data.designGates);
+      
+      if (isC && isD) {
+        final pathMatch = RegExp('id="$id"\\s+(?:d|points)="([^"]+)"').firstMatch(raw);
+        if (pathMatch != null) {
+          final grad = _generateDynamicGradient(id, pathMatch.group(1)!, '#A44344', 'white');
+          if (grad != null) {
+            dynamicGradients += grad;
+            processed = processed.replaceFirstMapped(RegExp('id="$id"[^>]*fill="[^"]*"(?:\\s+fill-opacity="[^"]*")?'), 
+              (m) => m.group(0)!.replaceFirst(RegExp('fill="[^"]*"'), 'fill="url(#grad$id)"').replaceFirst(RegExp('fill-opacity="[^"]*"'), 'fill-opacity="1.0"'));
+            continue;
+          }
+        }
+      }
+      
+      if (isC || isD) {
+        String fill = isC ? 'white' : '#A44344';
+        processed = processed.replaceFirstMapped(RegExp('id="$id"[^>]*fill="[^"]*"(?:\\s+fill-opacity="[^"]*")?'), 
+          (m) => m.group(0)!.replaceFirst(RegExp('fill="[^"]*"'), 'fill="$fill"').replaceFirst(RegExp('fill-opacity="[^"]*"'), 'fill-opacity="1.0"'));
+      }
+    }
+
+    if (processed.contains('<defs>')) {
+      processed = processed.replaceFirst('<defs>', '<defs>$dynamicGradients');
+    } else {
+      processed = processed.replaceFirst('<svg', '<svg><defs>$dynamicGradients</defs>');
     }
 
     return processed;
   }
 
-  String _getGradientForChannel(int gate) {
-      if (gate == 10) return 'url(#gradientForHorizontalChannels)';
-      if (gate == 50 || gate == 27) return 'url(#gradientFor50_27)';
-      if (gate == 6 || gate == 59) return 'url(#gradientFor59_6)';
-      if ([16, 48, 57, 20].contains(gate)) return 'url(#gradientForGate10Connect)';
-      if ([32, 54, 28, 38, 58, 18].contains(gate)) return 'url(#gradientForSpleenRootChannels)';
-      if (gate == 34) return 'url(#gradientForGate34)';
-      if (gate == 25 || gate == 51) return 'url(#gradientFor25_51)';
-      if ([44, 26, 45, 21, 12, 22, 35, 36, 37, 40].contains(gate)) return 'url(#gradientForDiagonalChannels)';
-      if ([19, 49, 39, 55, 41, 30].contains(gate)) return 'url(#gradientForSolarPlexusRootChannels)';
-      return 'url(#gradientForVerticalChannels)';
+  bool _isIntegrationActive(String id, Set<int> gates) {
+    if (id == 'GateConnect34') return gates.contains(34);
+    if (id == 'GateConnect10') return gates.contains(10);
+    return gates.contains(34) || gates.contains(57) || gates.contains(20) || gates.contains(10);
+  }
+
+  String? _generateDynamicGradient(String id, String d, String colorD, String colorC) {
+    final List<Offset> points = [];
+    final regExp = RegExp(r'([a-zA-Z])|([-+]?\d*\.?\d+)');
+    final matches = regExp.allMatches(d);
+    
+    String currentCommand = '';
+    Offset currentPos = Offset.zero;
+    List<double> params = [];
+    
+    void flush() {
+      if (currentCommand.isEmpty) return;
+      final isRel = currentCommand == currentCommand.toLowerCase();
+      final cmd = currentCommand.toUpperCase();
+      if (cmd == 'M' || cmd == 'L') {
+        for (int i = 0; i < params.length; i += 2) {
+          if (i + 1 >= params.length) break;
+          final p = Offset(params[i], params[i+1]);
+          currentPos = isRel ? currentPos + p : p;
+          points.add(currentPos);
+        }
+      } else if (cmd == 'H') {
+        for (var v in params) {
+          currentPos = Offset(isRel ? currentPos.dx + v : v, currentPos.dy);
+          points.add(currentPos);
+        }
+      } else if (cmd == 'V') {
+        for (var v in params) {
+          currentPos = Offset(currentPos.dx, isRel ? currentPos.dy + v : v);
+          points.add(currentPos);
+        }
+      }
+      params.clear();
+    }
+
+    for (final m in matches) {
+      if (m.group(1) != null) { flush(); currentCommand = m.group(1)!; } 
+      else { params.add(double.parse(m.group(2)!)); }
+    }
+    flush();
+    
+    // Fallback para polígono se não houver comandos
+    if (points.isEmpty) {
+      final parts = d.split(RegExp(r'[ ,]+')).where((s) => s.isNotEmpty).toList();
+      for (int i = 0; i < parts.length; i += 2) {
+        if (i+1 < parts.length) points.add(Offset(double.parse(parts[i]), double.parse(parts[i+1])));
+      }
+    }
+
+    if (points.length < 3) return null;
+    
+    // Rigor Geométrico: Encontrar o vetor de espessura (lado mais curto)
+    double minLenSq = double.infinity;
+    Offset start = points[0], end = points[1];
+    for (int i = 0; i < points.length; i++) {
+      final p1 = points[i], p2 = points[(i + 1) % points.length];
+      final lenSq = (p2.dx - p1.dx) * (p2.dx - p1.dx) + (p2.dy - p1.dy) * (p2.dy - p1.dy);
+      if (lenSq > 1.0 && lenSq < minLenSq) { minLenSq = lenSq; start = p1; end = p2; }
+    }
+
+    // Normalizar direção: Garantir que o gradiente corre perpendicular à linha principal
+    if ((end.dx - start.dx).abs() > (end.dy - start.dy).abs()) {
+       if (end.dx < start.dx) { final t = start; start = end; end = t; }
+    } else if (end.dy < start.dy) { final t = start; start = end; end = t; }
+
+    return '<linearGradient id="grad$id" gradientUnits="userSpaceOnUse" x1="${start.dx}" y1="${start.dy}" x2="${end.dx}" y2="${end.dy}"><stop offset="50%" stop-color="$colorD" /><stop offset="50%" stop-color="$colorC" /></linearGradient>';
   }
 
   List<String> _getCenterPairForChannel(int gateA, int gateB) {
@@ -206,25 +274,14 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
         return Stack(
           alignment: Alignment.center,
           children: [
-            // Silhueta de fundo (SVG estático processado)
-            // Usamos ColorFiltered para forçar a silhueta a ser branca/clara sobre o fundo escuro
             Opacity(
               opacity: 0.6,
               child: ColorFiltered(
                 colorFilter: const ColorFilter.mode(Colors.white54, BlendMode.srcIn),
-                child: SvgPicture.string(
-                  _silhouetteSvg!,
-                  width: constraints.maxWidth,
-                  fit: BoxFit.contain,
-                ),
+                child: SvgPicture.string(_silhouetteSvg!, width: constraints.maxWidth, fit: BoxFit.contain),
               ),
             ),
-            // Bodygraph processado dinamicamente com transparência nas áreas vazias
-            SvgPicture.string(
-              _svgString!,
-              width: constraints.maxWidth,
-              fit: BoxFit.contain,
-            ),
+            SvgPicture.string(_svgString!, width: constraints.maxWidth, fit: BoxFit.contain),
           ],
         );
       },
