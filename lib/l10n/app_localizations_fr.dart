@@ -300,7 +300,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hdEnergyCenters => 'Centres';
 
   @override
-  String get hdEnergyCentersChannels => 'Centres, canaux et portes';
+  String get hdEnergyCentersChannels => 'Centros, canaux et portes';
 
   @override
   String get hdDefinedCenters => 'Centres définis';
@@ -959,7 +959,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get astroValSignLeo =>
-      'Expression créative, confiance, chaleur et éclat personnel. Recherche la reconnaissance et l\'authenticité.';
+      'Expression créative, confiance, chaleur et éclat personnel. Recherche la reconnaissance et l\'authentibilité.';
 
   @override
   String get astroValSignVirgo =>
@@ -988,4 +988,11 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get astroValSignPisces =>
       'Vaste empathie, intuition aiguisée, imagination et lien fort avec le monde spirituel et émotionnel.';
+
+  @override
+  String get onlyMobile => 'Uniquement disponible sur les appareils mobiles.';
+
+  @override
+  String get downloadApp =>
+      'Téléchargez l\'application pour accéder à cette fonctionnalité :';
 }

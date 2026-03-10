@@ -591,7 +591,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get hdValAuthLunar =>
-      'Como Refletor, a tua decisão amadurece ao longo de 28 dias em sintonia com o ciclo da Lua.';
+      'Como Reflector, a tua decisão amadurece ao longo de 28 dias em sintonia com o ciclo da Lua.';
 
   @override
   String get hdValStrRespond =>
@@ -687,7 +687,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get hdValProf62 =>
-      'Observador/Eremita: Modelo de papel que vive com objetividade e desapego após uma vida de experiência.';
+      'Observador/Eremita: Modelo de papel que vive with objetividade e desapego após uma vida de experiência.';
 
   @override
   String get hdValProf63 =>
@@ -981,4 +981,11 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get astroValSignPisces =>
       'Empatia vasta, intuição aguçada, imaginação e uma forte ligação ao mundo espiritual e emocional.';
+
+  @override
+  String get onlyMobile => 'Apenas disponível em dispositivos móveis.';
+
+  @override
+  String get downloadApp =>
+      'Descarrega a app para acederes a esta funcionalidade:';
 }

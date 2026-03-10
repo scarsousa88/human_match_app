@@ -95,7 +95,7 @@
   "hdDefinition": "Définition",
   "hdIncarnationCross": "Croix d'Incarnation",
   "hdEnergyCenters": "Centres",
-  "hdEnergyCentersChannels": "Centres, canaux et portes",
+  "hdEnergyCentersChannels": "Centros, canaux et portes",
   "hdDefinedCenters": "Centres définis",
   "hdChannels": "Canaux",
   "hdNoData": "Aucune donnée disponible.",
@@ -309,12 +309,14 @@
   "astroValSignTaurus": "Focus sur la stabilité, le plaisir sensoriel et la persévérance. Valorise la sécurité et le confort matériel.",
   "astroValSignGemini": "Curiosité insatiable, communication polyvalente et agilité mentale. Adore échanger des idées et apprendre.",
   "astroValSignCancer": "Sensibilité profonde, soutien émotionnel et lien fort avec les racines et la famille.",
-  "astroValSignLeo": "Expression créative, confiance, chaleur et éclat personnel. Recherche la reconnaissance et l'authenticité.",
+  "astroValSignLeo": "Expression créative, confiance, chaleur et éclat personnel. Recherche la reconnaissance et l'authentibilité.",
   "astroValSignVirgo": "Analyse détaillée, recherche de perfection, organisation et désir d'être utile et pratique.",
   "astroValSignLibra": "Équilibre, harmonie dans les relations, diplomatie et un sens aigu de l'esthétique et de la justice.",
   "astroValSignScorpio": "Intensité profonde, passion, transformation et un puissant magnétisme émotionnel.",
   "astroValSignSagittarius": "Expansion, recherche de sens, optimisme et amour pour la liberté et l'aventure intellectuelle.",
   "astroValSignCapricorn": "Responsabilité, ambition, discipline et une approche structurée pour réussir.",
   "astroValSignAquarius": "Originalité, vision humanitaire, indépendance et pensée innovante et progressiste.",
-  "astroValSignPisces": "Vaste empathie, intuition aiguisée, imagination et lien fort avec le monde spirituel et émotionnel."
+  "astroValSignPisces": "Vaste empathie, intuition aiguisée, imagination et lien fort avec le monde spirituel et émotionnel.",
+  "onlyMobile": "Uniquement disponible sur les appareils mobiles.",
+  "downloadApp": "Téléchargez l'application pour accéder à cette fonctionnalité :"
 }

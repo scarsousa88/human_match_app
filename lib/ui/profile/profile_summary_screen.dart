@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../calc/numerology.dart';
@@ -72,6 +74,62 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildWebAppStoreButtons(AppLocalizations l10n) {
+    return Column(
+      children: [
+        const SizedBox(height: 8),
+        Text(
+          l10n.onlyMobile,
+          style: const TextStyle(color: Color(0xFFE6B325), fontWeight: FontWeight.bold, fontSize: 13),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 8),
+        Text(
+          l10n.downloadApp,
+          style: const TextStyle(color: Colors.white70, fontSize: 12),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: 12),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: () => launchUrl(Uri.parse('https://play.google.com/store/apps/details?id=com.opinto.humanmatch')),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: Image.network(
+                  'https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg',
+                  height: 36,
+                  errorBuilder: (_, __, ___) => Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(6), border: Border.all(color: Colors.white24)),
+                    child: const Text('Google Play', style: TextStyle(color: Colors.white, fontSize: 11)),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            GestureDetector(
+              onTap: () => launchUrl(Uri.parse('https://apps.apple.com/app/human-match/id6740638510')),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: Image.network(
+                  'https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg',
+                  height: 36,
+                  errorBuilder: (_, __, ___) => Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(6), border: Border.all(color: Colors.white24)),
+                    child: const Text('App Store', style: TextStyle(color: Colors.white, fontSize: 11)),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -353,19 +411,22 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                       children: [
                         Text(l10n.noInsights, style: const TextStyle(color: Colors.white70)),
                         const SizedBox(height: 12),
-                        SizedBox(
-                          width: double.infinity,
-                          child: FilledButton.icon(
-                            style: mainButtonStyle,
-                            onPressed: isLoading ? null : () async {
-                              setState(() => _loadingInsights = true);
-                              await _ai.runInsightsBehindRewardedAd();
-                              if (mounted) setState(() => _loadingInsights = false);
-                            },
-                            icon: const Icon(Icons.auto_awesome_outlined),
-                            label: Text(l10n.generateInsights.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                        if (kIsWeb)
+                          _buildWebAppStoreButtons(l10n)
+                        else
+                          SizedBox(
+                            width: double.infinity,
+                            child: FilledButton.icon(
+                              style: mainButtonStyle,
+                              onPressed: isLoading ? null : () async {
+                                setState(() => _loadingInsights = true);
+                                await _ai.runInsightsBehindRewardedAd();
+                                if (mounted) setState(() => _loadingInsights = false);
+                              },
+                              icon: const Icon(Icons.auto_awesome_outlined),
+                              label: Text(l10n.generateInsights.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                            ),
                           ),
-                        ),
                       ],
                     );
                   } else {
@@ -376,21 +437,29 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                         Row(
                           children: [
                             const Spacer(),
-                            TextButton.icon(
-                              onPressed: isLoading ? null : () async {
-                                setState(() => _loadingInsights = true);
-                                await _ai.runInsightsBehindRewardedAd();
-                                if (mounted) setState(() => _loadingInsights = false);
-                              },
-                              icon: const Icon(Icons.auto_awesome_outlined, color: goldColor),
-                              label: Text(l10n.update, style: const TextStyle(color: goldColor)),
-                            ),
+                            if (kIsWeb)
+                              const SizedBox.shrink()
+                            else
+                              TextButton.icon(
+                                onPressed: isLoading ? null : () async {
+                                  setState(() => _loadingInsights = true);
+                                  await _ai.runInsightsBehindRewardedAd();
+                                  if (mounted) setState(() => _loadingInsights = false);
+                                },
+                                icon: const Icon(Icons.auto_awesome_outlined, color: goldColor),
+                                label: Text(l10n.update, style: const TextStyle(color: goldColor)),
+                              ),
                           ],
                         ),
                         Text(data['summary']?.toString() ?? '—', style: const TextStyle(color: Colors.white)),
                         const SizedBox(height: 12),
                         Text(l10n.profilePillars, style: const TextStyle(fontWeight: FontWeight.w900, color: goldColor)),
                         _bullets(data['insights'] ?? []),
+                        if (kIsWeb) ...[
+                          const SizedBox(height: 16),
+                          const Divider(color: Colors.white12),
+                          _buildWebAppStoreButtons(l10n),
+                        ],
                       ],
                     );
                   }
@@ -430,24 +499,33 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                       const SizedBox(height: 8),
 
                       if (!hasTodayTip) ...[
-                        SizedBox(
-                          width: double.infinity,
-                          child: FilledButton.icon(
-                            style: mainButtonStyle,
-                            onPressed: isLoading ? null : () async {
-                              setState(() => _loadingTip = true);
-                              await _ai.runTipsBehindRewardedAd();
-                              if (mounted) setState(() => _loadingTip = false);
-                            },
-                            icon: const Icon(Icons.auto_awesome_outlined),
-                            label: Text(l10n.getDailyTip.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                        if (kIsWeb)
+                          _buildWebAppStoreButtons(l10n)
+                        else
+                          SizedBox(
+                            width: double.infinity,
+                            child: FilledButton.icon(
+                              style: mainButtonStyle,
+                              onPressed: isLoading ? null : () async {
+                                setState(() => _loadingTip = true);
+                                await _ai.runTipsBehindRewardedAd();
+                                if (mounted) setState(() => _loadingTip = false);
+                              },
+                              icon: const Icon(Icons.auto_awesome_outlined),
+                              label: Text(l10n.getDailyTip.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                            ),
                           ),
-                        ),
                         const SizedBox(height: 14),
                       ],
 
                       if (lastTipDoc != null)
                         Text(lastTipData['text']?.toString() ?? '—', style: const TextStyle(color: Colors.white)),
+                      
+                      if (hasTodayTip && kIsWeb) ...[
+                         const SizedBox(height: 16),
+                         const Divider(color: Colors.white12),
+                         _buildWebAppStoreButtons(l10n),
+                      ],
                     ],
                   );
 

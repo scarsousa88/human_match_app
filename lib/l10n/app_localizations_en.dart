@@ -982,4 +982,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get astroValSignPisces =>
       'Vast empathy, sharp intuition, imagination, and a strong connection to the spiritual and emotional world.';
+
+  @override
+  String get onlyMobile => 'Only available on mobile devices.';
+
+  @override
+  String get downloadApp => 'Download the app to access this feature:';
 }

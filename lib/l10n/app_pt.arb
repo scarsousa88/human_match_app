@@ -199,7 +199,7 @@
   "hdValAuthEgo": "A tua vontade é o teu guia. O que é que tu realmente queres e tens vontade de fazer?",
   "hdValAuthSelfProjected": "A tua verdade sai pela tua boca. Ouve o que dizes quando falas sem pensar sobre o teu futuro.",
   "hdValAuthMental": "Precisas de usar os outros como caixa de ressonância para ouvires a tua própria verdade ao falar.",
-  "hdValAuthLunar": "Como Refletor, a tua decisão amadurece ao longo de 28 dias em sintonia com o ciclo da Lua.",
+  "hdValAuthLunar": "Como Reflector, a tua decisão amadurece ao longo de 28 dias em sintonia com o ciclo da Lua.",
   "hdValStrRespond": "A tua melhor forma de agir é responder às oportunidades que aparecem, em vez de tentar forçar coisas novas.",
   "hdValStrInform": "Para reduzir a resistência dos outros, informa as pessoas afetadas pelas tuas ações antes de as tomares.",
   "hdValStrRespondInform": "Como MG, deves responder primeiro e depois informar quem te rodeia antes de entrares em ação rápida.",
@@ -224,7 +224,7 @@
   "hdValProf41": "Oportunista/Investigador: Segue um caminho fixo e único com base em fundações muito sólidas.",
   "hdValProf51": "Herege/Investigador: O mestre que resolve problemas práticos através de estudo e autoridade.",
   "hdValProf52": "Herege/Eremita: Motivado pela autorreflexão, mas visto pelos outros como um guia natural.",
-  "hdValProf62": "Observador/Eremita: Modelo de papel que vive com objetividade e desapego após uma vida de experiência.",
+  "hdValProf62": "Observador/Eremita: Modelo de papel que vive with objetividade e desapego após uma vida de experiência.",
   "hdValProf63": "Observador/Mártir: Modelo de papel que continua a evoluir através da experimentação constante.",
 
   "hdCenterHeadDefDesc": "Processas pensamentos de forma constante e inspiras-te nas tuas próprias ideias.",
@@ -316,5 +316,7 @@
   "astroValSignSagittarius": "Expansão, busca por significado, otimismo e amor pela liberdade e aventura intelectual.",
   "astroValSignCapricorn": "Responsabilidade, ambição, disciplina e uma abordagem estruturada para alcançar o sucesso.",
   "astroValSignAquarius": "Originalidade, visão humanitária, independência e um pensamento inovador e progressista.",
-  "astroValSignPisces": "Empatia vasta, intuição aguçada, imaginação e uma forte ligação ao mundo espiritual e emocional."
+  "astroValSignPisces": "Empatia vasta, intuição aguçada, imaginação e uma forte ligação ao mundo espiritual e emocional.",
+  "onlyMobile": "Apenas disponível em dispositivos móveis.",
+  "downloadApp": "Descarrega a app para acederes a esta funcionalidade:"
 }

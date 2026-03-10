@@ -32,7 +32,6 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
 
   Future<void> _loadAndProcessSvg() async {
     try {
-      // Caminhos relativos sem a barra inicial para compatibilidade com base-href
       const String blankPath = 'assets/bodygraph/bodygraph_blank.svg';
       const String silPath = 'assets/bodygraph/bodygraph_silhouette.svg';
 
@@ -58,7 +57,7 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
       debugPrint('ERRO BODYGRAPH: $e');
       if (mounted) {
         setState(() {
-          _error = 'Certifique-se de que os assets existem em assets/bodygraph/\n$e';
+          _error = 'Erro ao processar gráfico: $e';
         });
       }
     }
@@ -81,8 +80,8 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
     final allActiveGates = {...data.consciousGates, ...data.designGates};
     String dynamicGradients = '';
 
-    // Gradiente Unificado para Integração (Evita sobreposição no 57-20)
-    dynamicGradients += '<linearGradient id="gradIntegration" gradientUnits="userSpaceOnUse" x1="130" y1="830" x2="230" y2="690"><stop offset="50%" stop-color="#A44344" /><stop offset="50%" stop-color="white" /></linearGradient>';
+    // Gradiente Unificado Rigoroso para o complexo 57-20-Span
+    dynamicGradients += '<linearGradient id="gradIntegration" gradientUnits="userSpaceOnUse" x1="100" y1="850" x2="250" y2="650"><stop offset="50%" stop-color="#A44344" /><stop offset="50%" stop-color="white" /></linearGradient>';
 
     final centerColors = {
       'Head': '#F9F6C4', 'Ajna': '#48BB78', 'Throat': '#655144', 'Spleen': '#655144',
@@ -94,6 +93,7 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
       dynamicGradients += '<linearGradient id="${id.toLowerCase()}Gradient" x1="0%" y1="0%" x2="0%" y2="140%"><stop offset="0%" stop-color="$color" /><stop offset="100%" stop-color="$darker" /></linearGradient>';
     });
 
+    // Centros
     data.definedChannels.forEach((channel) {
       final parts = channel.split('-');
       if(parts.length != 2) return;
@@ -108,6 +108,7 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
       }
     });
 
+    // Gates - Processamento Individual para Máximo Rigor
     for (int i = 1; i <= 64; i++) {
       if (!allActiveGates.contains(i)) continue;
       final isC = data.consciousGates.contains(i);
@@ -115,9 +116,11 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
       
       String fill;
       if (isC && isD) {
-        if ([10, 20, 34, 57].contains(i)) {
+        // Apenas 20 e 57 usam o gradiente unificado para evitar seams no 57-20
+        if ([20, 57].contains(i)) {
           fill = 'url(#gradIntegration)';
         } else {
+          // Porta 10, 34 e todas as outras usam o Parser Geométrico para perfeição longitudinal
           final pathMatch = RegExp('id="Gate$i"\\s+(?:d|points)="([^"]+)"').firstMatch(raw);
           final grad = pathMatch != null ? _generateDynamicGradient('Gate$i', pathMatch.group(1)!, '#A44344', 'white') : null;
           if (grad != null) {
@@ -137,11 +140,12 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
       processed = processed.replaceFirstMapped(bgRegex, (m) => '${m.group(1)}fill="#EFEFEF" fill-opacity="1.0"');
     }
 
+    // Sistema de Integração - Correção Rigorosa de Sobreposição
     final integrationIds = ['GateSpan', 'GateConnect10', 'GateConnect34'];
     for (var id in integrationIds) {
       bool isDefined = false;
       if (id == 'GateSpan') {
-        isDefined = data.definedChannels.any((c) => c.contains('57-20') || c.contains('20-57') || c.contains('10-20') || c.contains('20-10'));
+        isDefined = data.definedChannels.any((c) => c.contains('57-20') || c.contains('20-57'));
       } else if (id == 'GateConnect10') {
         isDefined = data.definedChannels.any((c) => c.contains('10-'));
       } else if (id == 'GateConnect34') {
@@ -149,8 +153,16 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
       }
 
       if (isDefined) {
-        processed = processed.replaceFirstMapped(RegExp('id="$id"[^>]*fill="[^"]*"(?:\\s+fill-opacity="[^"]*")?'), 
-          (m) => m.group(0)!.replaceFirst(RegExp('fill="[^"]*"'), 'fill="url(#gradIntegration)"').replaceFirst(RegExp('fill-opacity="[^"]*"'), 'fill-opacity="1.0"'));
+        // Conectores pequenos usam o gradiente unificado ou o seu próprio conforme a peça que tocam
+        String gradFill = (id == 'GateSpan') ? 'url(#gradIntegration)' : 'white';
+        if (id == 'GateConnect10' || id == 'GateConnect34') {
+           final pathMatch = RegExp('id="$id"\\s+(?:d|points)="([^"]+)"').firstMatch(raw);
+           final grad = pathMatch != null ? _generateDynamicGradient(id, pathMatch.group(1)!, '#A44344', 'white') : null;
+           if (grad != null) { dynamicGradients += grad; gradFill = 'url(#grad$id)'; }
+        }
+
+        processed = processed.replaceFirstMapped(RegExp('id="$id"[^>]*fill="[^"]*"(?:\\s+fill-opacity="[^"]*")?'),
+          (m) => m.group(0)!.replaceFirst(RegExp('fill="[^"]*"'), 'fill="$gradFill"').replaceFirst(RegExp('fill-opacity="[^"]*"'), 'fill-opacity="1.0"'));
       }
     }
 
@@ -190,7 +202,7 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
       params.clear();
     }
     for (final m in matches) {
-      if (m.group(1) != null) { flush(); currentCommand = m.group(1)!; } 
+      if (m.group(1) != null) { flush(); currentCommand = m.group(1)!; }
       else { params.add(double.parse(m.group(2)!)); }
     }
     flush();
@@ -234,23 +246,7 @@ class _BodygraphWidgetState extends State<BodygraphWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (_error != null) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.error_outline, color: Colors.red, size: 40),
-              const SizedBox(height: 10),
-              Text('Erro Bodygraph: $_error', textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontSize: 13)),
-              const SizedBox(height: 10),
-              ElevatedButton(onPressed: _loadAndProcessSvg, child: const Text('Tentar novamente')),
-            ],
-          ),
-        ),
-      );
-    }
+    if (_error != null) return Center(child: Padding(padding: const EdgeInsets.all(20), child: Text('$_error', textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontSize: 13))));
     if (_svgString == null || _silhouetteSvg == null) return const Center(child: Padding(padding: EdgeInsets.symmetric(vertical: 40), child: CircularProgressIndicator()));
     return LayoutBuilder(builder: (context, constraints) {
       return Stack(alignment: Alignment.center, children: [

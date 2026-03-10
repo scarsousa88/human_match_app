@@ -1209,7 +1209,7 @@ abstract class AppLocalizations {
   /// No description provided for @hdValAuthLunar.
   ///
   /// In pt, this message translates to:
-  /// **'Como Refletor, a tua decisão amadurece ao longo de 28 dias em sintonia com o ciclo da Lua.'**
+  /// **'Como Reflector, a tua decisão amadurece ao longo de 28 dias em sintonia com o ciclo da Lua.'**
   String get hdValAuthLunar;
 
   /// No description provided for @hdValStrRespond.
@@ -1353,7 +1353,7 @@ abstract class AppLocalizations {
   /// No description provided for @hdValProf62.
   ///
   /// In pt, this message translates to:
-  /// **'Observador/Eremita: Modelo de papel que vive com objetividade e desapego após uma vida de experiência.'**
+  /// **'Observador/Eremita: Modelo de papel que vive with objetividade e desapego após uma vida de experiência.'**
   String get hdValProf62;
 
   /// No description provided for @hdValProf63.
@@ -1829,6 +1829,18 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Empatia vasta, intuição aguçada, imaginação e uma forte ligação ao mundo espiritual e emocional.'**
   String get astroValSignPisces;
+
+  /// No description provided for @onlyMobile.
+  ///
+  /// In pt, this message translates to:
+  /// **'Apenas disponível em dispositivos móveis.'**
+  String get onlyMobile;
+
+  /// No description provided for @downloadApp.
+  ///
+  /// In pt, this message translates to:
+  /// **'Descarrega a app para acederes a esta funcionalidade:'**
+  String get downloadApp;
 }
 
 class _AppLocalizationsDelegate
