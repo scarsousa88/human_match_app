@@ -219,7 +219,7 @@ abstract class AppLocalizations {
   /// No description provided for @termsContent.
   ///
   /// In pt, this message translates to:
-  /// **'Política de Privacidade - Human Match\n\nEsta Política de Privacidade descreve como a Human Match, uma aplicação móvel que gera relatórios personalizados de Human Design, Astrologia e Numerologia com base no nome completo, data e local de nascimento dos utilizadores, recolhe, utiliza e protege os seus dados pessoais. Estamos comprometidos com a proteção da sua privacidade em conformidade com o Regulamento Geral de Proteção de Dados (RGPD) da União Europeia e legislação aplicável em Portugal.\n\nDados Recolhidos\nRecolhemos apenas os dados estritamente necessários para fornecer o serviço:\n\nNome completo;\n\nData de nascimento;\n\nLocal de nascimento.\n\nEstes dados são usados exclusivamente para calcular e gerar os seus relatórios personalizados de Human Design, Astrologia e Numerologia. Não recolhemos dados sensíveis adicionais, como endereço de email ou informações financeiras, a menos que sejam voluntariamente fornecidos para suporte ou registo de conta.\n\nFinalidades do Tratamento\nOs dados são tratados para:\n\nGerar relatórios precisos baseados nos inputs fornecidos;\n\nMelhorar a precisão dos cálculos astrológicos e de design humano;\n\nPermitir o armazenamento opcional de relatórios para acesso futuro (com o seu consentimento explícito).\n\nO tratamento é lícito com base no seu consentimento livre e informado, obtido no momento da submissão dos dados.\n\nPartilha de Dados\nNão partilhamos os seus dados pessoais com terceiros, exceto:\n\nPrestadores de serviços técnicos essenciais (ex.: servidores de cloud seguros na UE) sob acordos de processamento de dados que garantem confidencialidade;\n\nQuando exigido por lei ou autoridades competentes.\n\nOs relatórios gerados são privados e não são vendidos ou usados para marketing.\n​\n\nArmazenamento e Segurança\nOs dados são armazenados em servidores seguros localizados na União Europeia, with medidas técnicas como encriptação (AES-256), pseudonimização e controlos de acesso. Retemos os dados apenas pelo tempo necessário para o serviço (geralmente até 30 dias após o último acesso, salvo consentimento para armazenamento prolongado). Procedemos à eliminação segura automática após esse período.\n\nOs Seus Direitos\nPode exercer os seus direitos RGPD a qualquer momento:\n\nAcesso aos dados;\n\nRectificação ou correção;\n\nApagamento (\"direito ao esquecimento\");\n\nOposição ao tratamento;\n\nLimitação do tratamento;\n\nPortabilidade dos dados.\n\nPara solicitar a eliminação da sua conta e de todos os dados associados, poderá fazê-lo através do seguinte link: https://humanmatch.app/delete-account ou enviando um email para support@humanmatch.app.\n\nConsentimento e Alterações\nAo usar a app, você consente com esta política. Pode revogar o consentimento a qualquer momento, o que impedirá o acesso a relatórios existentes. Atualizaremos esta política conforme necessário, notificando os utilizadores via app.'**
+  /// **'Política de Privacidade - Human Match\n\nEsta Política de Privacidade descreve como a Human Match, uma aplicação móvel que gera relatórios personalizados de Human Design, Astrologia e Numerologia com base no nome completo, data e local de nascimento dos utilizadores, recolhe, utiliza e protege os seus dados pessoais. Estamos comprometidos com a proteção da sua privacidade em conformidade com o Regulamento Geral de Proteção de Dados (RGPD) da União Europeia e legislação aplicável em Portugal.\n\nDados Recolhidos\nRecolhemos apenas os dados estritamente necessários para fornecer o serviço:\n\nNome completo;\n\nData de nascimento;\n\nLocal de nascimento.\n\nEstes dados são usados exclusivamente para calcular e gerar os seus relatórios personalizados de Human Design, Astrologia e Numerologia. Não recolhemos dados sensíveis adicionais, como endereço de email ou informações financeiras, a menos que sejam voluntariamente fornecidos para suporte ou registo de conta.\n\nFinalidades do Tratamento\nOs dados são tratados para:\n\nGerar relatórios precisos baseados nos inputs fornecidos;\n\nMelhorar a precisão dos cálculos astrológicos e de design humano;\n\nPermitir o armazenamento opcional de relatórios para acesso futuro (com o seu consentimento explícito).\n\nO tratamento é lícito com base no seu consentimento livre e informado, obtido no momento da submissão dos dados.\n\nPartilha de Dados\nNão partilhamos os seus dados pessoais com terceiros, exceto:\n\nPrestadores de serviços técnicos essenciais (ex.: servidores de cloud seguros na UE) sob acordos de processamento de dados que garantisent confidencialidade;\n\nQuando exigido por lei ou autoridades competentes.\n\nOs relatórios gerados são privados e não são vendidos ou usados para marketing.\n​\n\nArmazenamento e Segurança\nDados são armazenados em servidores seguros localizados na União Europeia, com medidas técnicas como encriptação (AES-256), pseudonimização e controlos de acesso. Retemos os dados apenas pelo tempo necessário para o serviço (geralmente até 30 dias após o último acesso, salvo consentimento para armazenamento prolongado). Procedemos à eliminação segura automática após esse período.\n\nOs Seus Direitos\nPode exercer os seus direitos RGPD a qualquer momento:\n\nAcesso aos dados;\n\nRectificação ou correção;\n\nApagamento (\"direito ao esquecimento\");\n\nOposição ao tratamento;\n\nLimitação do tratamento;\n\nPortabilidade dos dados.\n\nPara solicitar a eliminação da sua conta e de todos os dados associados, poderá fazê-lo através do seguinte link: https://humanmatch.app/delete-account ou enviando um email para support@humanmatch.app.\n\nConsentement e Alterações\nAo usar a app, você consente com esta política. Pode revogar o consentimento a qualquer momento, o que impedirá o acesso a relatórios existentes. Atualizaremos esta política conforme necessário, notificando os utilizadores via app.'**
   String get termsContent;
 
   /// No description provided for @processing.
@@ -645,7 +645,7 @@ abstract class AppLocalizations {
   /// No description provided for @hdIncarnationCross.
   ///
   /// In pt, this message translates to:
-  /// **'Encarnação'**
+  /// **'Cruz de Encarnação'**
   String get hdIncarnationCross;
 
   /// No description provided for @hdEnergyCenters.
@@ -707,6 +707,72 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Astros'**
   String get hdPlanets;
+
+  /// No description provided for @hdPlanetSun.
+  ///
+  /// In pt, this message translates to:
+  /// **'Sol'**
+  String get hdPlanetSun;
+
+  /// No description provided for @hdPlanetEarth.
+  ///
+  /// In pt, this message translates to:
+  /// **'Terra'**
+  String get hdPlanetEarth;
+
+  /// No description provided for @hdPlanetMoon.
+  ///
+  /// In pt, this message translates to:
+  /// **'Lua'**
+  String get hdPlanetMoon;
+
+  /// No description provided for @hdPlanetMercury.
+  ///
+  /// In pt, this message translates to:
+  /// **'Mercúrio'**
+  String get hdPlanetMercury;
+
+  /// No description provided for @hdPlanetVenus.
+  ///
+  /// In pt, this message translates to:
+  /// **'Vénus'**
+  String get hdPlanetVenus;
+
+  /// No description provided for @hdPlanetMars.
+  ///
+  /// In pt, this message translates to:
+  /// **'Marte'**
+  String get hdPlanetMars;
+
+  /// No description provided for @hdPlanetJupiter.
+  ///
+  /// In pt, this message translates to:
+  /// **'Júpiter'**
+  String get hdPlanetJupiter;
+
+  /// No description provided for @hdPlanetSaturn.
+  ///
+  /// In pt, this message translates to:
+  /// **'Saturno'**
+  String get hdPlanetSaturn;
+
+  /// No description provided for @hdPlanetUranus.
+  ///
+  /// In pt, this message translates to:
+  /// **'Urano'**
+  String get hdPlanetUranus;
+
+  /// No description provided for @hdPlanetNeptune.
+  ///
+  /// In pt, this message translates to:
+  /// **'Neptuno'**
+  String get hdPlanetNeptune;
+
+  /// No description provided for @hdPlanetPluto.
+  ///
+  /// In pt, this message translates to:
+  /// **'Plutão'**
+  String get hdPlanetPluto;
 
   /// No description provided for @hdPersonality.
   ///
@@ -945,7 +1011,7 @@ abstract class AppLocalizations {
   /// No description provided for @hdCenterEgo.
   ///
   /// In pt, this message translates to:
-  /// **'Coração'**
+  /// **'Coração (Ego)'**
   String get hdCenterEgo;
 
   /// No description provided for @hdCenterSpleen.
@@ -972,293 +1038,329 @@ abstract class AppLocalizations {
   /// **'Raiz'**
   String get hdCenterRoot;
 
-  /// No description provided for @hdPlanetSun.
+  /// No description provided for @hdCenterNameHead.
   ///
   /// In pt, this message translates to:
-  /// **'Sol'**
-  String get hdPlanetSun;
+  /// **'Cabeça'**
+  String get hdCenterNameHead;
 
-  /// No description provided for @hdPlanetEarth.
+  /// No description provided for @hdCenterNameAjna.
   ///
   /// In pt, this message translates to:
-  /// **'Terra'**
-  String get hdPlanetEarth;
+  /// **'Ajna'**
+  String get hdCenterNameAjna;
 
-  /// No description provided for @hdPlanetMoon.
+  /// No description provided for @hdCenterNameThroat.
   ///
   /// In pt, this message translates to:
-  /// **'Lua'**
-  String get hdPlanetMoon;
+  /// **'Garganta'**
+  String get hdCenterNameThroat;
 
-  /// No description provided for @hdPlanetMercury.
+  /// No description provided for @hdCenterNameG.
   ///
   /// In pt, this message translates to:
-  /// **'Mercúrio'**
-  String get hdPlanetMercury;
+  /// **'Centro G'**
+  String get hdCenterNameG;
 
-  /// No description provided for @hdPlanetVenus.
+  /// No description provided for @hdCenterNameHeart.
   ///
   /// In pt, this message translates to:
-  /// **'Vénus'**
-  String get hdPlanetVenus;
+  /// **'Coração'**
+  String get hdCenterNameHeart;
 
-  /// No description provided for @hdPlanetMars.
+  /// No description provided for @hdCenterNameSpleen.
   ///
   /// In pt, this message translates to:
-  /// **'Marte'**
-  String get hdPlanetMars;
+  /// **'Baço'**
+  String get hdCenterNameSpleen;
 
-  /// No description provided for @hdPlanetJupiter.
+  /// No description provided for @hdCenterNameSolar.
   ///
   /// In pt, this message translates to:
-  /// **'Júpiter'**
-  String get hdPlanetJupiter;
+  /// **'Plexo Solar'**
+  String get hdCenterNameSolar;
 
-  /// No description provided for @hdPlanetSaturn.
+  /// No description provided for @hdCenterNameSacral.
   ///
   /// In pt, this message translates to:
-  /// **'Saturno'**
-  String get hdPlanetSaturn;
+  /// **'Sacral'**
+  String get hdCenterNameSacral;
 
-  /// No description provided for @hdPlanetUranus.
+  /// No description provided for @hdCenterNameRoot.
   ///
   /// In pt, this message translates to:
-  /// **'Urano'**
-  String get hdPlanetUranus;
+  /// **'Raiz'**
+  String get hdCenterNameRoot;
 
-  /// No description provided for @hdPlanetNeptune.
+  /// No description provided for @hdTypeDefDesc.
   ///
   /// In pt, this message translates to:
-  /// **'Neptuno'**
-  String get hdPlanetNeptune;
+  /// **'O Tipo define a forma como a tua energia interage com o mundo.'**
+  String get hdTypeDefDesc;
 
-  /// No description provided for @hdPlanetPluto.
+  /// No description provided for @hdAuthorityDefDesc.
   ///
   /// In pt, this message translates to:
-  /// **'Plutão'**
-  String get hdPlanetPluto;
+  /// **'A tua Autoridade é o teu sistema interno de tomada de decisão.'**
+  String get hdAuthorityDefDesc;
 
-  /// No description provided for @legalInfo.
+  /// No description provided for @hdStrategyDefDesc.
   ///
   /// In pt, this message translates to:
-  /// **'Informações Legais'**
-  String get legalInfo;
+  /// **'A Estratégia é o método para navegar na vida com menos resistência.'**
+  String get hdStrategyDefDesc;
 
-  /// No description provided for @deleteAccountData.
+  /// No description provided for @hdProfileDefDesc.
   ///
   /// In pt, this message translates to:
-  /// **'Eliminação de Conta e Dados'**
-  String get deleteAccountData;
+  /// **'O Perfil descreve o teu papel e a forma como aprendes e evoluis.'**
+  String get hdProfileDefDesc;
 
-  /// No description provided for @verifyEmailTitle.
+  /// No description provided for @hdSignatureDefDesc.
   ///
   /// In pt, this message translates to:
-  /// **'Verifica o teu Email'**
-  String get verifyEmailTitle;
+  /// **'A Assinatura é a sensação de estar alinhado com o teu design.'**
+  String get hdSignatureDefDesc;
 
-  /// No description provided for @verifyEmailSent.
+  /// No description provided for @hdNotSelfDefDesc.
   ///
   /// In pt, this message translates to:
-  /// **'Enviámos um email de confirmação para {email}. Por favor, verifica a tua caixa de entrada (e pasta de spam).'**
-  String verifyEmailSent(String email);
+  /// **'O Não-ser é o sinal de que te estás a desviar da tua verdade.'**
+  String get hdNotSelfDefDesc;
 
-  /// No description provided for @checkVerification.
+  /// No description provided for @hdDefinitionDefDesc.
   ///
   /// In pt, this message translates to:
-  /// **'Já verifiquei'**
-  String get checkVerification;
+  /// **'A Definição mostra como a energia flui entre os teus centros.'**
+  String get hdDefinitionDefDesc;
 
-  /// No description provided for @resendVerification.
+  /// No description provided for @hdIncarnationCrossDefDesc.
   ///
   /// In pt, this message translates to:
-  /// **'Reenviar email'**
-  String get resendVerification;
+  /// **'A tua Cruz de Encarnação representa o teu propósito de vida.'**
+  String get hdIncarnationCrossDefDesc;
 
-  /// No description provided for @verificationResent.
+  /// No description provided for @hdValTypeGenerator.
   ///
   /// In pt, this message translates to:
-  /// **'Email de verificação reenviado.'**
-  String get verificationResent;
+  /// **'Como Gerador, a tua energia é desenhada para responder ao que a vida te traz, em vez de iniciares.'**
+  String get hdValTypeGenerator;
 
-  /// No description provided for @orDivider.
+  /// No description provided for @hdValTypeManifestingGenerator.
   ///
   /// In pt, this message translates to:
-  /// **'OU'**
-  String get orDivider;
+  /// **'Tens a rapidez do Manifestador e a sustentabilidade do Gerador. Responde antes de agir.'**
+  String get hdValTypeManifestingGenerator;
 
-  /// No description provided for @errorEmailAlreadyRegistered.
+  /// No description provided for @hdValTypeManifestor.
   ///
   /// In pt, this message translates to:
-  /// **'Este email já está registado. Tente fazer LOGIN em vez de criar conta.'**
-  String get errorEmailAlreadyRegistered;
+  /// **'Vieste para iniciar e impactar. Informa os outros antes de agires para reduzir a resistência.'**
+  String get hdValTypeManifestor;
 
-  /// No description provided for @errorInvalidCredentials.
+  /// No description provided for @hdValTypeProjector.
   ///
   /// In pt, this message translates to:
-  /// **'Credenciais incorretas ou conta inexistente.'**
-  String get errorInvalidCredentials;
+  /// **'Estás aqui para guiar os outros. O teu sucesso vem ao esperares pelo reconhecimento e convite.'**
+  String get hdValTypeProjector;
 
-  /// No description provided for @errorUserDisabled.
+  /// No description provided for @hdValTypeReflector.
   ///
   /// In pt, this message translates to:
-  /// **'Conta desativada.'**
-  String get errorUserDisabled;
+  /// **'És um espelho da comunidade. Espera um ciclo lunar completo antes de tomares decisões importantes.'**
+  String get hdValTypeReflector;
 
-  /// No description provided for @errorTooManyRequests.
+  /// No description provided for @hdValAuthEmotional.
   ///
   /// In pt, this message translates to:
-  /// **'Bloqueado temporariamente por excesso de tentativas.'**
-  String get errorTooManyRequests;
+  /// **'A claridade não acontece no agora. Espera que a tua onda emocional estabilize antes de decidires.'**
+  String get hdValAuthEmotional;
 
-  /// No description provided for @errorAccountExistsGoogle.
+  /// No description provided for @hdValAuthSacral.
   ///
   /// In pt, this message translates to:
-  /// **'Já existe uma conta com este email vinculada ao Google. Use \"Continuar com Google\".'**
-  String get errorAccountExistsGoogle;
+  /// **'Confia na tua resposta visceral imediata (sons sacrais ou inclinação física) no momento presente.'**
+  String get hdValAuthSacral;
 
-  /// No description provided for @errorUnexpected.
+  /// No description provided for @hdValAuthSplenic.
   ///
   /// In pt, this message translates to:
-  /// **'Erro inesperado: {error}'**
-  String errorUnexpected(Object error);
+  /// **'Confia na tua intuição instintiva e espontânea que te avisa sobre o que é seguro e saudável.'**
+  String get hdValAuthSplenic;
 
-  /// No description provided for @errorGoogle.
+  /// No description provided for @hdValAuthEgo.
   ///
   /// In pt, this message translates to:
-  /// **'Erro Google: {error}'**
-  String errorGoogle(Object error);
+  /// **'A tua vontade é o teu guia. O que é que tu realmente queres e tens vontade de fazer?'**
+  String get hdValAuthEgo;
 
-  /// No description provided for @errorResetPassword.
+  /// No description provided for @hdValAuthSelfProjected.
   ///
   /// In pt, this message translates to:
-  /// **'Erro ao resetar: {error}'**
-  String errorResetPassword(Object error);
+  /// **'A tua verdade sai pela tua boca. Ouve o que dizes quando falas sem pensar sobre o teu futuro.'**
+  String get hdValAuthSelfProjected;
 
-  /// No description provided for @close.
+  /// No description provided for @hdValAuthMental.
   ///
   /// In pt, this message translates to:
-  /// **'Fechar'**
-  String get close;
+  /// **'Precisas de usar os outros como caixa de ressonância para ouvires a tua própria verdade ao falar.'**
+  String get hdValAuthMental;
 
-  /// No description provided for @authError.
+  /// No description provided for @hdValAuthLunar.
   ///
   /// In pt, this message translates to:
-  /// **'Erro de Autenticação: {error}'**
-  String authError(Object error);
+  /// **'Como Refletor, a tua decisão amadurece ao longo de 28 dias em sintonia com o ciclo da Lua.'**
+  String get hdValAuthLunar;
 
-  /// No description provided for @tryAgain.
+  /// No description provided for @hdValStrRespond.
   ///
   /// In pt, this message translates to:
-  /// **'Tentar novamente'**
-  String get tryAgain;
+  /// **'A tua melhor forma de agir é responder às oportunidades que aparecem, em vez de tentar forçar coisas novas.'**
+  String get hdValStrRespond;
 
-  /// No description provided for @loadProfileError.
+  /// No description provided for @hdValStrInform.
   ///
   /// In pt, this message translates to:
-  /// **'Erro ao carregar perfil: {error}'**
-  String loadProfileError(Object error);
+  /// **'Para reduzir a resistência dos outros, informa as pessoas afetadas pelas tuas ações antes de as tomares.'**
+  String get hdValStrInform;
 
-  /// No description provided for @logoutAndTryAgain.
+  /// No description provided for @hdValStrRespondInform.
   ///
   /// In pt, this message translates to:
-  /// **'Sair e Tentar Novamente'**
-  String get logoutAndTryAgain;
+  /// **'Como MG, deves responder primeiro e depois informar quem te rodeia antes de entrares em ação rápida.'**
+  String get hdValStrRespondInform;
 
-  /// No description provided for @astroMoonSign.
+  /// No description provided for @hdValStrInvite.
   ///
   /// In pt, this message translates to:
-  /// **'Signo Lunar'**
-  String get astroMoonSign;
+  /// **'Deves esperar por reconhecimento formal e um convite antes de partilhares a tua sabedoria ou orientação.'**
+  String get hdValStrInvite;
 
-  /// No description provided for @astroMercurySign.
+  /// No description provided for @hdValStrLunar.
   ///
   /// In pt, this message translates to:
-  /// **'Mercúrio'**
-  String get astroMercurySign;
+  /// **'Decisões importantes devem ser tomadas apenas após um ciclo lunar completo (aproximadamente 28 dias).'**
+  String get hdValStrLunar;
 
-  /// No description provided for @astroVenusSign.
+  /// No description provided for @hdValSigSatisfaction.
   ///
   /// In pt, this message translates to:
-  /// **'Vénus'**
-  String get astroVenusSign;
+  /// **'Sentes satisfação quando usas a tua energia de forma produtiva em algo que te dá prazer.'**
+  String get hdValSigSatisfaction;
 
-  /// No description provided for @astroMarsSign.
+  /// No description provided for @hdValSigSuccess.
   ///
   /// In pt, this message translates to:
-  /// **'Marte'**
-  String get astroMarsSign;
+  /// **'O sucesso para ti é ser reconhecido pelo que és e ver os outros prosperarem com a tua guia.'**
+  String get hdValSigSuccess;
 
-  /// No description provided for @astroMC.
+  /// No description provided for @hdValSigPeace.
   ///
   /// In pt, this message translates to:
-  /// **'Meio do Céu (MC)'**
-  String get astroMC;
+  /// **'Sentirás paz quando puderes agir livremente e sem resistência após informares os outros.'**
+  String get hdValSigPeace;
 
-  /// No description provided for @astroNorthNode.
+  /// No description provided for @hdValSigSurprise.
   ///
   /// In pt, this message translates to:
-  /// **'Nodo Norte'**
-  String get astroNorthNode;
+  /// **'A surpresa é o sinal de que estás a ver a vida com olhos novos, como um espelho puro do ambiente.'**
+  String get hdValSigSurprise;
 
-  /// No description provided for @astroSouthNode.
+  /// No description provided for @hdValNotFrustration.
   ///
   /// In pt, this message translates to:
-  /// **'Nodo Sul'**
-  String get astroSouthNode;
+  /// **'A frustração surge quando tentas iniciar coisas sem esperar pela resposta certa.'**
+  String get hdValNotFrustration;
 
-  /// No description provided for @astroHouses.
+  /// No description provided for @hdValNotBitterness.
   ///
   /// In pt, this message translates to:
-  /// **'Casas Astrológicas'**
-  String get astroHouses;
+  /// **'A amargura aparece quando te esforças demais sem ser convidado ou reconhecido.'**
+  String get hdValNotBitterness;
 
-  /// No description provided for @astroHouseN.
+  /// No description provided for @hdValNotAnger.
   ///
   /// In pt, this message translates to:
-  /// **'Casa {n}'**
-  String astroHouseN(int n);
+  /// **'A raiva é o resultado de sentires resistência por não informares os outros sobre as tuas intenções.'**
+  String get hdValNotAnger;
 
-  /// No description provided for @astroAspects.
+  /// No description provided for @hdValNotDisappointment.
   ///
   /// In pt, this message translates to:
-  /// **'Aspetos Planetários'**
-  String get astroAspects;
+  /// **'A desilusão ocorre quando não estás num ambiente saudável ou tentas decidir depressa demais.'**
+  String get hdValNotDisappointment;
 
-  /// No description provided for @astroBig3.
+  /// No description provided for @hdValProf13.
   ///
   /// In pt, this message translates to:
-  /// **'🌟 Big 3'**
-  String get astroBig3;
+  /// **'Investigador/Mártir: Aprende através da experimentação, fundações sólidas e profundidade.'**
+  String get hdValProf13;
 
-  /// No description provided for @astroPersonalPlanets.
+  /// No description provided for @hdValProf14.
   ///
   /// In pt, this message translates to:
-  /// **'🪐 Planetas Pessoais'**
-  String get astroPersonalPlanets;
+  /// **'Investigador/Oportunista: Influencia a sua rede próxima partilhando o seu estudo profundo.'**
+  String get hdValProf14;
 
-  /// No description provided for @astroSocialGenerationalPlanets.
+  /// No description provided for @hdValProf24.
   ///
   /// In pt, this message translates to:
-  /// **'🪐 Planetas Sociais e Geracionais'**
-  String get astroSocialGenerationalPlanets;
+  /// **'Eremita/Oportunista: Um talento natural que precisa de tempo sozinho, mas que florece na sua rede.'**
+  String get hdValProf24;
 
-  /// No description provided for @astroMCNodes.
+  /// No description provided for @hdValProf25.
   ///
   /// In pt, this message translates to:
-  /// **'🎯 MC e Nodos Lunares'**
-  String get astroMCNodes;
+  /// **'Eremita/Herege: Talento natural projetado para ser um guia ou salvador para os outros.'**
+  String get hdValProf25;
 
-  /// No description provided for @hdIndicators.
+  /// No description provided for @hdValProf35.
   ///
   /// In pt, this message translates to:
-  /// **'Principais Indicadores'**
-  String get hdIndicators;
+  /// **'Mártir/Herege: Aprende por tentativa e erro e partilha o que funciona para desafiar o status quo.'**
+  String get hdValProf35;
 
-  /// No description provided for @hdBodygraph.
+  /// No description provided for @hdValProf36.
   ///
   /// In pt, this message translates to:
-  /// **'Mapa do Corpo (Bodygraph)'**
-  String get hdBodygraph;
+  /// **'Mártir/Observador: Experimenta na primeira fase da vida para se tornar um guia sábio e objetivo.'**
+  String get hdValProf36;
+
+  /// No description provided for @hdValProf46.
+  ///
+  /// In pt, this message translates to:
+  /// **'Oportunista/Observador: Influencia através da rede e objetividade, tornando-se um modelo de papel.'**
+  String get hdValProf46;
+
+  /// No description provided for @hdValProf41.
+  ///
+  /// In pt, this message translates to:
+  /// **'Oportunista/Investigador: Segue um caminho fixo e único com base em fundações muito sólidas.'**
+  String get hdValProf41;
+
+  /// No description provided for @hdValProf51.
+  ///
+  /// In pt, this message translates to:
+  /// **'Herege/Investigador: O mestre que resolve problemas práticos através de estudo e autoridade.'**
+  String get hdValProf51;
+
+  /// No description provided for @hdValProf52.
+  ///
+  /// In pt, this message translates to:
+  /// **'Herege/Eremita: Motivado pela autorreflexão, mas visto pelos outros como um guia natural.'**
+  String get hdValProf52;
+
+  /// No description provided for @hdValProf62.
+  ///
+  /// In pt, this message translates to:
+  /// **'Observador/Eremita: Modelo de papel que vive com objetividade e desapego após uma vida de experiência.'**
+  String get hdValProf62;
+
+  /// No description provided for @hdValProf63.
+  ///
+  /// In pt, this message translates to:
+  /// **'Observador/Mártir: Modelo de papel que continua a evoluir através da experimentação constante.'**
+  String get hdValProf63;
 
   /// No description provided for @hdCenterHeadDefDesc.
   ///
@@ -1398,257 +1500,335 @@ abstract class AppLocalizations {
   /// **'Canais do utilizador'**
   String get hdChannelsUser;
 
-  /// No description provided for @hdCenterName_head.
+  /// No description provided for @legalInfo.
   ///
   /// In pt, this message translates to:
-  /// **'Cabeça'**
-  String get hdCenterName_head;
+  /// **'Informações Legais'**
+  String get legalInfo;
 
-  /// No description provided for @hdCenterName_ajna.
+  /// No description provided for @deleteAccountData.
   ///
   /// In pt, this message translates to:
-  /// **'Ajna'**
-  String get hdCenterName_ajna;
+  /// **'Eliminação de Conta e Dados'**
+  String get deleteAccountData;
 
-  /// No description provided for @hdCenterName_throat.
+  /// No description provided for @verifyEmailTitle.
   ///
   /// In pt, this message translates to:
-  /// **'Garganta'**
-  String get hdCenterName_throat;
+  /// **'Verifica o teu Email'**
+  String get verifyEmailTitle;
 
-  /// No description provided for @hdCenterName_g.
+  /// No description provided for @verifyEmailSent.
   ///
   /// In pt, this message translates to:
-  /// **'Centro G'**
-  String get hdCenterName_g;
+  /// **'Enviámos um email de confirmação para {email}. Por favor, verifica a tua caixa de entrada (e pasta de spam).'**
+  String verifyEmailSent(String email);
 
-  /// No description provided for @hdCenterName_heart.
+  /// No description provided for @checkVerification.
   ///
   /// In pt, this message translates to:
-  /// **'Coração'**
-  String get hdCenterName_heart;
+  /// **'Já verifiquei'**
+  String get checkVerification;
 
-  /// No description provided for @hdCenterName_spleen.
+  /// No description provided for @resendVerification.
   ///
   /// In pt, this message translates to:
-  /// **'Baço'**
-  String get hdCenterName_spleen;
+  /// **'Reenviar email'**
+  String get resendVerification;
 
-  /// No description provided for @hdCenterName_solar.
+  /// No description provided for @verificationResent.
   ///
   /// In pt, this message translates to:
-  /// **'Plexo Solar'**
-  String get hdCenterName_solar;
+  /// **'Email de verificação reenviado.'**
+  String get verificationResent;
 
-  /// No description provided for @hdCenterName_sacral.
+  /// No description provided for @orDivider.
   ///
   /// In pt, this message translates to:
-  /// **'Sacral'**
-  String get hdCenterName_sacral;
+  /// **'OU'**
+  String get orDivider;
 
-  /// No description provided for @hdCenterName_root.
+  /// No description provided for @errorEmailAlreadyRegistered.
   ///
   /// In pt, this message translates to:
-  /// **'Raiz'**
-  String get hdCenterName_root;
+  /// **'Este email já está registado. Tente fazer LOGIN em vez de criar conta.'**
+  String get errorEmailAlreadyRegistered;
 
-  /// No description provided for @hdTypeDefDesc.
+  /// No description provided for @errorInvalidCredentials.
   ///
   /// In pt, this message translates to:
-  /// **'O Tipo define a forma como a tua energia interage com o mundo.'**
-  String get hdTypeDefDesc;
+  /// **'Credenciais incorretas ou conta inexistente.'**
+  String get errorInvalidCredentials;
 
-  /// No description provided for @hdAuthorityDefDesc.
+  /// No description provided for @errorUserDisabled.
   ///
   /// In pt, this message translates to:
-  /// **'A tua Autoridade é o teu sistema interno de tomada de decisão.'**
-  String get hdAuthorityDefDesc;
+  /// **'Conta desativada.'**
+  String get errorUserDisabled;
 
-  /// No description provided for @hdStrategyDefDesc.
+  /// No description provided for @errorTooManyRequests.
   ///
   /// In pt, this message translates to:
-  /// **'A Estratégia é o método para navegar na vida com menos resistência.'**
-  String get hdStrategyDefDesc;
+  /// **'Bloqueado temporariamente por excesso de tentativas.'**
+  String get errorTooManyRequests;
 
-  /// No description provided for @hdProfileDefDesc.
+  /// No description provided for @errorAccountExistsGoogle.
   ///
   /// In pt, this message translates to:
-  /// **'O Perfil descreve o teu papel e a forma como aprendes e evoluis.'**
-  String get hdProfileDefDesc;
+  /// **'Já existe uma conta com este email vinculada ao Google. Use \"Continuar com Google\".'**
+  String get errorAccountExistsGoogle;
 
-  /// No description provided for @hdSignatureDefDesc.
+  /// No description provided for @errorUnexpected.
   ///
   /// In pt, this message translates to:
-  /// **'A Assinatura é a sensação de estar alinhado com o teu design.'**
-  String get hdSignatureDefDesc;
+  /// **'Erro inesperado: {error}'**
+  String errorUnexpected(Object error);
 
-  /// No description provided for @hdNotSelfDefDesc.
+  /// No description provided for @errorGoogle.
   ///
   /// In pt, this message translates to:
-  /// **'O Não-ser é o sinal de que te estás a desviar da tua verdade.'**
-  String get hdNotSelfDefDesc;
+  /// **'Erro Google: {error}'**
+  String errorGoogle(Object error);
 
-  /// No description provided for @hdDefinitionDefDesc.
+  /// No description provided for @errorResetPassword.
   ///
   /// In pt, this message translates to:
-  /// **'A Definição mostra como a energia flui entre os teus centros.'**
-  String get hdDefinitionDefDesc;
+  /// **'Erro ao resetar: {error}'**
+  String errorResetPassword(Object error);
 
-  /// No description provided for @hdIncarnationCrossDefDesc.
+  /// No description provided for @close.
   ///
   /// In pt, this message translates to:
-  /// **'A tua Cruz de Encarnação representa o teu propósito de vida.'**
-  String get hdIncarnationCrossDefDesc;
+  /// **'Fechar'**
+  String get close;
 
-  /// No description provided for @hdValType_generator.
+  /// No description provided for @authError.
   ///
   /// In pt, this message translates to:
-  /// **'Como Gerador, a tua energia é desenhada para responder ao que a vida te traz, em vez de iniciares.'**
-  String get hdValType_generator;
+  /// **'Erro de Autenticação: {error}'**
+  String authError(Object error);
 
-  /// No description provided for @hdValType_manifestingGenerator.
+  /// No description provided for @tryAgain.
   ///
   /// In pt, this message translates to:
-  /// **'Tens a rapidez do Manifestador e a sustentabilidade do Gerador. Responde antes de agir.'**
-  String get hdValType_manifestingGenerator;
+  /// **'Tentar novamente'**
+  String get tryAgain;
 
-  /// No description provided for @hdValType_manifestor.
+  /// No description provided for @loadProfileError.
   ///
   /// In pt, this message translates to:
-  /// **'Vieste para iniciar e impactar. Informa os outros antes de agires para reduzir a resistência.'**
-  String get hdValType_manifestor;
+  /// **'Erro ao carregar perfil: {error}'**
+  String loadProfileError(String error);
 
-  /// No description provided for @hdValType_projector.
+  /// No description provided for @logoutAndTryAgain.
   ///
   /// In pt, this message translates to:
-  /// **'Estás aqui para guiar os outros. O teu sucesso vem ao esperares pelo reconhecimento e convite.'**
-  String get hdValType_projector;
+  /// **'Sair e Tentar Novamente'**
+  String get logoutAndTryAgain;
 
-  /// No description provided for @hdValType_reflector.
+  /// No description provided for @astroMoonSign.
   ///
   /// In pt, this message translates to:
-  /// **'És um espelho da comunidade. Espera um ciclo lunar completo antes de tomares decisões importantes.'**
-  String get hdValType_reflector;
+  /// **'Signo Lunar'**
+  String get astroMoonSign;
 
-  /// No description provided for @hdValAuth_emotional.
+  /// No description provided for @astroMercurySign.
   ///
   /// In pt, this message translates to:
-  /// **'A claridade não acontece no agora. Espera que a tua onda emocional estabilize antes de decidires.'**
-  String get hdValAuth_emotional;
+  /// **'Mercúrio'**
+  String get astroMercurySign;
 
-  /// No description provided for @hdValAuth_sacral.
+  /// No description provided for @astroVenusSign.
   ///
   /// In pt, this message translates to:
-  /// **'Confia na tua resposta visceral imediata (sons sacrais ou inclinação física) no momento presente.'**
-  String get hdValAuth_sacral;
+  /// **'Vénus'**
+  String get astroVenusSign;
 
-  /// No description provided for @hdValAuth_splenic.
+  /// No description provided for @astroMarsSign.
   ///
   /// In pt, this message translates to:
-  /// **'Confia na tua intuição instintiva e espontânea que te avisa sobre o que é seguro e saudável.'**
-  String get hdValAuth_splenic;
+  /// **'Marte'**
+  String get astroMarsSign;
 
-  /// No description provided for @hdValAuth_ego.
+  /// No description provided for @astroMC.
   ///
   /// In pt, this message translates to:
-  /// **'A tua vontade é o teu guia. O que é que tu realmente queres e tens vontade de fazer?'**
-  String get hdValAuth_ego;
+  /// **'Meio do Céu (MC)'**
+  String get astroMC;
 
-  /// No description provided for @hdValAuth_selfProjected.
+  /// No description provided for @astroNorthNode.
   ///
   /// In pt, this message translates to:
-  /// **'A tua verdade sai pela tua boca. Ouve o que dizes quando falas sem pensar sobre o teu futuro.'**
-  String get hdValAuth_selfProjected;
+  /// **'Nodo Norte'**
+  String get astroNorthNode;
 
-  /// No description provided for @hdValAuth_mental.
+  /// No description provided for @astroSouthNode.
   ///
   /// In pt, this message translates to:
-  /// **'Precisas de usar os outros como caixa de ressonância para ouvires a tua própria verdade ao falar.'**
-  String get hdValAuth_mental;
+  /// **'Nodo Sul'**
+  String get astroSouthNode;
 
-  /// No description provided for @hdValAuth_lunar.
+  /// No description provided for @astroHouses.
   ///
   /// In pt, this message translates to:
-  /// **'Como Refletor, a tua decisão amadurece ao longo de 28 dias em sintonia com o ciclo da Lua.'**
-  String get hdValAuth_lunar;
+  /// **'Casas Astrológicas'**
+  String get astroHouses;
 
-  /// No description provided for @hdValStr_respond.
+  /// No description provided for @astroHouseN.
   ///
   /// In pt, this message translates to:
-  /// **'A tua melhor forma de agir é responder às oportunidades que aparecem, em vez de tentar forçar coisas novas.'**
-  String get hdValStr_respond;
+  /// **'Casa {n}'**
+  String astroHouseN(int n);
 
-  /// No description provided for @hdValStr_inform.
+  /// No description provided for @astroAspects.
   ///
   /// In pt, this message translates to:
-  /// **'Para reduzir a resistência dos outros, informa as pessoas afetadas pelas tuas ações antes de as tomares.'**
-  String get hdValStr_inform;
+  /// **'Aspetos Planetários'**
+  String get astroAspects;
 
-  /// No description provided for @hdValStr_respondInform.
+  /// No description provided for @astroBig3.
   ///
   /// In pt, this message translates to:
-  /// **'Como MG, deves responder primeiro e depois informar quem te rodeia antes de entrares em ação rápida.'**
-  String get hdValStr_respondInform;
+  /// **'🌟 Big 3'**
+  String get astroBig3;
 
-  /// No description provided for @hdValStr_invite.
+  /// No description provided for @astroPersonalPlanets.
   ///
   /// In pt, this message translates to:
-  /// **'Deves esperar por reconhecimento formal e um convite antes de partilhares a tua sabedoria ou orientação.'**
-  String get hdValStr_invite;
+  /// **'🪐 Planetas Pessoais'**
+  String get astroPersonalPlanets;
 
-  /// No description provided for @hdValStr_lunar.
+  /// No description provided for @astroSocialGenerationalPlanets.
   ///
   /// In pt, this message translates to:
-  /// **'Decisões importantes devem ser tomadas apenas após um ciclo lunar completo (aproximadamente 28 dias).'**
-  String get hdValStr_lunar;
+  /// **'🪐 Planetas Sociais e Geracionais'**
+  String get astroSocialGenerationalPlanets;
 
-  /// No description provided for @hdValSig_satisfaction.
+  /// No description provided for @astroMCNodes.
   ///
   /// In pt, this message translates to:
-  /// **'Sentes satisfação quando usas a tua energia de forma produtiva em algo que te dá prazer.'**
-  String get hdValSig_satisfaction;
+  /// **'🎯 MC e Nodos Lunares'**
+  String get astroMCNodes;
 
-  /// No description provided for @hdValSig_success.
+  /// No description provided for @hdIndicators.
   ///
   /// In pt, this message translates to:
-  /// **'O sucesso para ti é ser reconhecido pelo que és e ver os outros prosperarem com a tua guia.'**
-  String get hdValSig_success;
+  /// **'Principais Indicadores'**
+  String get hdIndicators;
 
-  /// No description provided for @hdValSig_peace.
+  /// No description provided for @hdBodygraph.
   ///
   /// In pt, this message translates to:
-  /// **'Sentirás paz quando puderes agir livremente e sem resistência após informares os outros.'**
-  String get hdValSig_peace;
+  /// **'Mapa do Corpo (Bodygraph)'**
+  String get hdBodygraph;
 
-  /// No description provided for @hdValSig_surprise.
+  /// No description provided for @astroSunDefDesc.
   ///
   /// In pt, this message translates to:
-  /// **'A surpresa é o sinal de que estás a ver a vida com olhos novos, como um espelho puro do ambiente.'**
-  String get hdValSig_surprise;
+  /// **'O Sol representa a tua essência, a tua identidade central, o teu ego e a forma como brilhas no mundo. É o núcleo da tua personalidade.'**
+  String get astroSunDefDesc;
 
-  /// No description provided for @hdValNot_frustration.
+  /// No description provided for @astroMoonDefDesc.
   ///
   /// In pt, this message translates to:
-  /// **'A frustração surge quando tentas iniciar coisas sem esperar pela resposta certa.'**
-  String get hdValNot_frustration;
+  /// **'A Lua rege as tuas emoções, o teu mundo interior, as tuas necessidades subconscientes e como te sentes seguro e nutrido.'**
+  String get astroMoonDefDesc;
 
-  /// No description provided for @hdValNot_bitterness.
+  /// No description provided for @astroAscendantDefDesc.
   ///
   /// In pt, this message translates to:
-  /// **'A amargura aparece quando te esforças demais sem ser convidado ou reconhecido.'**
-  String get hdValNot_bitterness;
+  /// **'O Ascendente é a tua máscara social, a primeira impressão que causas nos outros e a forma como inicias novas etapas na vida.'**
+  String get astroAscendantDefDesc;
 
-  /// No description provided for @hdValNot_anger.
+  /// No description provided for @astroMercuryDefDesc.
   ///
   /// In pt, this message translates to:
-  /// **'A raiva é o resultado de sentires resistência por não informares os outros sobre as tuas intenções.'**
-  String get hdValNot_anger;
+  /// **'Mercúrio rege a tua mente, a tua forma de comunicar, de processar informação, a tua curiosidade intelectual e aprendizagem.'**
+  String get astroMercuryDefDesc;
 
-  /// No description provided for @hdValNot_disappointment.
+  /// No description provided for @astroVenusDefDesc.
   ///
   /// In pt, this message translates to:
-  /// **'A desilusão ocorre quando não estás num ambiente saudável ou tentas decidir depressa demais.'**
-  String get hdValNot_disappointment;
+  /// **'Vénus representa como amas, o que valorizas, a tua estética e a forma como te relacionas, dás valor e atrais harmonia.'**
+  String get astroVenusDefDesc;
+
+  /// No description provided for @astroMarsDefDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Marte simboliza a tua ação, o teu impulso, a tua coragem e a forma como persegues os teus desejos e lidas com desafios e conflitos.'**
+  String get astroMarsDefDesc;
+
+  /// No description provided for @astroValSignAries.
+  ///
+  /// In pt, this message translates to:
+  /// **'Energia pioneira, corajosa e cheia de iniciativa. Gosta de liderar e de novos desafios.'**
+  String get astroValSignAries;
+
+  /// No description provided for @astroValSignTaurus.
+  ///
+  /// In pt, this message translates to:
+  /// **'Foco na estabilidade, prazer sensorial e persistência. Valoriza a segurança e o conforto material.'**
+  String get astroValSignTaurus;
+
+  /// No description provided for @astroValSignGemini.
+  ///
+  /// In pt, this message translates to:
+  /// **'Curiosidade insaciável, comunicação versátil e agilidade mental. Adora trocar ideias e aprender.'**
+  String get astroValSignGemini;
+
+  /// No description provided for @astroValSignCancer.
+  ///
+  /// In pt, this message translates to:
+  /// **'Sensibilidade profunda, nutrição emocional e forte ligação às raízes e à família.'**
+  String get astroValSignCancer;
+
+  /// No description provided for @astroValSignLeo.
+  ///
+  /// In pt, this message translates to:
+  /// **'Expressão criativa, confiança, calor e brilho pessoal. Procura reconhecimento e ser autêntico.'**
+  String get astroValSignLeo;
+
+  /// No description provided for @astroValSignVirgo.
+  ///
+  /// In pt, this message translates to:
+  /// **'Análise detalhada, busca pela perfeição, organização e desejo de ser útil e prático.'**
+  String get astroValSignVirgo;
+
+  /// No description provided for @astroValSignLibra.
+  ///
+  /// In pt, this message translates to:
+  /// **'Equilíbrio, harmonia nas relações, diplomacia e um forte senso estético e de justiça.'**
+  String get astroValSignLibra;
+
+  /// No description provided for @astroValSignScorpio.
+  ///
+  /// In pt, this message translates to:
+  /// **'Intensidade profunda, paixão, transformação e um poderoso magnetismo emocional.'**
+  String get astroValSignScorpio;
+
+  /// No description provided for @astroValSignSagittarius.
+  ///
+  /// In pt, this message translates to:
+  /// **'Expansão, busca por significado, otimismo e amor pela liberdade e aventura intelectual.'**
+  String get astroValSignSagittarius;
+
+  /// No description provided for @astroValSignCapricorn.
+  ///
+  /// In pt, this message translates to:
+  /// **'Responsabilidade, ambição, disciplina e uma abordagem estruturada para alcançar o sucesso.'**
+  String get astroValSignCapricorn;
+
+  /// No description provided for @astroValSignAquarius.
+  ///
+  /// In pt, this message translates to:
+  /// **'Originalidade, visão humanitária, independência e um pensamento inovador e progressista.'**
+  String get astroValSignAquarius;
+
+  /// No description provided for @astroValSignPisces.
+  ///
+  /// In pt, this message translates to:
+  /// **'Empatia vasta, intuição aguçada, imaginação e uma forte ligação ao mundo espiritual e emocional.'**
+  String get astroValSignPisces;
 }
 
 class _AppLocalizationsDelegate

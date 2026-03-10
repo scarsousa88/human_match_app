@@ -323,6 +323,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hdPlanets => 'Astros';
 
   @override
+  String get hdPlanetSun => 'Sun';
+
+  @override
+  String get hdPlanetEarth => 'Earth';
+
+  @override
+  String get hdPlanetMoon => 'Moon';
+
+  @override
+  String get hdPlanetMercury => 'Mercury';
+
+  @override
+  String get hdPlanetVenus => 'Venus';
+
+  @override
+  String get hdPlanetMars => 'Mars';
+
+  @override
+  String get hdPlanetJupiter => 'Jupiter';
+
+  @override
+  String get hdPlanetSaturn => 'Saturn';
+
+  @override
+  String get hdPlanetUranus => 'Uranus';
+
+  @override
+  String get hdPlanetNeptune => 'Neptune';
+
+  @override
+  String get hdPlanetPluto => 'Pluto';
+
+  @override
   String get hdPersonality => 'Personality';
 
   @override
@@ -440,7 +473,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hdCenterG => 'G Center';
 
   @override
-  String get hdCenterEgo => 'Ego (Heart)';
+  String get hdCenterEgo => 'Heart (Ego)';
 
   @override
   String get hdCenterSpleen => 'Spleen';
@@ -455,167 +488,211 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hdCenterRoot => 'Root';
 
   @override
-  String get hdPlanetSun => 'Sun';
+  String get hdCenterNameHead => 'Head';
 
   @override
-  String get hdPlanetEarth => 'Earth';
+  String get hdCenterNameAjna => 'Ajna';
 
   @override
-  String get hdPlanetMoon => 'Moon';
+  String get hdCenterNameThroat => 'Throat';
 
   @override
-  String get hdPlanetMercury => 'Mercury';
+  String get hdCenterNameG => 'G Center';
 
   @override
-  String get hdPlanetVenus => 'Venus';
+  String get hdCenterNameHeart => 'Heart';
 
   @override
-  String get hdPlanetMars => 'Mars';
+  String get hdCenterNameSpleen => 'Spleen';
 
   @override
-  String get hdPlanetJupiter => 'Jupiter';
+  String get hdCenterNameSolar => 'Solar Plexus';
 
   @override
-  String get hdPlanetSaturn => 'Saturn';
+  String get hdCenterNameSacral => 'Sacral';
 
   @override
-  String get hdPlanetUranus => 'Uranus';
+  String get hdCenterNameRoot => 'Root';
 
   @override
-  String get hdPlanetNeptune => 'Neptune';
+  String get hdTypeDefDesc =>
+      'Type defines how your energy interacts with the world.';
 
   @override
-  String get hdPlanetPluto => 'Pluto';
+  String get hdAuthorityDefDesc =>
+      'Your Authority is your internal decision-making system.';
 
   @override
-  String get legalInfo => 'Legal Information';
+  String get hdStrategyDefDesc =>
+      'Strategy is the method for navigating life with less resistance.';
 
   @override
-  String get deleteAccountData => 'Delete Account and Data';
+  String get hdProfileDefDesc =>
+      'Profile describes your role and how you learn and evolve.';
 
   @override
-  String get verifyEmailTitle => 'Verify your Email';
+  String get hdSignatureDefDesc =>
+      'Signature is the feeling of being in alignment with your design.';
 
   @override
-  String verifyEmailSent(String email) {
-    return 'We sent a verification email to $email. Please check your inbox (and spam folder).';
-  }
+  String get hdNotSelfDefDesc =>
+      'Not-Self is the sign that you are drifting away from your truth.';
 
   @override
-  String get checkVerification => 'I\'ve verified';
+  String get hdDefinitionDefDesc =>
+      'Definition shows how energy flows between your centers.';
 
   @override
-  String get resendVerification => 'Resend email';
+  String get hdIncarnationCrossDefDesc =>
+      'Your Incarnation Cross represents your life purpose.';
 
   @override
-  String get verificationResent => 'Verification email resent.';
+  String get hdValTypeGenerator =>
+      'As a Generator, your energy is designed to respond to what life brings you, rather than initiating.';
 
   @override
-  String get orDivider => 'OU';
+  String get hdValTypeManifestingGenerator =>
+      'You have the speed of the Manifestor and the sustainability of the Generator. Respond before acting.';
 
   @override
-  String get errorEmailAlreadyRegistered =>
-      'Este email já está registado. Tente fazer LOGIN em vez de criar conta.';
+  String get hdValTypeManifestor =>
+      'You came to initiate and impact. Inform others before you act to reduce resistance.';
 
   @override
-  String get errorInvalidCredentials =>
-      'Credenciais incorretas ou conta inexistente.';
+  String get hdValTypeProjector =>
+      'You are here to guide others. Your success comes from waiting for recognition and invitation.';
 
   @override
-  String get errorUserDisabled => 'Conta desativada.';
+  String get hdValTypeReflector =>
+      'You are a mirror of the community. Wait a full lunar cycle before making major decisions.';
 
   @override
-  String get errorTooManyRequests =>
-      'Bloqueado temporariamente por excesso de tentativas.';
+  String get hdValAuthEmotional =>
+      'Clarity does not happen in the now. Wait for your emotional wave to stabilize before deciding.';
 
   @override
-  String get errorAccountExistsGoogle =>
-      'Já existe uma conta com este email vinculada ao Google. Use \"Continuar com Google\".';
+  String get hdValAuthSacral =>
+      'Trust your immediate visceral response (sacral sounds or physical leaning) in the present moment.';
 
   @override
-  String errorUnexpected(Object error) {
-    return 'Erro inesperado: $error';
-  }
+  String get hdValAuthSplenic =>
+      'Trust your instinctive and spontaneous intuition that warns you about what is safe and healthy.';
 
   @override
-  String errorGoogle(Object error) {
-    return 'Erro Google: $error';
-  }
+  String get hdValAuthEgo =>
+      'Your will is your guide. What do you really want and have the will to do?';
 
   @override
-  String errorResetPassword(Object error) {
-    return 'Erro ao resetar: $error';
-  }
+  String get hdValAuthSelfProjected =>
+      'Your truth comes out of your mouth. Listen to what you say when you speak without thinking about your future.';
 
   @override
-  String get close => 'Fechar';
+  String get hdValAuthMental =>
+      'You need to use others as a sounding board to hear your own truth when speaking.';
 
   @override
-  String authError(Object error) {
-    return 'Erro de Autenticação: $error';
-  }
+  String get hdValAuthLunar =>
+      'As a Reflector, your decision matures over 28 days in tune with the cycle of the Moon.';
 
   @override
-  String get tryAgain => 'Tentar novamente';
+  String get hdValStrRespond =>
+      'Your best way to act is to respond to the opportunities that appear, instead of trying to force new things.';
 
   @override
-  String loadProfileError(Object error) {
-    return 'Erro ao carregar perfil: $error';
-  }
+  String get hdValStrInform =>
+      'To reduce the resistance of others, inform the people affected by your actions before you take them.';
 
   @override
-  String get logoutAndTryAgain => 'Sair e Tentar Novamente';
+  String get hdValStrRespondInform =>
+      'As an MG, you must respond first and then inform those around you before moving into fast action.';
 
   @override
-  String get astroMoonSign => 'Moon Sign';
+  String get hdValStrInvite =>
+      'You must wait for formal recognition and an invitation before sharing your wisdom or guidance.';
 
   @override
-  String get astroMercurySign => 'Mercury';
+  String get hdValStrLunar =>
+      'Important decisions should only be made after a full lunar cycle (approximately 28 days).';
 
   @override
-  String get astroVenusSign => 'Venus';
+  String get hdValSigSatisfaction =>
+      'You feel satisfaction when you use your energy productively in something that gives you pleasure.';
 
   @override
-  String get astroMarsSign => 'Mars';
+  String get hdValSigSuccess =>
+      'Success for you is being recognized for who you are and seeing others prosper with your guidance.';
 
   @override
-  String get astroMC => 'Midheaven (MC)';
+  String get hdValSigPeace =>
+      'You will feel peace when you can act freely and without resistance after informing others.';
 
   @override
-  String get astroNorthNode => 'North Node';
+  String get hdValSigSurprise =>
+      'Surprise is the sign that you are seeing life with new eyes, as a pure mirror of the environment.';
 
   @override
-  String get astroSouthNode => 'South Node';
+  String get hdValNotFrustration =>
+      'Frustration arises when you try to initiate things without waiting for the right response.';
 
   @override
-  String get astroHouses => 'Astrological Houses';
+  String get hdValNotBitterness =>
+      'Bitterness appears when you overextend yourself without being invited or recognized.';
 
   @override
-  String astroHouseN(int n) {
-    return 'House $n';
-  }
+  String get hdValNotAnger =>
+      'Anger is the result of feeling resistance for not informing others about your intentions.';
 
   @override
-  String get astroAspects => 'Astrological Aspects';
+  String get hdValNotDisappointment =>
+      'Disappointment occurs when you are not in a healthy environment or try to decide too quickly.';
 
   @override
-  String get astroBig3 => '🌟 Big 3';
+  String get hdValProf13 =>
+      'Investigator/Martyr: Learns through experimentation, solid foundations, and depth.';
 
   @override
-  String get astroPersonalPlanets => '🪐 Personal Planets';
+  String get hdValProf14 =>
+      'Investigator/Opportunist: Influences their close network by sharing their deep study.';
 
   @override
-  String get astroSocialGenerationalPlanets =>
-      '🪐 Social and Generational Planets';
+  String get hdValProf24 =>
+      'Hermit/Opportunist: A natural talent who needs time alone but flourishes in their network.';
 
   @override
-  String get astroMCNodes => '🎯 MC and Lunar Nodes';
+  String get hdValProf25 =>
+      'Hermit/Heretic: Natural talent projected to be a guide or savior for others.';
 
   @override
-  String get hdIndicators => 'Main Indicators';
+  String get hdValProf35 =>
+      'Martyr/Heretic: Learns by trial and error and shares what works to challenge the status quo.';
 
   @override
-  String get hdBodygraph => 'Bodygraph';
+  String get hdValProf36 =>
+      'Martyr/Role Model: Experiments in the first phase of life to become a wise and objective guide.';
+
+  @override
+  String get hdValProf46 =>
+      'Opportunist/Role Model: Influences through network and objectivity, becoming a role model.';
+
+  @override
+  String get hdValProf41 =>
+      'Opportunist/Investigator: Follows a fixed and unique path based on very solid foundations.';
+
+  @override
+  String get hdValProf51 =>
+      'Heretic/Investigator: The master who solves practical problems through study and authority.';
+
+  @override
+  String get hdValProf52 =>
+      'Heretic/Hermit: Motivated by self-reflection but seen by others as a natural guide.';
+
+  @override
+  String get hdValProf62 =>
+      'Role Model/Hermit: A role model who lives with objectivity and detachment after a life of experience.';
+
+  @override
+  String get hdValProf63 =>
+      'Role Model/Martyr: A role model who continues to evolve through constant experimentation.';
 
   @override
   String get hdCenterHeadDefDesc =>
@@ -705,161 +782,204 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hdChannelsUser => 'User\'s Channels';
 
   @override
-  String get hdCenterName_head => 'Head';
+  String get legalInfo => 'Legal Information';
 
   @override
-  String get hdCenterName_ajna => 'Ajna';
+  String get deleteAccountData => 'Delete Account and Data';
 
   @override
-  String get hdCenterName_throat => 'Throat';
+  String get verifyEmailTitle => 'Verify your Email';
 
   @override
-  String get hdCenterName_g => 'G Center';
+  String verifyEmailSent(String email) {
+    return 'We sent a verification email to $email. Please check your inbox (and spam folder).';
+  }
 
   @override
-  String get hdCenterName_heart => 'Heart';
+  String get checkVerification => 'I\'ve verified';
 
   @override
-  String get hdCenterName_spleen => 'Spleen';
+  String get resendVerification => 'Resend email';
 
   @override
-  String get hdCenterName_solar => 'Solar Plexus';
+  String get verificationResent => 'Verification email resent.';
 
   @override
-  String get hdCenterName_sacral => 'Sacral';
+  String get orDivider => 'OR';
 
   @override
-  String get hdCenterName_root => 'Root';
+  String get errorEmailAlreadyRegistered =>
+      'This email is already registered. Try logging in instead of creating an account.';
 
   @override
-  String get hdTypeDefDesc =>
-      'Type defines how your energy interacts with the world.';
+  String get errorInvalidCredentials =>
+      'Incorrect credentials or account does not exist.';
 
   @override
-  String get hdAuthorityDefDesc =>
-      'Your Authority is your internal decision-making system.';
+  String get errorUserDisabled => 'Account disabled.';
 
   @override
-  String get hdStrategyDefDesc =>
-      'Strategy is the method for navigating life with less resistance.';
+  String get errorTooManyRequests =>
+      'Temporarily blocked due to too many attempts.';
 
   @override
-  String get hdProfileDefDesc =>
-      'Profile describes your role and how you learn and evolve.';
+  String get errorAccountExistsGoogle =>
+      'An account with this email already exists linked to Google. Use \"Continue with Google\".';
 
   @override
-  String get hdSignatureDefDesc =>
-      'Signature is the feeling of being in alignment with your design.';
+  String errorUnexpected(Object error) {
+    return 'Unexpected error: $error';
+  }
 
   @override
-  String get hdNotSelfDefDesc =>
-      'Not-Self is the sign that you are drifting away from your truth.';
+  String errorGoogle(Object error) {
+    return 'Google error: $error';
+  }
 
   @override
-  String get hdDefinitionDefDesc =>
-      'Definition shows how energy flows between your centers.';
+  String errorResetPassword(Object error) {
+    return 'Error resetting: $error';
+  }
 
   @override
-  String get hdIncarnationCrossDefDesc =>
-      'Your Incarnation Cross represents your life purpose.';
+  String get close => 'Close';
 
   @override
-  String get hdValType_generator =>
-      'As a Generator, your energy is designed to respond to what life brings you, rather than initiating.';
+  String authError(Object error) {
+    return 'Authentication Error: $error';
+  }
 
   @override
-  String get hdValType_manifestingGenerator =>
-      'You have the speed of the Manifestor and the sustainability of the Generator. Respond before acting.';
+  String get tryAgain => 'Try again';
 
   @override
-  String get hdValType_manifestor =>
-      'You came to initiate and impact. Inform others before you act to reduce resistance.';
+  String loadProfileError(String error) {
+    return 'Error loading profile: $error';
+  }
 
   @override
-  String get hdValType_projector =>
-      'You are here to guide others. Your success comes from waiting for recognition and invitation.';
+  String get logoutAndTryAgain => 'Logout and Try Again';
 
   @override
-  String get hdValType_reflector =>
-      'You are a mirror of the community. Wait a full lunar cycle before making major decisions.';
+  String get astroMoonSign => 'Moon Sign';
 
   @override
-  String get hdValAuth_emotional =>
-      'Clarity does not happen in the now. Wait for your emotional wave to stabilize before deciding.';
+  String get astroMercurySign => 'Mercury';
 
   @override
-  String get hdValAuth_sacral =>
-      'Trust your immediate visceral response (sacral sounds or physical leaning) in the present moment.';
+  String get astroVenusSign => 'Venus';
 
   @override
-  String get hdValAuth_splenic =>
-      'Trust your instinctive and spontaneous intuition that warns you about what is safe and healthy.';
+  String get astroMarsSign => 'Mars';
 
   @override
-  String get hdValAuth_ego =>
-      'Your will is your guide. What do you really want and have the will to do?';
+  String get astroMC => 'Midheaven (MC)';
 
   @override
-  String get hdValAuth_selfProjected =>
-      'Your truth comes out of your mouth. Listen to what you say when you speak without thinking about your future.';
+  String get astroNorthNode => 'North Node';
 
   @override
-  String get hdValAuth_mental =>
-      'You need to use others as a sounding board to hear your own truth when speaking.';
+  String get astroSouthNode => 'South Node';
 
   @override
-  String get hdValAuth_lunar =>
-      'As a Reflector, your decision matures over 28 days in tune with the cycle of the Moon.';
+  String get astroHouses => 'Astrological Houses';
 
   @override
-  String get hdValStr_respond =>
-      'Your best way to act is to respond to the opportunities that appear, instead of trying to force new things.';
+  String astroHouseN(int n) {
+    return 'House $n';
+  }
 
   @override
-  String get hdValStr_inform =>
-      'To reduce the resistance of others, inform the people affected by your actions before you take them.';
+  String get astroAspects => 'Astrological Aspects';
 
   @override
-  String get hdValStr_respondInform =>
-      'As an MG, you must respond first and then inform those around you before moving into fast action.';
+  String get astroBig3 => '🌟 Big 3';
 
   @override
-  String get hdValStr_invite =>
-      'You must wait for formal recognition and an invitation before sharing your wisdom or guidance.';
+  String get astroPersonalPlanets => '🪐 Personal Planets';
 
   @override
-  String get hdValStr_lunar =>
-      'Important decisions should only be made after a full lunar cycle (approximately 28 days).';
+  String get astroSocialGenerationalPlanets =>
+      '🪐 Social and Generational Planets';
 
   @override
-  String get hdValSig_satisfaction =>
-      'You feel satisfaction when you use your energy productively in something that gives you pleasure.';
+  String get astroMCNodes => '🎯 MC and Lunar Nodes';
 
   @override
-  String get hdValSig_success =>
-      'Success for you is being recognized for who you are and seeing others prosper with your guidance.';
+  String get hdIndicators => 'Main Indicators';
 
   @override
-  String get hdValSig_peace =>
-      'You will feel peace when you can act freely and without resistance after informing others.';
+  String get hdBodygraph => 'Bodygraph';
 
   @override
-  String get hdValSig_surprise =>
-      'Surprise is the sign that you are seeing life with new eyes, as a pure mirror of the environment.';
+  String get astroSunDefDesc =>
+      'The Sun represents your essence, your core identity, your ego, and how you shine in the world. It is the core of your personality.';
 
   @override
-  String get hdValNot_frustration =>
-      'Frustration arises when you try to initiate things without waiting for the right response.';
+  String get astroMoonDefDesc =>
+      'The Moon rules your emotions, your inner world, your subconscious needs, and how you feel safe and nurtured.';
 
   @override
-  String get hdValNot_bitterness =>
-      'Bitterness appears when you overextend yourself without being invited or recognized.';
+  String get astroAscendantDefDesc =>
+      'The Ascendant is your social mask, the first impression you make on others, and the way you initiate new stages in life.';
 
   @override
-  String get hdValNot_anger =>
-      'Anger is the result of feeling resistance for not informing others about your intentions.';
+  String get astroMercuryDefDesc =>
+      'Mercury rules your mind, your way of communicating, processing information, your intellectual curiosity, and learning.';
 
   @override
-  String get hdValNot_disappointment =>
-      'Disappointment occurs when you are not in a healthy environment or try to decide too quickly.';
+  String get astroVenusDefDesc =>
+      'Venus represents how you love, what you value, your aesthetics, and the way you relate, give value, and attract harmony.';
+
+  @override
+  String get astroMarsDefDesc =>
+      'Mars symbolizes your action, your drive, your courage, and the way you pursue your desires and handle challenges and conflicts.';
+
+  @override
+  String get astroValSignAries =>
+      'Pioneering energy, courageous and full of initiative. Loves to lead and take on new challenges.';
+
+  @override
+  String get astroValSignTaurus =>
+      'Focus on stability, sensory pleasure, and persistence. Values security and material comfort.';
+
+  @override
+  String get astroValSignGemini =>
+      'Insatiable curiosity, versatile communication, and mental agility. Loves to exchange ideas and learn.';
+
+  @override
+  String get astroValSignCancer =>
+      'Deep sensitivity, emotional nurturing, and a strong connection to roots and family.';
+
+  @override
+  String get astroValSignLeo =>
+      'Creative expression, confidence, warmth, and personal radiance. Seeks recognition and authenticity.';
+
+  @override
+  String get astroValSignVirgo =>
+      'Detailed analysis, search for perfection, organization, and a desire to be useful and practical.';
+
+  @override
+  String get astroValSignLibra =>
+      'Balance, harmony in relationships, diplomacy, and a strong sense of aesthetics and justice.';
+
+  @override
+  String get astroValSignScorpio =>
+      'Deep intensity, passion, transformation, and a powerful emotional magnetism.';
+
+  @override
+  String get astroValSignSagittarius =>
+      'Expansion, search for meaning, optimism, and a love for freedom and intellectual adventure.';
+
+  @override
+  String get astroValSignCapricorn =>
+      'Responsibility, ambition, discipline, and a structured approach to achieving success.';
+
+  @override
+  String get astroValSignAquarius =>
+      'Originality, humanitarian vision, independence, and innovative, progressive thinking.';
+
+  @override
+  String get astroValSignPisces =>
+      'Vast empathy, sharp intuition, imagination, and a strong connection to the spiritual and emotional world.';
 }

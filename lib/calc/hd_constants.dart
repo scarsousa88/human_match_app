@@ -37,7 +37,6 @@ enum HdType {
 }
 
 /// All 36 channels: gateA-gateB and the two centers they connect.
-/// Used to determine defined channels/centers and type.
 class HdChannel {
   final int a;
   final int b;
@@ -114,6 +113,4 @@ const List<HdChannel> hdChannels = [
 
   // Ego <-> Solar Plexus
   HdChannel(37, 40, HdCenter.solarPlexus, HdCenter.ego),
-
-  // Ajna <-> G? (none)  Solar plexus <-> Spleen? (none) etc.
 ];

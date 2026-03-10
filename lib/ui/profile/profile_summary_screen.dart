@@ -7,6 +7,7 @@ import '../../calc/numerology.dart';
 import '../../hd/human_design_section.dart';
 import '../../ai_actions.dart';
 import '../../utils/astro_utils.dart';
+import '../../utils/astro_data_utils.dart';
 import '../loading_widget.dart';
 import '../widgets/common_ui.dart';
 
@@ -110,20 +111,20 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
             return '—';
           }
 
-          final sunSign = getSign(astro['sun'], astro['sunSign']);
-          final moonSign = getSign(astro['moon'], null);
-          final mercurySign = getSign(astro['mercury'], null);
-          final venusSign = getSign(astro['venus'], null);
-          final marsSign = getSign(astro['mars'], null);
-          final jupiterSign = getSign(astro['jupiter'], null);
-          final saturnSign = getSign(astro['saturn'], null);
-          final uranusSign = getSign(astro['uranus'], null);
-          final neptuneSign = getSign(astro['neptune'], null);
-          final plutoSign = getSign(astro['pluto'], null);
-          final ascSign = astro['ascSign'] ?? astro['ascendantSign'] ?? '—';
-          final mcSign = astro['mcSign'] ?? '—';
-          final northNodeSign = getSign(astro['northNode'], null);
-          final southNodeSign = getSign(astro['southNode'], null);
+          final sunSign = AstroDataUtils.localizeSignName(context, getSign(astro['sun'], astro['sunSign']));
+          final moonSign = AstroDataUtils.localizeSignName(context, getSign(astro['moon'], null));
+          final mercurySign = AstroDataUtils.localizeSignName(context, getSign(astro['mercury'], null));
+          final venusSign = AstroDataUtils.localizeSignName(context, getSign(astro['venus'], null));
+          final marsSign = AstroDataUtils.localizeSignName(context, getSign(astro['mars'], null));
+          final jupiterSign = AstroDataUtils.localizeSignName(context, getSign(astro['jupiter'], null));
+          final saturnSign = AstroDataUtils.localizeSignName(context, getSign(astro['saturn'], null));
+          final uranusSign = AstroDataUtils.localizeSignName(context, getSign(astro['uranus'], null));
+          final neptuneSign = AstroDataUtils.localizeSignName(context, getSign(astro['neptune'], null));
+          final plutoSign = AstroDataUtils.localizeSignName(context, getSign(astro['pluto'], null));
+          final ascSign = AstroDataUtils.localizeSignName(context, astro['ascSign'] ?? astro['ascendantSign'] ?? '—');
+          final mcSign = AstroDataUtils.localizeSignName(context, astro['mcSign'] ?? '—');
+          final northNodeSign = AstroDataUtils.localizeSignName(context, getSign(astro['northNode'], null));
+          final southNodeSign = AstroDataUtils.localizeSignName(context, getSign(astro['southNode'], null));
           
           final housesList = (astro['houses'] as List?)?.cast<num>();
           final aspectsList = (astro['aspects'] as List?)?.cast<Map>();
@@ -151,11 +152,13 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                       // --- BIG 3 ---
                       Text(l10n.astroBig3, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 15)),
                       const SizedBox(height: 12),
-                      _AstroRow(symbol: '☉', label: l10n.zodiacSign, value: sunSign),
-                      const SizedBox(height: 10),
-                      _AstroRow(symbol: '☾', label: l10n.astroMoonSign, value: moonSign),
-                      const SizedBox(height: 10),
-                      _AstroRow(symbol: '⬆️', label: l10n.ascendant, value: ascSign),
+                      _AstroIndicatorsTable(
+                        items: [
+                          {'key': 'sun', 'label': l10n.zodiacSign, 'value': sunSign, 'symbol': '☉'},
+                          {'key': 'moon', 'label': l10n.astroMoonSign, 'value': moonSign, 'symbol': '☾'},
+                          {'key': 'ascendant', 'label': l10n.ascendant, 'value': ascSign, 'symbol': '⬆️'},
+                        ],
+                      ),
                       
                       const SizedBox(height: 20),
                       const Divider(color: Colors.white12),
@@ -164,11 +167,13 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
                       // --- PLANETAS PESSOAIS ---
                       Text(l10n.astroPersonalPlanets, style: const TextStyle(color: goldColor, fontWeight: FontWeight.bold, fontSize: 15)),
                       const SizedBox(height: 12),
-                      _AstroRow(symbol: '☿', label: l10n.astroMercurySign, value: mercurySign),
-                      const SizedBox(height: 10),
-                      _AstroRow(symbol: '♀', label: l10n.astroVenusSign, value: venusSign),
-                      const SizedBox(height: 10),
-                      _AstroRow(symbol: '♂', label: l10n.astroMarsSign, value: marsSign),
+                      _AstroIndicatorsTable(
+                        items: [
+                          {'key': 'mercury', 'label': l10n.astroMercurySign, 'value': mercurySign, 'symbol': '☿'},
+                          {'key': 'venus', 'label': l10n.astroVenusSign, 'value': venusSign, 'symbol': '♀'},
+                          {'key': 'mars', 'label': l10n.astroMarsSign, 'value': marsSign, 'symbol': '♂'},
+                        ],
+                      ),
 
                       const SizedBox(height: 20),
                       const Divider(color: Colors.white12),
@@ -515,6 +520,59 @@ class _AstroRow extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _AstroIndicatorsTable extends StatelessWidget {
+  const _AstroIndicatorsTable({required this.items});
+  final List<Map<String, String>> items;
+
+  @override
+  Widget build(BuildContext context) {
+    const goldColor = Color(0xFFE6B325);
+
+    return Column(
+      children: items.map((item) {
+        final desc = AstroDataUtils.getAstroDescription(context, item['key']!);
+        final valDesc = AstroDataUtils.getAstroValueDescription(context, item['value']!);
+
+        return Container(
+          width: double.infinity,
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.05),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: Colors.white10),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  SizedBox(
+                    width: 24,
+                    child: Text(item['symbol']!, style: const TextStyle(fontSize: 18, color: goldColor), textAlign: TextAlign.center),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(item['label']!, style: const TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w600)),
+                  const Spacer(),
+                  Text(item['value']!, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
+                ],
+              ),
+              if (desc.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Text(desc, style: const TextStyle(color: goldColor, fontSize: 11, fontWeight: FontWeight.w500)),
+              ],
+              if (valDesc.isNotEmpty) ...[
+                const SizedBox(height: 4),
+                Text(valDesc, style: const TextStyle(color: Colors.white60, fontSize: 12, height: 1.4)),
+              ],
+            ],
+          ),
+        );
+      }).toList(),
     );
   }
 }

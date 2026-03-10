@@ -97,13 +97,11 @@ class HumanDesignCalculator {
   }) async {
     await swe.init();
 
-    // Ensure birthUtc is strictly UTC
     final bUtc = birthUtc.toUtc();
 
     final sunLonBirth = _norm360(swe.calcSunLongitudeUtc(bUtc));
     final targetLon = _norm360(sunLonBirth - 88.0);
     
-    // Design Sun is exactly 88 degrees before birth.
     final designUtc = _findUtcWhenSunAtLongitude(
       targetLon: targetLon,
       startGuessUtc: bUtc.subtract(const Duration(days: 88)),
@@ -159,9 +157,11 @@ class HumanDesignCalculator {
   }
 
   List<HdActivation> _buildPlanetSet(DateTime utc, {required bool conscious}) {
+    // Standard HD planets + North Node (True Node is used by MyBodyGraph)
     const bodies = {
       'Sun': 0, 'Moon': 1, 'Mercury': 2, 'Venus': 3, 'Mars': 4, 
       'Jupiter': 5, 'Saturn': 6, 'Uranus': 7, 'Neptune': 8, 'Pluto': 9,
+      'North Node': 11, // True Node
     };
     
     final list = <HdActivation>[];
@@ -170,17 +170,25 @@ class HumanDesignCalculator {
       list.add(HdActivation(body: e.key, conscious: conscious, lon: lon, gl: _gateLineFromLon(lon)));
     }
 
+    // Earth is always 180 degrees from the Sun
     final sunLon = list.firstWhere((a) => a.body == 'Sun').lon;
     final earthLon = _norm360(sunLon + 180.0);
     list.add(HdActivation(body: 'Earth', conscious: conscious, lon: earthLon, gl: _gateLineFromLon(earthLon)));
+
+    // South Node is always 180 degrees from the North Node
+    final nNodeLon = list.firstWhere((a) => a.body == 'North Node').lon;
+    final sNodeLon = _norm360(nNodeLon + 180.0);
+    list.add(HdActivation(body: 'South Node', conscious: conscious, lon: sNodeLon, gl: _gateLineFromLon(sNodeLon)));
     
     return list;
   }
 
   HdGateLine _gateLineFromLon(double lonDeg) {
+    // Normalize longitude relative to the mandala start (0° Aries for Gate 25)
     final x = _norm360(lonDeg - hdStartDeg);
     final gateIndex = (x / hdGateSizeDeg).floor().clamp(0, 63);
     final withinGate = (x / hdGateSizeDeg) - gateIndex;
+    // Lines are 1-6
     return HdGateLine(hdGateOrder[gateIndex], (withinGate * 6).floor().clamp(0, 5) + 1);
   }
 
@@ -200,6 +208,7 @@ class HumanDesignCalculator {
       }
     }
 
+    // Binary search for high precision
     for (int i = 0; i < 40; i++) {
       final mid = DateTime.fromMillisecondsSinceEpoch((a.millisecondsSinceEpoch + b.millisecondsSinceEpoch) ~/ 2, isUtc: true);
       final fm = _shortestAngleDiff(_norm360(swe.calcSunLongitudeUtc(mid)), target);

@@ -53,43 +53,58 @@ class HdDataUtils {
     final val = value.toLowerCase();
 
     if (indicatorKey == 'type') {
-      if (val.contains('generator') && !val.contains('manifesting')) return l10n.hdValType_generator;
-      if (val.contains('manifesting')) return l10n.hdValType_manifestingGenerator;
-      if (val.contains('manifestor')) return l10n.hdValType_manifestor;
-      if (val.contains('projector')) return l10n.hdValType_projector;
-      if (val.contains('reflector')) return l10n.hdValType_reflector;
+      if (val.contains('generator') && !val.contains('manifesting')) return l10n.hdValTypeGenerator;
+      if (val.contains('manifesting')) return l10n.hdValTypeManifestingGenerator;
+      if (val.contains('manifestor')) return l10n.hdValTypeManifestor;
+      if (val.contains('projector')) return l10n.hdValTypeProjector;
+      if (val.contains('reflector')) return l10n.hdValTypeReflector;
     }
 
     if (indicatorKey == 'authority') {
-      if (val.contains('emot')) return l10n.hdValAuth_emotional;
-      if (val.contains('sacral')) return l10n.hdValAuth_sacral;
-      if (val.contains('splen')) return l10n.hdValAuth_splenic;
-      if (val.contains('ego')) return l10n.hdValAuth_ego;
-      if (val.contains('self')) return l10n.hdValAuth_selfProjected;
-      if (val.contains('mental')) return l10n.hdValAuth_mental;
-      if (val.contains('lunar')) return l10n.hdValAuth_lunar;
+      if (val.contains('emot')) return l10n.hdValAuthEmotional;
+      if (val.contains('sacral')) return l10n.hdValAuthSacral;
+      if (val.contains('splen')) return l10n.hdValAuthSplenic;
+      if (val.contains('ego')) return l10n.hdValAuthEgo;
+      if (val.contains('self')) return l10n.hdValAuthSelfProjected;
+      if (val.contains('mental')) return l10n.hdValAuthMental;
+      if (val.contains('lunar')) return l10n.hdValAuthLunar;
     }
 
     if (indicatorKey == 'strategy') {
-      if (val.contains('inform') && val.contains('respond')) return l10n.hdValStr_respondInform;
-      if (val.contains('inform')) return l10n.hdValStr_inform;
-      if (val.contains('respond')) return l10n.hdValStr_respond;
-      if (val.contains('invit')) return l10n.hdValStr_invite;
-      if (val.contains('lunar')) return l10n.hdValStr_lunar;
+      if (val.contains('inform') && val.contains('respond')) return l10n.hdValStrRespondInform;
+      if (val.contains('inform')) return l10n.hdValStrInform;
+      if (val.contains('respond')) return l10n.hdValStrRespond;
+      if (val.contains('invit')) return l10n.hdValStrInvite;
+      if (val.contains('lunar')) return l10n.hdValStrLunar;
     }
 
     if (indicatorKey == 'signature') {
-      if (val.contains('sat')) return l10n.hdValSig_satisfaction;
-      if (val.contains('suc')) return l10n.hdValSig_success;
-      if (val.contains('pea')) return l10n.hdValSig_peace;
-      if (val.contains('sur')) return l10n.hdValSig_surprise;
+      if (val.contains('sat')) return l10n.hdValSigSatisfaction;
+      if (val.contains('suc')) return l10n.hdValSigSuccess;
+      if (val.contains('pea')) return l10n.hdValSigPeace;
+      if (val.contains('sur')) return l10n.hdValSigSurprise;
     }
 
     if (indicatorKey == 'notSelf') {
-      if (val.contains('fru')) return l10n.hdValNot_frustration;
-      if (val.contains('bit')) return l10n.hdValNot_bitterness;
-      if (val.contains('ang')) return l10n.hdValNot_anger;
-      if (val.contains('dis')) return l10n.hdValNot_disappointment;
+      if (val.contains('fru')) return l10n.hdValNotFrustration;
+      if (val.contains('bit')) return l10n.hdValNotBitterness;
+      if (val.contains('ang')) return l10n.hdValNotAnger;
+      if (val.contains('dis')) return l10n.hdValNotDisappointment;
+    }
+
+    if (indicatorKey == 'profile') {
+      if (val.contains('1/3')) return l10n.hdValProf13;
+      if (val.contains('1/4')) return l10n.hdValProf14;
+      if (val.contains('2/4')) return l10n.hdValProf24;
+      if (val.contains('2/5')) return l10n.hdValProf25;
+      if (val.contains('3/5')) return l10n.hdValProf35;
+      if (val.contains('3/6')) return l10n.hdValProf36;
+      if (val.contains('4/6')) return l10n.hdValProf46;
+      if (val.contains('4/1')) return l10n.hdValProf41;
+      if (val.contains('5/1')) return l10n.hdValProf51;
+      if (val.contains('5/2')) return l10n.hdValProf52;
+      if (val.contains('6/2')) return l10n.hdValProf62;
+      if (val.contains('6/3')) return l10n.hdValProf63;
     }
 
     return '';
