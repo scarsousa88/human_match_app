@@ -615,4 +615,250 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get hdBodygraph => 'Mapa do Corpo (Bodygraph)';
+
+  @override
+  String get hdCenterHeadDefDesc =>
+      'Processas pensamentos de forma constante e inspiras-te nas tuas próprias ideias.';
+
+  @override
+  String get hdCenterHeadUndDesc =>
+      'És aberto a novas ideias e tens flexibilidade para ver diferentes perspetivas.';
+
+  @override
+  String get hdCenterAjnaDefDesc =>
+      'Tens uma forma fixa e organizada de pensar e processar informação.';
+
+  @override
+  String get hdCenterAjnaUndDesc =>
+      'Podes adaptar a tua forma de pensar a qualquer situação sem opiniões rígidas.';
+
+  @override
+  String get hdCenterThroatDefDesc =>
+      'Comunicação e ação constantes e fiáveis através da tua voz e feitos.';
+
+  @override
+  String get hdCenterThroatUndDesc =>
+      'Comunicação variável, dependendo do ambiente e de quem te rodeia.';
+
+  @override
+  String get hdCenterGDefDesc =>
+      'Tens um sentido fixo e claro de quem és, do teu propósito e direção na vida.';
+
+  @override
+  String get hdCenterGUndDesc =>
+      'A tua identidade é fluida e podes adaptar-te e encontrar-te em diversos ambientes.';
+
+  @override
+  String get hdCenterEgoDefDesc =>
+      'Tens força de vontade e um compromisso natural para alcançar os teus objetivos.';
+
+  @override
+  String get hdCenterEgoUndDesc =>
+      'Não precisas de provar nada a ninguém; a tua vontade é flexível.';
+
+  @override
+  String get hdCenterSpleenDefDesc =>
+      'Intuição aguçada e instinto de sobrevivência forte e constante.';
+
+  @override
+  String get hdCenterSpleenUndDesc =>
+      'Captação da saúde e bem-estar dos outros de forma sensível e intuitiva.';
+
+  @override
+  String get hdCenterSolarDefDesc =>
+      'Vives uma onda emocional cíclica e profunda; a claridade vem com o tempo.';
+
+  @override
+  String get hdCenterSolarUndDesc =>
+      'És sensível às emoções dos outros, captando-as e amplificando-as.';
+
+  @override
+  String get hdCenterSacralDefDesc =>
+      'Fonte inesgotável de energia vital e persistência para o trabalho que amas.';
+
+  @override
+  String get hdCenterSacralUndDesc =>
+      'Precisas de descansar quando a energia acaba; não tens um motor vital constante.';
+
+  @override
+  String get hdCenterRootDefDesc =>
+      'Lidas bem com a pressão e tens um motor interno para impulsionar a ação.';
+
+  @override
+  String get hdCenterRootUndDesc =>
+      'Podes sentir a pressão externa mas preferes agir ao teu próprio ritmo.';
+
+  @override
+  String get hdDefined => 'Definido';
+
+  @override
+  String get hdUndefined => 'Indefinido';
+
+  @override
+  String get hdGates => 'Portas';
+
+  @override
+  String get hdGatesUser => 'Portas do utilizador';
+
+  @override
+  String get hdChannelsUser => 'Canais do utilizador';
+
+  @override
+  String get hdCenterName_head => 'Cabeça';
+
+  @override
+  String get hdCenterName_ajna => 'Ajna';
+
+  @override
+  String get hdCenterName_throat => 'Garganta';
+
+  @override
+  String get hdCenterName_g => 'Centro G';
+
+  @override
+  String get hdCenterName_heart => 'Coração';
+
+  @override
+  String get hdCenterName_spleen => 'Baço';
+
+  @override
+  String get hdCenterName_solar => 'Plexo Solar';
+
+  @override
+  String get hdCenterName_sacral => 'Sacral';
+
+  @override
+  String get hdCenterName_root => 'Raiz';
+
+  @override
+  String get hdTypeDefDesc =>
+      'O Tipo define a forma como a tua energia interage com o mundo.';
+
+  @override
+  String get hdAuthorityDefDesc =>
+      'A tua Autoridade é o teu sistema interno de tomada de decisão.';
+
+  @override
+  String get hdStrategyDefDesc =>
+      'A Estratégia é o método para navegar na vida com menos resistência.';
+
+  @override
+  String get hdProfileDefDesc =>
+      'O Perfil descreve o teu papel e a forma como aprendes e evoluis.';
+
+  @override
+  String get hdSignatureDefDesc =>
+      'A Assinatura é a sensação de estar alinhado com o teu design.';
+
+  @override
+  String get hdNotSelfDefDesc =>
+      'O Não-ser é o sinal de que te estás a desviar da tua verdade.';
+
+  @override
+  String get hdDefinitionDefDesc =>
+      'A Definição mostra como a energia flui entre os teus centros.';
+
+  @override
+  String get hdIncarnationCrossDefDesc =>
+      'A tua Cruz de Encarnação representa o teu propósito de vida.';
+
+  @override
+  String get hdValType_generator =>
+      'Como Gerador, a tua energia é desenhada para responder ao que a vida te traz, em vez de iniciares.';
+
+  @override
+  String get hdValType_manifestingGenerator =>
+      'Tens a rapidez do Manifestador e a sustentabilidade do Gerador. Responde antes de agir.';
+
+  @override
+  String get hdValType_manifestor =>
+      'Vieste para iniciar e impactar. Informa os outros antes de agires para reduzir a resistência.';
+
+  @override
+  String get hdValType_projector =>
+      'Estás aqui para guiar os outros. O teu sucesso vem ao esperares pelo reconhecimento e convite.';
+
+  @override
+  String get hdValType_reflector =>
+      'És um espelho da comunidade. Espera um ciclo lunar completo antes de tomares decisões importantes.';
+
+  @override
+  String get hdValAuth_emotional =>
+      'A claridade não acontece no agora. Espera que a tua onda emocional estabilize antes de decidires.';
+
+  @override
+  String get hdValAuth_sacral =>
+      'Confia na tua resposta visceral imediata (sons sacrais ou inclinação física) no momento presente.';
+
+  @override
+  String get hdValAuth_splenic =>
+      'Confia na tua intuição instintiva e espontânea que te avisa sobre o que é seguro e saudável.';
+
+  @override
+  String get hdValAuth_ego =>
+      'A tua vontade é o teu guia. O que é que tu realmente queres e tens vontade de fazer?';
+
+  @override
+  String get hdValAuth_selfProjected =>
+      'A tua verdade sai pela tua boca. Ouve o que dizes quando falas sem pensar sobre o teu futuro.';
+
+  @override
+  String get hdValAuth_mental =>
+      'Precisas de usar os outros como caixa de ressonância para ouvires a tua própria verdade ao falar.';
+
+  @override
+  String get hdValAuth_lunar =>
+      'Como Refletor, a tua decisão amadurece ao longo de 28 dias em sintonia com o ciclo da Lua.';
+
+  @override
+  String get hdValStr_respond =>
+      'A tua melhor forma de agir é responder às oportunidades que aparecem, em vez de tentar forçar coisas novas.';
+
+  @override
+  String get hdValStr_inform =>
+      'Para reduzir a resistência dos outros, informa as pessoas afetadas pelas tuas ações antes de as tomares.';
+
+  @override
+  String get hdValStr_respondInform =>
+      'Como MG, deves responder primeiro e depois informar quem te rodeia antes de entrares em ação rápida.';
+
+  @override
+  String get hdValStr_invite =>
+      'Deves esperar por reconhecimento formal e um convite antes de partilhares a tua sabedoria ou orientação.';
+
+  @override
+  String get hdValStr_lunar =>
+      'Decisões importantes devem ser tomadas apenas após um ciclo lunar completo (aproximadamente 28 dias).';
+
+  @override
+  String get hdValSig_satisfaction =>
+      'Sentes satisfação quando usas a tua energia de forma produtiva em algo que te dá prazer.';
+
+  @override
+  String get hdValSig_success =>
+      'O sucesso para ti é ser reconhecido pelo que és e ver os outros prosperarem com a tua guia.';
+
+  @override
+  String get hdValSig_peace =>
+      'Sentirás paz quando puderes agir livremente e sem resistência após informares os outros.';
+
+  @override
+  String get hdValSig_surprise =>
+      'A surpresa é o sinal de que estás a ver a vida com olhos novos, como um espelho puro do ambiente.';
+
+  @override
+  String get hdValNot_frustration =>
+      'A frustração surge quando tentas iniciar coisas sem esperar pela resposta certa.';
+
+  @override
+  String get hdValNot_bitterness =>
+      'A amargura aparece quando te esforças demais sem ser convidado ou reconhecido.';
+
+  @override
+  String get hdValNot_anger =>
+      'A raiva é o resultado de sentires resistência por não informares os outros sobre as tuas intenções.';
+
+  @override
+  String get hdValNot_disappointment =>
+      'A desilusão ocorre quando não estás num ambiente saudável ou tentas decidir depressa demais.';
 }

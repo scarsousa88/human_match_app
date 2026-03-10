@@ -67,7 +67,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get termsContent =>
-      'Politique de confidentialité - Human Match\n\nCette politique de confidentialité décrit comment Human Match, une application mobile qui génère des rapports personnalisés de Human Design, d\'astrologie et de numérologie basés sur le nom complet, la date et le lieu de naissance des utilisateurs, collecte, utilise et protège vos données personnelles. Nous nous engageons à protéger votre vie privée conformément au Règlement général sur la protection des données (RGPD) de l\'Union européenne et à la législation applicable au Portugal.\n\nDonnées collectées\nNous collectons uniquement les données strictly nécessaires à la fourniture du service :\n- Nom complet ;\n- Date de naissance ;\n- Lieu de naissance.\n\nCes données sont utilisées exclusivement pour calculer et générer vos rapports personnalisés de Human Design, d\'astrologie et de numérologie. Nous ne collectons pas de données sensibles supplémentaires, telles que l\'adresse e-mail ou les informations financière, a moins qu\'elles ne soient fournies volontairement pour l\'assistance ou l\'enregistrement d\'un compte.\n\nFinalités du traitement\nLes données sont traitées pour :\n- Générer des rapports précis basés sur les données fournies ;\n- Améliorer la précision des calculs astrologiques et de design humain ;\n- Permettre le stockage facultatif des rapports pour un accès futur (avec votre consentement explicite).\n\nLe traitement est licite sur la base de votre consentement libre et éclairé, obtenu au moment de la soumission des données.\n\nPartage de données\nNous ne partageons pas vos données personnelles with tiers, sauf :\n- Prestataires de services techniques essentiels (par exemple, serveurs cloud sécurisés dans l\'UE) dans le cadre d\'accords de traitement de données garantissant la confidentialité ;\n- Lorsque la loi ou les autorités compétentes l\'exigent.\n\nLes rapports générés sont privés et ne sont pas vendus ni utilisés à des fins de marketing.\n\nStockage et sécurité\nLes données sont stockées sur des serveurs sécurisés situés dans l\'Union européenne, avec des mesures techniques telles que le cryptage (AES-256), la pseudonymisation et les contrôles d\'accès. Nous ne conservons les données que pendant la durée nécessaire au service (généralement jusqu\'à 30 jours après le dernier accès, sauf consentement pour un stockage prolongé). Nous procédons à une suppression sécurisée automatique après cette période.\n\nvos droits\nVous pouvez exercer vos droits RGPD a tout moment :\n- Accès aux données ;\n- Rectification ou correction ;\n- Effacement (\"droit à l\'oubli\") ;\n- Opposition au traitement ;\n- Limitation du traitement ;\n- Portabilidade des données.\n\nPour demander la suppression de votre compte et de toutes les données associadas, vous pouvez le faire via le lien suivant : https://humanmatch.app/delete-account ou en envoyant un e-mail à support@humanmatch.app.\n\nConsentement et modifications\nEn utilisant l\'application, vous consentez à cette politique. Vous pouvez révoquer votre consentement à tout moment, ce qui empêchera l\'accès aux rapports existants. Nous mettrons à jour cette politique si nécessaire, en informant les utilisateurs via l\'application.';
+      'Politique de confidentialité - Human Match\n\nCette politique de confidentialité décrit comment Human Match, une application mobile qui génère des rapports personnalisés de Human Design, d\'astrologie et de numérologie basés sur le nom complet, la date et le lieu de naissance des utilisateurs, collecte, utilise et protège vos données personnelles. Nous nous engageons à protéger votre vie privée conformément au Règlement général sur la protection des données (RGPD) de l\'Union européenne et à la législation applicable au Portugal.\n\nDonnées collectées\nNous collectons uniquement les données strictly nécessaires à la fourniture du service :\n- Nom complet ;\n- Date de naissance ;\n- Lieu de naissance.\n\nCes données sont utilisées exclusivement pour calculer et générer vos rapports personnalisés de Human Design, d\'astrologie et de numérologie. Nous ne collectons pas de données sensibles supplémentaires, telles que l\'adresse e-mail ou les informations financière, a moins qu\'elles ne soient fournies volontairement pour l\'assistance ou l\'enregistrement d\'un compte.\n\nFinalidades du traitement\nLes données sont traitées pour :\n- Générer des rapports précis basés sur les données fournies ;\n- Améliorer la précision des calculs astrologiques et de design humain ;\n- Permettre le stockage facultatif des rapports pour un accès futur (avec votre consentement explicite).\n\nLe traitement est licite sur la base de votre consentement libre et éclairé, obtenu au moment de la soumission des données.\n\nPartage de données\nNous ne partageons pas vos données personnelles with tiers, sauf :\n- Prestataires de services techniques essentiels (par exemple, serveurs cloud sécurisés dans l\'UE) dans le cadre d\'accords de traitement de données garantissant la confidentialité ;\n- Lorsque la loi ou les autorités compétentes l\'exigent.\n\nLes rapports générés sont privés et ne sont pas vendus ni utilisés à des fins de marketing.\n\nStockage et sécurité\nLes données sont stockées sur des serveurs sécurisés situés dans l\'Union européenne, avec des mesures techniques telles que le cryptage (AES-256), la pseudonymisation et les contrôles d\'accès. Nous ne conservons les données que pendant la durée nécessaire au service (généralement jusqu\'à 30 jours après le dernier accès, sauf consentement pour un stockage prolongé). Nous procédons à une suppression sécurisée automatique après cette période.\n\nvos droits\nVous pouvez exercer vos droits RGPD a tout moment :\n- Accès aux données ;\n- Rectification ou correction ;\n- Effacement (\"droit à l\'oubli\") ;\n- Opposition au traitement ;\n- Limitation du traitement ;\n- Portabilidade des données.\n\nPour demander la suppression de votre compte et de toutes les données associadas, vous pouvez le faire via le lien suivant : https://humanmatch.app/delete-account ou en envoyant un e-mail à support@humanmatch.app.\n\nConsentement et modifications\nEn utilisant l\'application, vous consentez à cette politique. Vous pouvez révoquer votre consentement à tout moment, ce qui empêchera l\'accès aux rapports existants. Nous mettrons à jour cette politique si nécessaire, en informant les utilisateurs via l\'application.';
 
   @override
   String get processing => 'Traitement...';
@@ -386,22 +386,22 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hdStrLun => 'Attendre un cycle lunaire';
 
   @override
-  String get hdSigSat => 'Satisfação';
+  String get hdSigSat => 'Satisfaction';
 
   @override
-  String get hdSigSuc => 'Sucesso';
+  String get hdSigSuc => 'Succès';
 
   @override
-  String get hdSigPea => 'Paz';
+  String get hdSigPea => 'Paix';
 
   @override
-  String get hdSigSur => 'Surpresa';
+  String get hdSigSur => 'Surprise';
 
   @override
-  String get hdNotFru => 'Frustração';
+  String get hdNotFru => 'Frustration';
 
   @override
-  String get hdNotBit => 'Amargura';
+  String get hdNotBit => 'Amertume';
 
   @override
   String get hdNotAng => 'Colère';
@@ -622,4 +622,250 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get hdBodygraph => 'Carte du corps';
+
+  @override
+  String get hdCenterHeadDefDesc =>
+      'Vous traitez les pensées de manière cohérente et vous vous inspirez de vos propres idées.';
+
+  @override
+  String get hdCenterHeadUndDesc =>
+      'Vous êtes ouvert aux idées nouvelles et avez la souplesse nécessaire pour voir différentes perspectives.';
+
+  @override
+  String get hdCenterAjnaDefDesc =>
+      'Vous avez une façon fixe et organisée de penser et de traiter l\'information.';
+
+  @override
+  String get hdCenterAjnaUndDesc =>
+      'Vous pouvez adapter votre façon de penser à n\'importe quelle situation sans opinions rigides.';
+
+  @override
+  String get hdCenterThroatDefDesc =>
+      'Communication et action fiables et constantes par votre voix et vos actes.';
+
+  @override
+  String get hdCenterThroatUndDesc =>
+      'Communication variable, selon l\'environnement et ceux qui vous entourent.';
+
+  @override
+  String get hdCenterGDefDesc =>
+      'Vous avez un sens fixe et clair de qui vous êtes, de votre but et de votre direction dans la vie.';
+
+  @override
+  String get hdCenterGUndDesc =>
+      'Votre identité est fluide et vous pouvez vous adapter et vous retrouver dans divers environnements.';
+
+  @override
+  String get hdCenterEgoDefDesc =>
+      'Vous avez de la volonté et un engagement naturel pour atteindre vos objectifs.';
+
+  @override
+  String get hdCenterEgoUndDesc =>
+      'Vous n\'avez rien à prouver à personne ; votre volonté est flexible.';
+
+  @override
+  String get hdCenterSpleenDefDesc =>
+      'Intuition aiguisée et un instinct de survie fort et constant.';
+
+  @override
+  String get hdCenterSpleenUndDesc =>
+      'Saisir la santé et le bien-être des autres de manière sensible et intuitive.';
+
+  @override
+  String get hdCenterSolarDefDesc =>
+      'Vous vivez une vague émotionnelle profonde et cyclique ; la clarté vient avec le temps.';
+
+  @override
+  String get hdCenterSolarUndDesc =>
+      'Vous êtes sensible aux émotions des autres, vous les captez et les amplifiez.';
+
+  @override
+  String get hdCenterSacralDefDesc =>
+      'Source inépuisable d\'énergie vitale et de persévérance pour le travail que vous aimez.';
+
+  @override
+  String get hdCenterSacralUndDesc =>
+      'Vous avez besoin de vous reposer quand l\'énergie vient à manquer ; vous n\'avez pas de moteur vital constant.';
+
+  @override
+  String get hdCenterRootDefDesc =>
+      'Vous gérez bien la pression et avez un moteur interne pour stimuler l\'action.';
+
+  @override
+  String get hdCenterRootUndDesc =>
+      'Vous pouvez ressentir la pression extérieure mais préférez agir à votre propre rythme.';
+
+  @override
+  String get hdDefined => 'Défini';
+
+  @override
+  String get hdUndefined => 'Indéfini';
+
+  @override
+  String get hdGates => 'Portes';
+
+  @override
+  String get hdGatesUser => 'Portes de l\'utilisateur';
+
+  @override
+  String get hdChannelsUser => 'Canaux de l\'utilisateur';
+
+  @override
+  String get hdCenterName_head => 'Tête';
+
+  @override
+  String get hdCenterName_ajna => 'Ajna';
+
+  @override
+  String get hdCenterName_throat => 'Gorge';
+
+  @override
+  String get hdCenterName_g => 'Centre G';
+
+  @override
+  String get hdCenterName_heart => 'Cœur';
+
+  @override
+  String get hdCenterName_spleen => 'Rate';
+
+  @override
+  String get hdCenterName_solar => 'Plexo Solaire';
+
+  @override
+  String get hdCenterName_sacral => 'Sacrum';
+
+  @override
+  String get hdCenterName_root => 'Racine';
+
+  @override
+  String get hdTypeDefDesc =>
+      'Le Type définit la manière dont votre énergie interagit avec le monde.';
+
+  @override
+  String get hdAuthorityDefDesc =>
+      'Votre Autorité est votre système interne de prise de décision.';
+
+  @override
+  String get hdStrategyDefDesc =>
+      'La Stratégie est la méthode pour naviguer dans la vie avec moins de résistance.';
+
+  @override
+  String get hdProfileDefDesc =>
+      'Le Profil décrit votre rôle et la manière dont vous apprenez et évoluez.';
+
+  @override
+  String get hdSignatureDefDesc =>
+      'La Signature est le sentiment d\'être en phase avec votre design.';
+
+  @override
+  String get hdNotSelfDefDesc =>
+      'Le Non-soi est le signe que vous vous éloignez de votre vérité.';
+
+  @override
+  String get hdDefinitionDefDesc =>
+      'La Définition montre comment l\'énergie circule entre vos centres.';
+
+  @override
+  String get hdIncarnationCrossDefDesc =>
+      'Votre Croix d\'Incarnation représente le but de votre vie.';
+
+  @override
+  String get hdValType_generator =>
+      'Como Gerador, a tua energia é desenhada para responder ao que a vida te traz, em vez de iniciares.';
+
+  @override
+  String get hdValType_manifestingGenerator =>
+      'Tens a rapidez do Manifestador e a sustentabilidade do Gerador. Responde antes de agir.';
+
+  @override
+  String get hdValType_manifestor =>
+      'Vieste para iniciar e impactar. Informa os outros antes de agires para reduzir a resistência.';
+
+  @override
+  String get hdValType_projector =>
+      'Estás aqui para guiar os outros. O teu sucesso vem ao esperares pelo reconhecimento e convite.';
+
+  @override
+  String get hdValType_reflector =>
+      'És um espelho da comunidade. Espera um ciclo lunar completo antes de tomares decisões importantes.';
+
+  @override
+  String get hdValAuth_emotional =>
+      'A claridade não acontece no agora. Espera que a tua onda emocional estabilize antes de decidires.';
+
+  @override
+  String get hdValAuth_sacral =>
+      'Confia na tua resposta visceral imediata (sons sacrais ou inclinação física) no momento presente.';
+
+  @override
+  String get hdValAuth_splenic =>
+      'Confia na tua intuição instintiva e espontânea que te avisa sobre o que é seguro e saudável.';
+
+  @override
+  String get hdValAuth_ego =>
+      'A tua vontade é o teu guia. O que é que tu realmente queres e tens vontade de fazer?';
+
+  @override
+  String get hdValAuth_selfProjected =>
+      'A tua verdade sai pela tua boca. Ouve o que dizes quando falas sem pensar sobre o teu futuro.';
+
+  @override
+  String get hdValAuth_mental =>
+      'Precisas de usar os outros como caixa de ressonância para ouvires a tua própria verdade ao falar.';
+
+  @override
+  String get hdValAuth_lunar =>
+      'Como Refletor, a tua decisão amadurece ao longo de 28 dias em sintonia com o ciclo da Lua.';
+
+  @override
+  String get hdValStr_respond =>
+      'A tua melhor forma de agir é responder às oportunidades que aparecem, em vez de tentar forçar coisas novas.';
+
+  @override
+  String get hdValStr_inform =>
+      'Para reduzir a resistência dos outros, informa as pessoas afetadas pelas tuas ações antes de as tomares.';
+
+  @override
+  String get hdValStr_respondInform =>
+      'Como MG, deves responder primeiro e depois informar quem te rodeia antes de entrares em ação rápida.';
+
+  @override
+  String get hdValStr_invite =>
+      'Deves esperar por reconhecimento formal e um convite antes de partilhares a tua sabedoria ou orientação.';
+
+  @override
+  String get hdValStr_lunar =>
+      'Decisões importantes devem ser tomadas apenas após um ciclo lunar completo (aproximadamente 28 dias).';
+
+  @override
+  String get hdValSig_satisfaction =>
+      'Sentes satisfação quando usas a tua energia de forma produtiva em algo que te dá prazer.';
+
+  @override
+  String get hdValSig_success =>
+      'O sucesso para ti é ser reconhecido pelo que és e ver os outros prosperarem com a tua guia.';
+
+  @override
+  String get hdValSig_peace =>
+      'Sentirás paz quando puderes agir livremente e sem resistência após informares os outros.';
+
+  @override
+  String get hdValSig_surprise =>
+      'A surpresa é o sinal de que estás a ver a vida com olhos novos, como um espelho puro do ambiente.';
+
+  @override
+  String get hdValNot_frustration =>
+      'A frustração surge quando tentas iniciar coisas sem esperar pela resposta certa.';
+
+  @override
+  String get hdValNot_bitterness =>
+      'A amargura aparece quando te esforças demais sem ser convidado ou reconhecido.';
+
+  @override
+  String get hdValNot_anger =>
+      'A raiva é o resultado de sentires resistência por não informares os outros sobre as tuas intenções.';
+
+  @override
+  String get hdValNot_disappointment =>
+      'A desilusão ocorre quando não estás num ambiente saudável ou tentas decidir depressa demais.';
 }

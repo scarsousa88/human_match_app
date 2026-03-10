@@ -1259,6 +1259,396 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Mapa do Corpo (Bodygraph)'**
   String get hdBodygraph;
+
+  /// No description provided for @hdCenterHeadDefDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Processas pensamentos de forma constante e inspiras-te nas tuas próprias ideias.'**
+  String get hdCenterHeadDefDesc;
+
+  /// No description provided for @hdCenterHeadUndDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'És aberto a novas ideias e tens flexibilidade para ver diferentes perspetivas.'**
+  String get hdCenterHeadUndDesc;
+
+  /// No description provided for @hdCenterAjnaDefDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Tens uma forma fixa e organizada de pensar e processar informação.'**
+  String get hdCenterAjnaDefDesc;
+
+  /// No description provided for @hdCenterAjnaUndDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Podes adaptar a tua forma de pensar a qualquer situação sem opiniões rígidas.'**
+  String get hdCenterAjnaUndDesc;
+
+  /// No description provided for @hdCenterThroatDefDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Comunicação e ação constantes e fiáveis através da tua voz e feitos.'**
+  String get hdCenterThroatDefDesc;
+
+  /// No description provided for @hdCenterThroatUndDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Comunicação variável, dependendo do ambiente e de quem te rodeia.'**
+  String get hdCenterThroatUndDesc;
+
+  /// No description provided for @hdCenterGDefDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Tens um sentido fixo e claro de quem és, do teu propósito e direção na vida.'**
+  String get hdCenterGDefDesc;
+
+  /// No description provided for @hdCenterGUndDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'A tua identidade é fluida e podes adaptar-te e encontrar-te em diversos ambientes.'**
+  String get hdCenterGUndDesc;
+
+  /// No description provided for @hdCenterEgoDefDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Tens força de vontade e um compromisso natural para alcançar os teus objetivos.'**
+  String get hdCenterEgoDefDesc;
+
+  /// No description provided for @hdCenterEgoUndDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Não precisas de provar nada a ninguém; a tua vontade é flexível.'**
+  String get hdCenterEgoUndDesc;
+
+  /// No description provided for @hdCenterSpleenDefDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Intuição aguçada e instinto de sobrevivência forte e constante.'**
+  String get hdCenterSpleenDefDesc;
+
+  /// No description provided for @hdCenterSpleenUndDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Captação da saúde e bem-estar dos outros de forma sensível e intuitiva.'**
+  String get hdCenterSpleenUndDesc;
+
+  /// No description provided for @hdCenterSolarDefDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Vives uma onda emocional cíclica e profunda; a claridade vem com o tempo.'**
+  String get hdCenterSolarDefDesc;
+
+  /// No description provided for @hdCenterSolarUndDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'És sensível às emoções dos outros, captando-as e amplificando-as.'**
+  String get hdCenterSolarUndDesc;
+
+  /// No description provided for @hdCenterSacralDefDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Fonte inesgotável de energia vital e persistência para o trabalho que amas.'**
+  String get hdCenterSacralDefDesc;
+
+  /// No description provided for @hdCenterSacralUndDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Precisas de descansar quando a energia acaba; não tens um motor vital constante.'**
+  String get hdCenterSacralUndDesc;
+
+  /// No description provided for @hdCenterRootDefDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Lidas bem com a pressão e tens um motor interno para impulsionar a ação.'**
+  String get hdCenterRootDefDesc;
+
+  /// No description provided for @hdCenterRootUndDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Podes sentir a pressão externa mas preferes agir ao teu próprio ritmo.'**
+  String get hdCenterRootUndDesc;
+
+  /// No description provided for @hdDefined.
+  ///
+  /// In pt, this message translates to:
+  /// **'Definido'**
+  String get hdDefined;
+
+  /// No description provided for @hdUndefined.
+  ///
+  /// In pt, this message translates to:
+  /// **'Indefinido'**
+  String get hdUndefined;
+
+  /// No description provided for @hdGates.
+  ///
+  /// In pt, this message translates to:
+  /// **'Portas'**
+  String get hdGates;
+
+  /// No description provided for @hdGatesUser.
+  ///
+  /// In pt, this message translates to:
+  /// **'Portas do utilizador'**
+  String get hdGatesUser;
+
+  /// No description provided for @hdChannelsUser.
+  ///
+  /// In pt, this message translates to:
+  /// **'Canais do utilizador'**
+  String get hdChannelsUser;
+
+  /// No description provided for @hdCenterName_head.
+  ///
+  /// In pt, this message translates to:
+  /// **'Cabeça'**
+  String get hdCenterName_head;
+
+  /// No description provided for @hdCenterName_ajna.
+  ///
+  /// In pt, this message translates to:
+  /// **'Ajna'**
+  String get hdCenterName_ajna;
+
+  /// No description provided for @hdCenterName_throat.
+  ///
+  /// In pt, this message translates to:
+  /// **'Garganta'**
+  String get hdCenterName_throat;
+
+  /// No description provided for @hdCenterName_g.
+  ///
+  /// In pt, this message translates to:
+  /// **'Centro G'**
+  String get hdCenterName_g;
+
+  /// No description provided for @hdCenterName_heart.
+  ///
+  /// In pt, this message translates to:
+  /// **'Coração'**
+  String get hdCenterName_heart;
+
+  /// No description provided for @hdCenterName_spleen.
+  ///
+  /// In pt, this message translates to:
+  /// **'Baço'**
+  String get hdCenterName_spleen;
+
+  /// No description provided for @hdCenterName_solar.
+  ///
+  /// In pt, this message translates to:
+  /// **'Plexo Solar'**
+  String get hdCenterName_solar;
+
+  /// No description provided for @hdCenterName_sacral.
+  ///
+  /// In pt, this message translates to:
+  /// **'Sacral'**
+  String get hdCenterName_sacral;
+
+  /// No description provided for @hdCenterName_root.
+  ///
+  /// In pt, this message translates to:
+  /// **'Raiz'**
+  String get hdCenterName_root;
+
+  /// No description provided for @hdTypeDefDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'O Tipo define a forma como a tua energia interage com o mundo.'**
+  String get hdTypeDefDesc;
+
+  /// No description provided for @hdAuthorityDefDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'A tua Autoridade é o teu sistema interno de tomada de decisão.'**
+  String get hdAuthorityDefDesc;
+
+  /// No description provided for @hdStrategyDefDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'A Estratégia é o método para navegar na vida com menos resistência.'**
+  String get hdStrategyDefDesc;
+
+  /// No description provided for @hdProfileDefDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'O Perfil descreve o teu papel e a forma como aprendes e evoluis.'**
+  String get hdProfileDefDesc;
+
+  /// No description provided for @hdSignatureDefDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'A Assinatura é a sensação de estar alinhado com o teu design.'**
+  String get hdSignatureDefDesc;
+
+  /// No description provided for @hdNotSelfDefDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'O Não-ser é o sinal de que te estás a desviar da tua verdade.'**
+  String get hdNotSelfDefDesc;
+
+  /// No description provided for @hdDefinitionDefDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'A Definição mostra como a energia flui entre os teus centros.'**
+  String get hdDefinitionDefDesc;
+
+  /// No description provided for @hdIncarnationCrossDefDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'A tua Cruz de Encarnação representa o teu propósito de vida.'**
+  String get hdIncarnationCrossDefDesc;
+
+  /// No description provided for @hdValType_generator.
+  ///
+  /// In pt, this message translates to:
+  /// **'Como Gerador, a tua energia é desenhada para responder ao que a vida te traz, em vez de iniciares.'**
+  String get hdValType_generator;
+
+  /// No description provided for @hdValType_manifestingGenerator.
+  ///
+  /// In pt, this message translates to:
+  /// **'Tens a rapidez do Manifestador e a sustentabilidade do Gerador. Responde antes de agir.'**
+  String get hdValType_manifestingGenerator;
+
+  /// No description provided for @hdValType_manifestor.
+  ///
+  /// In pt, this message translates to:
+  /// **'Vieste para iniciar e impactar. Informa os outros antes de agires para reduzir a resistência.'**
+  String get hdValType_manifestor;
+
+  /// No description provided for @hdValType_projector.
+  ///
+  /// In pt, this message translates to:
+  /// **'Estás aqui para guiar os outros. O teu sucesso vem ao esperares pelo reconhecimento e convite.'**
+  String get hdValType_projector;
+
+  /// No description provided for @hdValType_reflector.
+  ///
+  /// In pt, this message translates to:
+  /// **'És um espelho da comunidade. Espera um ciclo lunar completo antes de tomares decisões importantes.'**
+  String get hdValType_reflector;
+
+  /// No description provided for @hdValAuth_emotional.
+  ///
+  /// In pt, this message translates to:
+  /// **'A claridade não acontece no agora. Espera que a tua onda emocional estabilize antes de decidires.'**
+  String get hdValAuth_emotional;
+
+  /// No description provided for @hdValAuth_sacral.
+  ///
+  /// In pt, this message translates to:
+  /// **'Confia na tua resposta visceral imediata (sons sacrais ou inclinação física) no momento presente.'**
+  String get hdValAuth_sacral;
+
+  /// No description provided for @hdValAuth_splenic.
+  ///
+  /// In pt, this message translates to:
+  /// **'Confia na tua intuição instintiva e espontânea que te avisa sobre o que é seguro e saudável.'**
+  String get hdValAuth_splenic;
+
+  /// No description provided for @hdValAuth_ego.
+  ///
+  /// In pt, this message translates to:
+  /// **'A tua vontade é o teu guia. O que é que tu realmente queres e tens vontade de fazer?'**
+  String get hdValAuth_ego;
+
+  /// No description provided for @hdValAuth_selfProjected.
+  ///
+  /// In pt, this message translates to:
+  /// **'A tua verdade sai pela tua boca. Ouve o que dizes quando falas sem pensar sobre o teu futuro.'**
+  String get hdValAuth_selfProjected;
+
+  /// No description provided for @hdValAuth_mental.
+  ///
+  /// In pt, this message translates to:
+  /// **'Precisas de usar os outros como caixa de ressonância para ouvires a tua própria verdade ao falar.'**
+  String get hdValAuth_mental;
+
+  /// No description provided for @hdValAuth_lunar.
+  ///
+  /// In pt, this message translates to:
+  /// **'Como Refletor, a tua decisão amadurece ao longo de 28 dias em sintonia com o ciclo da Lua.'**
+  String get hdValAuth_lunar;
+
+  /// No description provided for @hdValStr_respond.
+  ///
+  /// In pt, this message translates to:
+  /// **'A tua melhor forma de agir é responder às oportunidades que aparecem, em vez de tentar forçar coisas novas.'**
+  String get hdValStr_respond;
+
+  /// No description provided for @hdValStr_inform.
+  ///
+  /// In pt, this message translates to:
+  /// **'Para reduzir a resistência dos outros, informa as pessoas afetadas pelas tuas ações antes de as tomares.'**
+  String get hdValStr_inform;
+
+  /// No description provided for @hdValStr_respondInform.
+  ///
+  /// In pt, this message translates to:
+  /// **'Como MG, deves responder primeiro e depois informar quem te rodeia antes de entrares em ação rápida.'**
+  String get hdValStr_respondInform;
+
+  /// No description provided for @hdValStr_invite.
+  ///
+  /// In pt, this message translates to:
+  /// **'Deves esperar por reconhecimento formal e um convite antes de partilhares a tua sabedoria ou orientação.'**
+  String get hdValStr_invite;
+
+  /// No description provided for @hdValStr_lunar.
+  ///
+  /// In pt, this message translates to:
+  /// **'Decisões importantes devem ser tomadas apenas após um ciclo lunar completo (aproximadamente 28 dias).'**
+  String get hdValStr_lunar;
+
+  /// No description provided for @hdValSig_satisfaction.
+  ///
+  /// In pt, this message translates to:
+  /// **'Sentes satisfação quando usas a tua energia de forma produtiva em algo que te dá prazer.'**
+  String get hdValSig_satisfaction;
+
+  /// No description provided for @hdValSig_success.
+  ///
+  /// In pt, this message translates to:
+  /// **'O sucesso para ti é ser reconhecido pelo que és e ver os outros prosperarem com a tua guia.'**
+  String get hdValSig_success;
+
+  /// No description provided for @hdValSig_peace.
+  ///
+  /// In pt, this message translates to:
+  /// **'Sentirás paz quando puderes agir livremente e sem resistência após informares os outros.'**
+  String get hdValSig_peace;
+
+  /// No description provided for @hdValSig_surprise.
+  ///
+  /// In pt, this message translates to:
+  /// **'A surpresa é o sinal de que estás a ver a vida com olhos novos, como um espelho puro do ambiente.'**
+  String get hdValSig_surprise;
+
+  /// No description provided for @hdValNot_frustration.
+  ///
+  /// In pt, this message translates to:
+  /// **'A frustração surge quando tentas iniciar coisas sem esperar pela resposta certa.'**
+  String get hdValNot_frustration;
+
+  /// No description provided for @hdValNot_bitterness.
+  ///
+  /// In pt, this message translates to:
+  /// **'A amargura aparece quando te esforças demais sem ser convidado ou reconhecido.'**
+  String get hdValNot_bitterness;
+
+  /// No description provided for @hdValNot_anger.
+  ///
+  /// In pt, this message translates to:
+  /// **'A raiva é o resultado de sentires resistência por não informares os outros sobre as tuas intenções.'**
+  String get hdValNot_anger;
+
+  /// No description provided for @hdValNot_disappointment.
+  ///
+  /// In pt, this message translates to:
+  /// **'A desilusão ocorre quando não estás num ambiente saudável ou tentas decidir depressa demais.'**
+  String get hdValNot_disappointment;
 }
 
 class _AppLocalizationsDelegate
