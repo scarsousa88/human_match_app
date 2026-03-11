@@ -420,6 +420,12 @@ abstract class AppLocalizations {
   /// **'Personalidade'**
   String get personality;
 
+  /// No description provided for @chineseSignTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Signo Chinês'**
+  String get chineseSignTitle;
+
   /// No description provided for @profileInsights.
   ///
   /// In pt, this message translates to:
@@ -1401,7 +1407,7 @@ abstract class AppLocalizations {
   /// No description provided for @hdCenterThroatDefDesc.
   ///
   /// In pt, this message translates to:
-  /// **'Comunicação e ação constantes e fiáveis através da tua voz e feitos.'**
+  /// **'Comunicação e ação constantes e fiáveis através da tua velocidade e feitos.'**
   String get hdCenterThroatDefDesc;
 
   /// No description provided for @hdCenterThroatUndDesc.

@@ -174,6 +174,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get personality => 'Personalidad';
 
   @override
+  String get chineseSignTitle => 'Signo Chinês';
+
+  @override
   String get profileInsights => 'Análisis del Perfil';
 
   @override

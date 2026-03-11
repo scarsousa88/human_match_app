@@ -173,6 +173,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get personality => 'Personalidade';
 
   @override
+  String get chineseSignTitle => 'Signo Chinês';
+
+  @override
   String get profileInsights => 'Insights de Perfil';
 
   @override
@@ -718,7 +721,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get hdCenterThroatDefDesc =>
-      'Comunicação e ação constantes e fiáveis através da tua voz e feitos.';
+      'Comunicação e ação constantes e fiáveis através da tua velocidade e feitos.';
 
   @override
   String get hdCenterThroatUndDesc =>

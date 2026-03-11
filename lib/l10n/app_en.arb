@@ -53,6 +53,7 @@
   "expression": "Expression",
   "soul": "Soul",
   "personality": "Personality",
+  "chineseSignTitle": "Chinese Sign",
   "profileInsights": "Profile Insights",
   "noInsights": "You don't have insights generated yet.",
   "generateInsights": "Generate Insights (Ad)",
