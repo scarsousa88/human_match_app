@@ -136,6 +136,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get greetingEmpty => 'Olá!';
 
   @override
+  String get profileSummaryTitle => 'Resumo do Perfil';
+
+  @override
+  String get profileSummaryDesc =>
+      'O teu perfil é uma combinação única de Human Design, Astrologia e Numerologia. A Human Match ajuda-te a decifrar o teu \'ADN Cósmico\' para que possas compreender melhor a tua essência, os teus talentos naturais e como podes evoluir nos teus relacionamentos através do autoconhecimento.';
+
+  @override
   String get hdTitle => 'Human Design';
 
   @override

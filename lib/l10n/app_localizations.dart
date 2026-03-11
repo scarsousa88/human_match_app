@@ -348,6 +348,18 @@ abstract class AppLocalizations {
   /// **'Olá!'**
   String get greetingEmpty;
 
+  /// No description provided for @profileSummaryTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Resumo do Perfil'**
+  String get profileSummaryTitle;
+
+  /// No description provided for @profileSummaryDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'O teu perfil é uma combinação única de Human Design, Astrologia e Numerologia. A Human Match ajuda-te a decifrar o teu \'ADN Cósmico\' para que possas compreender melhor a tua essência, os teus talentos naturais e como podes evoluir nos teus relacionamentos através do autoconhecimento.'**
+  String get profileSummaryDesc;
+
   /// No description provided for @hdTitle.
   ///
   /// In pt, this message translates to:

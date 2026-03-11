@@ -67,7 +67,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get termsContent =>
-      'Política de Privacidad - Human Match\n\nEsta Política de Privacidad describe cómo Human Match, una aplicación móvil que genera informes personalizados de Diseño Humano, Astrología y Numerología basados en el nombre completo, la fecha y el lugar de nacimiento de los usuarios, recopila, utiliza y protege sus datos personales. Estamos comprometidos con la protección de su privacidad de acuerdo con el Reglamento General de Protección de Datos (RGPD) de la Unión Europea y la legislación aplicável en Portugal.\n\nDatos Recopilados\nRecopilamos solo los datos estrictamente necesarios para prestar el servicio:\n\nNombre completo;\n\nFecha de nacimiento;\n\nLugar de nacimiento.\n\nEstos datos se utilizan exclusivamente para calcular y generar sus informes personalizados de Diseño Humano, Astrología y Numerología. No recopilamos datos sensibles adicionales, como direcciones de correo electrónico o información financiera, a menos que se proporcionen voluntariamente para soporte o registro de cuenta.\n\nFinalidades del Tratamiento\nLos datos se tratan para:\n\nGenerar informes precisos basados en las entradas proporcionadas;\n\nMejorar la precisión de los cálculos astrológicos y de diseño humano;\n\nPermitir el almacenamiento opcional de informes para acceso futuro (con su consentimiento explícito).\n\nEl tratamiento es lícito basado en su consentimiento libre e informado, obtenido en el momento del envío de los datos.\n\nIntercambio de Datos\nNo compartimos sus datos personales con terceros, excepto:\n\nProveedores de servicios técnicos esenciales (ej.: servidores en la nube seguros en la UE) bajo acuerdos de procesamiento de datos que garantizan la confidencialidad;\n\nCuando lo exija la ley o las autoridades competentes.\n\nLos informes generados son privados y no se venden ni se utilizan para marketing.\n​\n\nAlmacenamiento y Seguridad\nLos datos se almacenan en servidores seguros ubicados en la Unión Europea, con medidas técnicas como cifrado (AES-256), seudonimización y controles de acceso. Conservamos los datos solo el tiempo necesario para el servicio (generalmente hasta 30 dias después del último acceso, a menos que se dé el consentimiento para un almacenamiento prolongado). Procedemos a la eliminación segura automática después de este período.\n\nSus Derechos\nPuede ejercer sus derechos RGPD en cualquier momento:\n\nAcceso a los datos;\n\nRectificación o corrección;\n\nSupresión (\"derecho al olvido\");\n\nOposición al tratamiento;\n\nLimitación del tratamiento;\n\nPortabilidad de los datos.\n\nPara solicitar la eliminación de su cuenta y de todos los datos asociados, puede hacerlo a través del siguiente enlace: https://humanmatch.app/delete-account o enviando un correo electrónico a support@humanmatch.app.\n\nConsentimiento e Cambios\nAl usar la aplicación, usted acepta esta política. Puede revocar su consentimiento en cualquier momento, lo que impedirá el acceso a los informes existentes. Actualizaremos esta política según sea necesario, notificando a los usuarios a través de la aplicación.';
+      'Política de Privacidad - Human Match\n\nEsta Política de Privacidad describe cómo Human Match, una aplicación móvil que genera informes personalizados de Diseño Humano, Astrología y Numerología basados en el nombre completo, la fecha y el lugar de nacimiento de los usuarios, recopila, utiliza y protege sus datos personales. Estamos comprometidos con la protección de su privacidad de acuerdo con el Reglamento General de Protección de Datos (RGPD) de la Unión Europea y la legislación aplicável en Portugal.\n\nDatos Recopilados\nRecopilamos solo los datos estrictamente necesarios para prestar el servicio:\n\nNombre completo;\n\nFecha de nacimiento;\n\nLugar de nacimiento.\n\nEstos datos se utilizan exclusivamente para calcular y generar sus informes personalizados de Diseño Humano, Astrología y Numerología. No recopilamos datos sensibles adicionales, como direcciones de correo electrónico o información financiera, a menos que se proporcionen voluntariamente para soporte o registro de cuenta.\n\nFinalidades del Tratamiento\nLos datos se tratan para:\n\nGenerar informes precisos basados en las entradas proporcionadas;\n\nMejorar la precisión de los cálculos astrológicos y de diseño humano;\n\nPermitir el almacenamiento opcional de informes para acceso futuro (con su consentimiento explícito).\n\nEl tratamiento es lícito basado en su consentimiento libre e informado, obtenido en el momento del envío de los datos.\n\nIntercambio de Datos\nNo compartimos sus datos personales con terceros, excepto:\n\nProveedores de servicios técnicos esenciales (ej.: servidores en la nube seguros en la UE) bajo acuerdos de procesamiento de datos que garantizan la confidencialidad;\n\nCuando lo exija la ley o las autoridades competentes.\n\nLos informes generados son privados y no se venden ni se utilizan para marketing.\n​\n\nAlmacenamiento y Seguridad\nLos datos se almacenan en servidores seguros ubicados en la Unión Europea, con medidas técnicas como cifrado (AES-256), seudonimización y controles de acceso. Conservamos los datos solo el tiempo necesario para el servicio (generalmente hasta 30 dias después del último acceso, a menos que se dé el consentimiento para un almacenamiento prolongado). Procedemos a la eliminación segura automática después de este período.\n\nSus Derechos\nPue de ejercer sus derechos RGPD en cualquier momento:\n\nAcceso a los datos;\n\nRectificación o corrección;\n\nSupresión (\"derecho al olvido\");\n\nOposición al tratamiento;\n\nLimitación del tratamiento;\n\nPortabilidad de los datos.\n\nPara solicitar la eliminación de su cuenta y de todos los datos asociados, puede hacerlo a través del siguiente enlace: https://humanmatch.app/delete-account o enviando un correo electrónico a support@humanmatch.app.\n\nConsentimiento e Cambios\nAl usar la aplicación, usted acepta esta política. Puede revocar su consentimiento en cualquier momento, lo que impedirá el acceso a los informes existentes. Actualizaremos esta política según sea necesario, notificando a los usuarios a través de la aplicación.';
 
   @override
   String get processing => 'Procesando...';
@@ -135,6 +135,13 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get greetingEmpty => '¡Hola!';
+
+  @override
+  String get profileSummaryTitle => 'Resumen del Perfil';
+
+  @override
+  String get profileSummaryDesc =>
+      'Tu perfil es una combinación única de Diseño Humano, Astrología y Numerología. Human Match te ayuda a descifrar tu \'ADN Cósmico\' para que puedas comprender mejor tu esencia, tus talentos naturales y cómo puedes evolucionar en tus relaciones a través del autoconocimiento.';
 
   @override
   String get hdTitle => 'Diseño Humano';
@@ -270,7 +277,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get signPisces => 'Piscis';
 
   @override
-  String get hdType => 'Tipo';
+  String get hdType => 'Type';
 
   @override
   String get hdAuthority => 'Autoridade';
@@ -948,7 +955,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get astroValSignGemini =>
-      'Curiosidad insaciable, comunicación versátil y agilidad mental. Le encanta intercambiar ideas y aprender.';
+      'Curiosidade insaciável, comunicação versátil e agilidade mental. Le encanta intercambiar ideas y aprender.';
 
   @override
   String get astroValSignCancer =>
@@ -960,11 +967,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get astroValSignVirgo =>
-      'Análisis detallado, búsqueda de la perfección, organización y deseo de ser útil y práctico.';
+      'Análise detalhado, busca de la perfección, organización y deseo de ser útil y práctico.';
 
   @override
   String get astroValSignLibra =>
-      'Equilibrio, armonía en las relaciones, diplomacia y un fuerte sentido estético y de justicia.';
+      'Equilíbrio, armonía en las relaciones, diplomacia y un fuerte sentido estético y de justicia.';
 
   @override
   String get astroValSignScorpio =>
@@ -972,19 +979,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get astroValSignSagittarius =>
-      'Expansión, búsqueda de significado, optimismo y amor por la libertad y la aventura intelectual.';
+      'Expansión, busca de significado, optimismo y amor por la libertad y la aventura intelectual.';
 
   @override
   String get astroValSignCapricorn =>
-      'Responsabilidad, ambición, disciplina y un enfoque estructurado para alcanzar el éxito.';
+      'Responsabilidade, ambição, disciplina y un enfoque estructurado para alcanzar el éxito.';
 
   @override
   String get astroValSignAquarius =>
-      'Originalidad, visión humanitaria, independencia y un pensamiento innovador y progresista.';
+      'Originalidade, visão humanitária, independência y um pensamiento inovador e progressista.';
 
   @override
   String get astroValSignPisces =>
-      'Empatía vasta, intuición aguda, imaginación y una fuerte conexión con el mundo espiritual y emocional.';
+      'Empatia vasta, intuição aguda, imaginação e uma forte conexão com o mundo espiritual e emocional.';
 
   @override
   String get onlyMobile => 'Solo disponible en dispositivos móviles.';

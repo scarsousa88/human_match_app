@@ -41,6 +41,8 @@
   "greeting": "Hello {name}",
   "@greeting": { "placeholders": { "name": { "type": "String" } } },
   "greetingEmpty": "Hello!",
+  "profileSummaryTitle": "Profile Summary",
+  "profileSummaryDesc": "Your profile is a unique combination of Human Design, Astrology, and Numerology. Human Match helps you decipher your 'Cosmic DNA' so you can better understand your essence, natural talents, and how you can evolve in your relationships through self-knowledge.",
   "hdTitle": "Human Design",
   "hdCalculating": "Calculating Human Design...",
   "astroTitle": "Astrology",

@@ -137,6 +137,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String get greetingEmpty => 'Bonjour !';
 
   @override
+  String get profileSummaryTitle => 'Résumé du Profil';
+
+  @override
+  String get profileSummaryDesc =>
+      'Votre profil est une combinaison unique de Human Design, d\'Astrologie et de Numérologie. Human Match vous aide à déchiffrer votre \'ADN Cosmique\' afin que vous puissiez mieux comprendre votre essence, vos talents naturels et comment vous pouvez évoluer dans vos relations grâce à la connaissance de soi.';
+
+  @override
   String get hdTitle => 'Human Design';
 
   @override
@@ -434,7 +441,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hdNotFru => 'Frustration';
 
   @override
-  String get hdNotBit => 'Amertume';
+  String get hdNotBit => 'Amargura';
 
   @override
   String get hdNotAng => 'Colère';
@@ -690,7 +697,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get hdValProf52 =>
-      'Hérétique/Ermite : Motivé par l\'autoréflexion, mais vu par les autres comme un guide naturel.';
+      'Hérétique/Ermite : Motivé par l\'autoréflexion, mas vu par les autres como un guia natural.';
 
   @override
   String get hdValProf62 =>
@@ -750,7 +757,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get hdCenterSolarDefDesc =>
-      'Vous vivez une vague émotionnelle profonde et cyclique ; la clarté vient avec le temps.';
+      'Vous vivez une vague émotionnelle profonde et cyclique ; la clarté vient avec le tempo.';
 
   @override
   String get hdCenterSolarUndDesc =>
@@ -770,7 +777,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get hdCenterRootUndDesc =>
-      'Vous pouvez ressentir la pression extérieure mais préférez agir à votre propre rythme.';
+      'Vous pouvez ressentir la pression extérieure mas préférez agir à votre propre ritmo.';
 
   @override
   String get hdDefined => 'Défini';
@@ -983,11 +990,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get astroValSignAquarius =>
-      'Originalité, vision humanitaire, indépendance et pensée innovante et progressiste.';
+      'Originalité, vision humanitária, independência e pensamento inovador e progressista.';
 
   @override
   String get astroValSignPisces =>
-      'Vaste empathie, intuition aiguisée, imagination et lien fort avec le monde spirituel et émotionnel.';
+      'Vaste empatia, intuição aguçada, imaginação e ligação forte com o mundo espiritual e emocional.';
 
   @override
   String get onlyMobile => 'Uniquement disponible sur les appareils mobiles.';

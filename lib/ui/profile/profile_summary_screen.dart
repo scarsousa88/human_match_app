@@ -206,7 +206,24 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
             key: const PageStorageKey('profile_summary_list'),
             padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
             children: [
-              _sectionHeader(l10n.hdTitle, isFirst: true),
+              _sectionHeader(l10n.profileSummaryTitle, isFirst: true),
+              PrimaryCard(
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.profileSummaryDesc,
+                        style: const TextStyle(color: Colors.white, fontSize: 14, height: 1.5),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              _sectionHeader(l10n.hdTitle),
               PrimaryCard(
                 child: hdBase == null ? Text(l10n.hdCalculating, style: const TextStyle(color: Colors.white70)) : HumanDesignSection(hd: hdBase),
               ),

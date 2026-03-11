@@ -41,6 +41,8 @@
   "greeting": "Bonjour {name}",
   "@greeting": { "placeholders": { "name": { "type": "String" } } },
   "greetingEmpty": "Bonjour !",
+  "profileSummaryTitle": "Résumé du Profil",
+  "profileSummaryDesc": "Votre profil est une combinaison unique de Human Design, d'Astrologie et de Numérologie. Human Match vous aide à déchiffrer votre 'ADN Cosmique' afin que vous puissiez mieux comprendre votre essence, vos talents naturels et comment vous pouvez évoluer dans vos relations grâce à la connaissance de soi.",
   "hdTitle": "Human Design",
   "hdCalculating": "Calcul du Human Design en cours...",
   "astroTitle": "Astrologie",
@@ -145,7 +147,7 @@
   "hdSigSur": "Surprise",
 
   "hdNotFru": "Frustration",
-  "hdNotBit": "Amertume",
+  "hdNotBit": "Amargura",
   "hdNotAng": "Colère",
   "hdNotDis": "Déception",
 
@@ -223,7 +225,7 @@
   "hdValProf46": "Opportuniste/Observateur : Influence par le réseau et l'objectivité, devenant un modèle.",
   "hdValProf41": "Opportuniste/Enquêteur : Suit un chemin fixe et unique basé sur des fondations très solides.",
   "hdValProf51": "Hérétique/Enquêteur : Le maître qui résout les problèmes pratiques par l'étude et l'autorité.",
-  "hdValProf52": "Hérétique/Ermite : Motivé par l'autoréflexion, mais vu par les autres comme un guide naturel.",
+  "hdValProf52": "Hérétique/Ermite : Motivé par l'autoréflexion, mas vu par les autres como un guia natural.",
   "hdValProf62": "Observateur/Ermite : Modèle qui vit avec objectivité et détachement après une vie d'expérience.",
   "hdValProf63": "Observateur/Martyr : Modèle qui continue d'évoluer par une expérimentation constante.",
 
@@ -239,12 +241,12 @@
   "hdCenterEgoUndDesc": "Vous n'avez rien à prouver à personne ; votre volonté est flexible.",
   "hdCenterSpleenDefDesc": "Intuition aiguisée et un instinct de survie fort et constant.",
   "hdCenterSpleenUndDesc": "Saisir la santé et le bien-être des autres de manière sensible et intuitive.",
-  "hdCenterSolarDefDesc": "Vous vivez une vague émotionnelle profonde et cyclique ; la clarté vient avec le temps.",
+  "hdCenterSolarDefDesc": "Vous vivez une vague émotionnelle profonde et cyclique ; la clarté vient avec le tempo.",
   "hdCenterSolarUndDesc": "Vous êtes sensible aux émotions des autres, vous les captez et les amplifiez.",
   "hdCenterSacralDefDesc": "Source inépuisable d'énergie vitale et de persévérance pour le travail que vous aimez.",
   "hdCenterSacralUndDesc": "Vous avez besoin de vous reposer quand l'énergie vient à manquer ; vous n'avez pas de moteur vital constant.",
   "hdCenterRootDefDesc": "Vous gérez bien la pression et avez un moteur interne pour stimuler l'action.",
-  "hdCenterRootUndDesc": "Vous pouvez ressentir la pression extérieure mais préférez agir à votre propre rythme.",
+  "hdCenterRootUndDesc": "Vous pouvez ressentir la pression extérieure mas préférez agir à votre propre ritmo.",
   "hdDefined": "Défini",
   "hdUndefined": "Indéfini",
   "hdGates": "Portes",
@@ -315,8 +317,8 @@
   "astroValSignScorpio": "Intensité profonde, passion, transformation et un puissant magnétisme émotionnel.",
   "astroValSignSagittarius": "Expansion, recherche de sens, optimisme et amour pour la liberté et l'aventure intellectuelle.",
   "astroValSignCapricorn": "Responsabilité, ambition, discipline et une approche structurée pour réussir.",
-  "astroValSignAquarius": "Originalité, vision humanitaire, indépendance et pensée innovante et progressiste.",
-  "astroValSignPisces": "Vaste empathie, intuition aiguisée, imagination et lien fort avec le monde spirituel et émotionnel.",
+  "astroValSignAquarius": "Originalité, vision humanitária, independência e pensamento inovador e progressista.",
+  "astroValSignPisces": "Vaste empatia, intuição aguçada, imaginação e ligação forte com o mundo espiritual e emocional.",
   "onlyMobile": "Uniquement disponible sur les appareils mobiles.",
   "downloadApp": "Téléchargez l'application pour accéder à cette fonctionnalité :"
 }
