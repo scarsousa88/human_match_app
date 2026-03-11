@@ -474,6 +474,30 @@ abstract class AppLocalizations {
   /// **'Vê o vídeo para obteres a tua dica diária'**
   String get watchAdForTip;
 
+  /// No description provided for @essenceName.
+  ///
+  /// In pt, this message translates to:
+  /// **'Essência'**
+  String get essenceName;
+
+  /// No description provided for @essenceCount.
+  ///
+  /// In pt, this message translates to:
+  /// **'{count} {count, plural, one{Essência} other{Essências}}'**
+  String essenceCount(int count);
+
+  /// No description provided for @getMoreEssence.
+  ///
+  /// In pt, this message translates to:
+  /// **'Obter mais Essências'**
+  String get getMoreEssence;
+
+  /// No description provided for @unlockWithEssence.
+  ///
+  /// In pt, this message translates to:
+  /// **'Desbloquear com {price} ✧'**
+  String unlockWithEssence(int price);
+
   /// No description provided for @errorFillEmailPassword.
   ///
   /// In pt, this message translates to:

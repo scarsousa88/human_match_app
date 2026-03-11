@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../l10n/app_localizations.dart';
 import '../profile/profile_summary_screen.dart';
 import '../profile/profile_input_screen.dart';
@@ -16,11 +18,16 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
   late PageController _pageController;
+  Stream<DocumentSnapshot<Map<String, dynamic>>>? _userStream;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _currentIndex);
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      _userStream = FirebaseFirestore.instance.collection('users').doc(user.uid).snapshots();
+    }
   }
 
   @override
@@ -39,9 +46,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     
-    // Cor Cosmic
+    // Cores
     const cosmicBg = Color(0xFF0F0B1E);
     const goldColor = Color(0xFFE6B325);
+    const appPurple = Color(0xFF3E1E4F);
 
     return Scaffold(
       backgroundColor: cosmicBg,
@@ -50,7 +58,60 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         elevation: 0,
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white70),
-        title: _currentIndex == 0 ? const _CosmicDNABadge() : Text(_currentIndex == 1 ? l10n.tabCommunity : l10n.tabCompare, style: const TextStyle(color: Colors.white)),
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
+        title: _currentIndex == 0 
+          ? const _CosmicDNABadge()
+          : _currentIndex == 1
+            ? const _BondConnectionsBadge()
+            : const _RelateBetterBadge(),
+        actions: [
+          // Essence Indicator
+          StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+            stream: _userStream,
+            builder: (context, snapshot) {
+              final data = snapshot.data?.data();
+              final balance = data?['essenceBalance'] ?? 0;
+              return Center(
+                child: Container(
+                  height: 32,
+                  margin: const EdgeInsets.only(left: 4),
+                  padding: const EdgeInsets.only(left: 4, right: 12),
+                  decoration: BoxDecoration(
+                    color: appPurple,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.white10),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SvgPicture.asset('assets/icon/essence.svg', width: 24, height: 24),
+                      const SizedBox(width: 8),
+                      Text(
+                        '$balance',
+                        style: const TextStyle(
+                          color: Colors.white, 
+                          fontWeight: FontWeight.w900,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+          // Botão de Mensagens
+          IconButton(
+            icon: const Icon(Icons.chat_bubble_outline, size: 20, color: Colors.white24),
+            onPressed: null,
+          ),
+          const SizedBox(width: 4),
+        ],
       ),
       drawer: Drawer(
         backgroundColor: const Color(0xFF1A162B),
@@ -65,7 +126,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                     Container(
                       padding: const EdgeInsets.all(2),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF3E1E4F),
+                        color: appPurple,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: ClipRRect(
@@ -98,7 +159,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                   
                   const Divider(color: Colors.white10),
                   
-                  // Novos Menus solicitados
                   Theme(
                     data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
                     child: ExpansionTile(
@@ -193,14 +253,54 @@ class _CosmicDNABadge extends StatelessWidget {
   Widget build(BuildContext context) {
     const goldColor = Color(0xFFE6B325);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
         border: Border.all(color: goldColor, width: 1.2),
         color: goldColor.withOpacity(0.05),
       ),
       child: const Text(
-        'DISCOVER YOUR COSMIC DNA',
+        'YOUR COSMIC DNA',
+        style: TextStyle(color: goldColor, fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 1.4),
+      ),
+    );
+  }
+}
+
+class _BondConnectionsBadge extends StatelessWidget {
+  const _BondConnectionsBadge();
+  @override
+  Widget build(BuildContext context) {
+    const goldColor = Color(0xFFE6B325);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: goldColor, width: 1.2),
+        color: goldColor.withOpacity(0.05),
+      ),
+      child: const Text(
+        'BOND CONNECTIONS',
+        style: TextStyle(color: goldColor, fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 1.4),
+      ),
+    );
+  }
+}
+
+class _RelateBetterBadge extends StatelessWidget {
+  const _RelateBetterBadge();
+  @override
+  Widget build(BuildContext context) {
+    const goldColor = Color(0xFFE6B325);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(color: goldColor, width: 1.2),
+        color: goldColor.withOpacity(0.05),
+      ),
+      child: const Text(
+        'RELATE BETTER',
         style: TextStyle(color: goldColor, fontSize: 10, fontWeight: FontWeight.w800, letterSpacing: 1.4),
       ),
     );

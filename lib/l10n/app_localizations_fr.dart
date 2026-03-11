@@ -202,6 +202,28 @@ class AppLocalizationsFr extends AppLocalizations {
       'Regardez la publicité pour obtenir votre conseil';
 
   @override
+  String get essenceName => 'Essência';
+
+  @override
+  String essenceCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Essências',
+      one: 'Essência',
+    );
+    return '$count $_temp0';
+  }
+
+  @override
+  String get getMoreEssence => 'Obter mais Essências';
+
+  @override
+  String unlockWithEssence(int price) {
+    return 'Desbloquear com $price ✧';
+  }
+
+  @override
   String get errorFillEmailPassword =>
       'Veuillez saisir votre e-mail et votre mot de passe.';
 

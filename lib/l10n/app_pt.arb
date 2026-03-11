@@ -62,6 +62,14 @@
   "dailyTip": "Dica Diária",
   "getDailyTip": "Obter dica diária",
   "watchAdForTip": "Vê o vídeo para obteres a tua dica diária",
+
+  "essenceName": "Essência",
+  "essenceCount": "{count} {count, plural, one{Essência} other{Essências}}",
+  "@essenceCount": { "placeholders": { "count": { "type": "int" } } },
+  "getMoreEssence": "Obter mais Essências",
+  "unlockWithEssence": "Desbloquear com {price} ✧",
+  "@unlockWithEssence": { "placeholders": { "price": { "type": "int" } } },
+
   "errorFillEmailPassword": "Preenche email e password.",
   "errorAcceptTerms": "Precisas de aceitar os Termos e Condições.",
   "resetEmailSent": "Email enviado. (Vê spam também)",

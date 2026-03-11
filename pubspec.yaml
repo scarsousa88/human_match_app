@@ -53,4 +53,5 @@ flutter:
     - assets/icon/card.png
     - assets/icon/compare.png
     - assets/icon/loading.svg
+    - assets/icon/essence.svg
     - assets/bodygraph/
