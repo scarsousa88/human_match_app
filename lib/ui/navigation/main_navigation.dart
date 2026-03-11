@@ -48,21 +48,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       appBar: AppBar(
         backgroundColor: cosmicBg,
         elevation: 0,
-        centerTitle: kIsWeb ? false : true,
+        centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white70),
-        title: kIsWeb 
-          ? Row(
-              children: [
-                const _CosmicDNABadge(),
-                const SizedBox(width: 20),
-                if (MediaQuery.of(context).size.width > 800) ...[
-                  _navItem(l10n.menuCosmicDNA),
-                  _navItem(l10n.menuBondConnections),
-                  _navItem(l10n.menuRelateBetter),
-                ]
-              ],
-            )
-          : (_currentIndex == 0 ? const _CosmicDNABadge() : Text(_currentIndex == 1 ? l10n.tabCommunity : l10n.tabCompare, style: const TextStyle(color: Colors.white))),
+        title: _currentIndex == 0 ? const _CosmicDNABadge() : Text(_currentIndex == 1 ? l10n.tabCommunity : l10n.tabCompare, style: const TextStyle(color: Colors.white)),
       ),
       drawer: Drawer(
         backgroundColor: const Color(0xFF1A162B),
@@ -114,7 +102,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                   Theme(
                     data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
                     child: ExpansionTile(
-                      leading: const Icon(Icons.AutoAwesome, color: goldColor),
+                      leading: const Icon(Icons.auto_awesome, color: goldColor),
                       title: Text(l10n.menuCosmicDNA, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
                       children: [
                         _subTile(l10n.menuHumanDesign),
@@ -138,7 +126,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                     ),
                   ),
 
-                  _drawerTile(Icons.TipsAndUpdates, l10n.menuRelateBetter, () {}, color: Colors.white),
+                  _drawerTile(Icons.tips_and_updates, l10n.menuRelateBetter, () {}, color: Colors.white),
 
                   const Divider(color: Colors.white10),
 
@@ -179,13 +167,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           BottomNavigationBarItem(icon: const Icon(Icons.compare_arrows), activeIcon: const Icon(Icons.compare_arrows), label: l10n.tabCompare),
         ],
       ),
-    );
-  }
-
-  Widget _navItem(String text) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Text(text, style: const TextStyle(color: Colors.white70, fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1)),
     );
   }
 

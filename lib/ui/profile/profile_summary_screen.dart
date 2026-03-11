@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../calc/numerology.dart';
@@ -99,15 +100,11 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
             GestureDetector(
               onTap: () => launchUrl(Uri.parse('https://play.google.com/store/apps/details?id=com.opinto.humanmatch')),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: Image.network(
+                borderRadius: BorderRadius.circular(8),
+                child: SvgPicture.network(
                   'https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg',
-                  height: 36,
-                  errorBuilder: (_, __, ___) => Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(6), border: Border.all(color: Colors.white24)),
-                    child: const Text('Google Play', style: TextStyle(color: Colors.white, fontSize: 11)),
-                  ),
+                  height: 40,
+                  placeholderBuilder: (context) => _fallbackButton(Icons.shop_outlined, 'Google Play'),
                 ),
               ),
             ),
@@ -115,21 +112,36 @@ class _ProfileSummaryScreenState extends State<ProfileSummaryScreen> {
             GestureDetector(
               onTap: () => launchUrl(Uri.parse('https://apps.apple.com/app/human-match/id6740638510')),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: Image.network(
+                borderRadius: BorderRadius.circular(8),
+                child: SvgPicture.network(
                   'https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg',
-                  height: 36,
-                  errorBuilder: (_, __, ___) => Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(6), border: Border.all(color: Colors.white24)),
-                    child: const Text('App Store', style: TextStyle(color: Colors.white, fontSize: 11)),
-                  ),
+                  height: 40,
+                  placeholderBuilder: (context) => _fallbackButton(Icons.apple, 'App Store'),
                 ),
               ),
             ),
           ],
         ),
       ],
+    );
+  }
+
+  Widget _fallbackButton(IconData icon, String text) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.black,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.white24),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: Colors.white, size: 18),
+          const SizedBox(width: 8),
+          Text(text, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+        ],
+      ),
     );
   }
 
