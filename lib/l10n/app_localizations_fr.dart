@@ -224,6 +224,15 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get learnMore => 'Saber mais';
+
+  @override
+  String get privacyPolicy => 'Política de Privacidade';
+
+  @override
+  String get support => 'Suporte';
+
+  @override
   String get errorFillEmailPassword =>
       'Veuillez saisir votre e-mail et votre mot de passe.';
 

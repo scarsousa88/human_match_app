@@ -70,6 +70,10 @@
   "unlockWithEssence": "Unlock with {price} ✧",
   "@unlockWithEssence": { "placeholders": { "price": { "type": "int" } } },
 
+  "learnMore": "Learn more",
+  "privacyPolicy": "Privacy Policy",
+  "support": "Support",
+
   "errorFillEmailPassword": "Fill in email and password.",
   "errorAcceptTerms": "You need to accept the Terms and Conditions.",
   "resetEmailSent": "Email sent. (Check spam too)",
@@ -167,7 +171,7 @@
 
   "hdCrossRight": "Right Angle",
   "hdCrossLeft": "Left Angle",
-  "hdCrossJuxta": "Juxtaposition",
+  "hdCrossJuxta": "Justaposition",
   "hdCrossOf": "Cross of",
 
   "hdCenterHead": "Head",
@@ -278,14 +282,14 @@
   "errorTooManyRequests": "Temporarily blocked due to too many attempts.",
   "errorAccountExistsGoogle": "An account with this email already exists linked to Google. Use \"Continue with Google\".",
   "errorUnexpected": "Unexpected error: {error}",
-  "@errorUnexpected": { "placeholders": { "error": { "error": { "type": "Object" } } } },
+  "@errorUnexpected": { "placeholders": { "error": { "type": "Object" } } },
   "errorGoogle": "Google error: {error}",
-  "@errorGoogle": { "placeholders": { "error": { "error": { "type": "Object" } } } },
+  "@errorGoogle": { "placeholders": { "error": { "type": "Object" } } },
   "errorResetPassword": "Error resetting: {error}",
-  "@errorResetPassword": { "placeholders": { "error": { "error": { "type": "Object" } } } },
+  "@errorResetPassword": { "placeholders": { "error": { "type": "Object" } } },
   "close": "Close",
   "authError": "Authentication Error: {error}",
-  "@authError": { "placeholders": { "error": { "error": { "type": "Object" } } } },
+  "@authError": { "placeholders": { "error": { "type": "Object" } } },
   "tryAgain": "Try again",
   "loadProfileError": "Error loading profile: {error}",
   "@loadProfileError": { "placeholders": { "error": { "type": "String" } } },
@@ -338,7 +342,7 @@
   "menuChineseSign": "Chinese Sign",
   "menuBondConnections": "BOND CONNECTIONS",
   "menuFriendship": "Friendship",
-  "menuCasual meetings": "Casual meetings",
-  "menuPartner for life": "Partner for life",
+  "menuCasualMeetings": "Casual meetings",
+  "menuPartnerForLife": "Partner for life",
   "menuRelateBetter": "RELATE BETTER"
 }

@@ -223,6 +223,15 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get learnMore => 'Saber mais';
+
+  @override
+  String get privacyPolicy => 'Política de Privacidade';
+
+  @override
+  String get support => 'Suporte';
+
+  @override
   String get errorFillEmailPassword =>
       'Ingresa correo electrónico y contraseña.';
 

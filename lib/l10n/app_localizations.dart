@@ -213,7 +213,7 @@ abstract class AppLocalizations {
   /// No description provided for @termsTitle.
   ///
   /// In pt, this message translates to:
-  /// **'Terms and Conditions'**
+  /// **'Termos e Condições'**
   String get termsTitle;
 
   /// No description provided for @termsContent.
@@ -497,6 +497,24 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Desbloquear com {price} ✧'**
   String unlockWithEssence(int price);
+
+  /// No description provided for @learnMore.
+  ///
+  /// In pt, this message translates to:
+  /// **'Saber mais'**
+  String get learnMore;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In pt, this message translates to:
+  /// **'Política de Privacidade'**
+  String get privacyPolicy;
+
+  /// No description provided for @support.
+  ///
+  /// In pt, this message translates to:
+  /// **'Suporte'**
+  String get support;
 
   /// No description provided for @errorFillEmailPassword.
   ///

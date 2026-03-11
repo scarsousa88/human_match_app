@@ -115,84 +115,76 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       ),
       drawer: Drawer(
         backgroundColor: const Color(0xFF1A162B),
+        width: 300,
         child: Column(
           children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(color: Color(0xFF0F0B1E)),
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                        color: appPurple,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.asset('assets/icon/icon.png', width: 44),
-                      ),
+            Container(
+              height: MediaQuery.of(context).padding.top + kToolbarHeight,
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).padding.top,
+                left: 12, // Encostado ligeiramente mais à esquerda
+              ),
+              color: cosmicBg,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      color: appPurple,
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    const SizedBox(width: 16),
-                    Text(
-                      l10n.appTitle,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: -0.5,
-                      ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset('assets/icon/icon.png', width: 38),
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    l10n.appTitle,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                ],
               ),
             ),
             Expanded(
               child: ListView(
-                padding: EdgeInsets.zero,
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 children: [
                   _drawerTile(Icons.edit_outlined, l10n.editProfile, () {
                     Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfileInputScreen()));
                   }),
                   
-                  const Divider(color: Colors.white10),
-                  
-                  Theme(
-                    data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                    child: ExpansionTile(
-                      leading: const Icon(Icons.auto_awesome, color: goldColor),
-                      title: Text(l10n.menuCosmicDNA, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
-                      children: [
-                        _subTile(l10n.menuHumanDesign),
-                        _subTile(l10n.menuAstrology),
-                        _subTile(l10n.menuNumerology),
-                        _subTile(l10n.menuChineseSign),
-                      ],
-                    ),
-                  ),
-                  
-                  Theme(
-                    data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                    child: ExpansionTile(
-                      leading: const Icon(Icons.favorite_border, color: goldColor),
-                      title: Text(l10n.menuBondConnections, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
-                      children: [
-                        _subTile(l10n.menuFriendship),
-                        _subTile(l10n.menuCasualMeetings),
-                        _subTile(l10n.menuPartnerForLife),
-                      ],
-                    ),
-                  ),
+                  _drawerTile(null, l10n.getMoreEssence, () {
+                    Navigator.pop(context);
+                  }, iconWidget: SvgPicture.asset('assets/icon/essence.svg', width: 22, height: 22)),
 
-                  _drawerTile(Icons.tips_and_updates, l10n.menuRelateBetter, () {}, color: Colors.white),
-
-                  const Divider(color: Colors.white10),
+                  const Divider(color: Colors.white10, height: 24),
+                  
+                  _drawerTile(Icons.language, l10n.learnMore, () {
+                    Navigator.pop(context);
+                    launchUrl(Uri.parse('https://humanmatch.app'), mode: LaunchMode.externalApplication);
+                  }),
 
                   _drawerTile(Icons.description_outlined, l10n.termsTitle, () {
                     Navigator.pop(context);
                     launchUrl(Uri.parse('https://humanmatch.app/Privacy-policy/'), mode: LaunchMode.externalApplication);
+                  }),
+
+                  _drawerTile(Icons.privacy_tip_outlined, l10n.privacyPolicy, () {
+                    Navigator.pop(context);
+                    launchUrl(Uri.parse('https://humanmatch.app/Privacy-policy/'), mode: LaunchMode.externalApplication);
+                  }),
+
+                  _drawerTile(Icons.support_agent, l10n.support, () {
+                    Navigator.pop(context);
+                    launchUrl(Uri.parse('mailto:support@humanmatch.app'));
                   }),
                 ],
               ),
@@ -230,17 +222,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     );
   }
 
-  Widget _subTile(String label) {
+  Widget _drawerTile(IconData? icon, String label, VoidCallback onTap, {Color? color, Widget? iconWidget}) {
     return ListTile(
-      contentPadding: const EdgeInsets.only(left: 72),
-      title: Text(label, style: const TextStyle(color: Colors.white60, fontSize: 13)),
-      onTap: () {},
-    );
-  }
-
-  Widget _drawerTile(IconData icon, String label, VoidCallback onTap, {Color? color}) {
-    return ListTile(
-      leading: Icon(icon, color: color ?? Colors.white70),
+      leading: iconWidget ?? Icon(icon, color: color ?? Colors.white70),
       title: Text(label, style: TextStyle(color: color ?? Colors.white70, fontWeight: FontWeight.w600)),
       onTap: onTap,
     );

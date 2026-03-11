@@ -63,7 +63,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get acceptTerms => 'Aceito os Termos e Condições';
 
   @override
-  String get termsTitle => 'Terms and Conditions';
+  String get termsTitle => 'Termos e Condições';
 
   @override
   String get termsContent =>
@@ -220,6 +220,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String unlockWithEssence(int price) {
     return 'Desbloquear com $price ✧';
   }
+
+  @override
+  String get learnMore => 'Saber mais';
+
+  @override
+  String get privacyPolicy => 'Política de Privacidade';
+
+  @override
+  String get support => 'Suporte';
 
   @override
   String get errorFillEmailPassword => 'Preenche email e password.';
