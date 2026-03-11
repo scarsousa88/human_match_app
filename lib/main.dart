@@ -17,7 +17,6 @@ void main() async {
   tz.initializeTimeZones();
 
   // Inicializa a Swiss Ephemeris em ambas as plataformas.
-  // No Web, ela tentará carregar o módulo Wasm via JS Interop.
   await SwissEphemerisService().init();
 
   if (!kIsWeb) {
@@ -55,7 +54,7 @@ class _HumanMatchAppState extends State<HumanMatchApp> {
     final colorScheme = ColorScheme.fromSeed(
       seedColor: const Color(0xFF3E1E4F),
       brightness: Brightness.dark,
-      surface: cosmicBg,
+      surface: cosmicBg, // Substitui o canvasColor e background
       onSurface: Colors.white,
     );
 
@@ -81,13 +80,14 @@ class _HumanMatchAppState extends State<HumanMatchApp> {
           brightness: Brightness.dark,
           colorScheme: colorScheme,
           scaffoldBackgroundColor: cosmicBg,
-          canvasColor: cosmicBg, // Adicionado para garantir fundo na Web
+          // Removido canvasColor depreciado, o colorScheme.surface cuida disso no M3
           appBarTheme: const AppBarTheme(
             backgroundColor: cosmicBg,
             foregroundColor: Colors.white,
             centerTitle: true,
             elevation: 0,
           ),
+          // Voltando para CardThemeData conforme exigido pelo seu compilador
           cardTheme: CardThemeData(
             elevation: 0,
             color: Colors.white.withOpacity(0.04),
@@ -116,7 +116,7 @@ class _HumanMatchAppState extends State<HumanMatchApp> {
             style: ElevatedButton.styleFrom(
               backgroundColor: goldColor,
               foregroundColor: Colors.black,
-              minimumSize: const Size(double.infinity, 55), // Ligeiramente maior
+              minimumSize: const Size(double.infinity, 55),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
               textStyle: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
             ),
