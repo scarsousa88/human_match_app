@@ -223,13 +223,53 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get learnMore => 'Saber mais';
+  String get essenceAdsTitle => 'Free Essences';
 
   @override
-  String get privacyPolicy => 'Política de Privacidade';
+  String get essenceAdsDesc =>
+      'Watch an ad to earn 1 Essence. Limit of 3 ads every 8 hours.';
 
   @override
-  String get support => 'Suporte';
+  String get essenceWatchAd => 'Watch Ad (+1 ✧)';
+
+  @override
+  String essenceAdLimit(String time) {
+    return 'Limit reached. Available in $time';
+  }
+
+  @override
+  String get essenceStoreTitle => 'Essence Store';
+
+  @override
+  String get essenceStoreDesc =>
+      'Purchase Essence packs to unlock content instantly.';
+
+  @override
+  String get essencePackStarter => 'Starter Pack';
+
+  @override
+  String get essencePackStarterDesc => 'Ideal para os primeiros passos';
+
+  @override
+  String get essencePackCosmic => 'Cosmic Pack';
+
+  @override
+  String get essencePackCosmicDesc => 'O pack mais equilibrado';
+
+  @override
+  String get essencePackInfinite => 'Infinite Pack';
+
+  @override
+  String get essencePackInfiniteDesc => 'Exploração sem limites';
+
+  @override
+  String get learnMore => 'Learn more';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get support => 'Support';
 
   @override
   String get errorFillEmailPassword => 'Fill in email and password.';
@@ -394,7 +434,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hdPlanetNeptune => 'Neptune';
 
   @override
-  String get hdPlanetPluto => 'Pluto';
+  String get hdPlanetPluto => 'Plutão';
 
   @override
   String get hdPersonality => 'Personality';
@@ -496,7 +536,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hdCrossLeft => 'Left Angle';
 
   @override
-  String get hdCrossJuxta => 'Juxtaposition';
+  String get hdCrossJuxta => 'Justaposition';
 
   @override
   String get hdCrossOf => 'Cross of';

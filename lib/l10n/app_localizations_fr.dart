@@ -174,7 +174,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get personality => 'Personnalité';
 
   @override
-  String get chineseSignTitle => 'Signo Chinês';
+  String get chineseSignTitle => 'Signe Chinois';
 
   @override
   String get profileInsights => 'Aperçus du profil';
@@ -202,35 +202,75 @@ class AppLocalizationsFr extends AppLocalizations {
       'Regardez la publicité pour obtenir votre conseil';
 
   @override
-  String get essenceName => 'Essência';
+  String get essenceName => 'Essence';
 
   @override
   String essenceCount(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Essências',
-      one: 'Essência',
+      other: 'Essences',
+      one: 'Essence',
     );
     return '$count $_temp0';
   }
 
   @override
-  String get getMoreEssence => 'Obter mais Essências';
+  String get getMoreEssence => 'Obtenir plus d\'Essences';
 
   @override
   String unlockWithEssence(int price) {
-    return 'Desbloquear com $price ✧';
+    return 'Débloquer avec $price ✧';
   }
 
   @override
-  String get learnMore => 'Saber mais';
+  String get essenceAdsTitle => 'Essências Gratuitas';
 
   @override
-  String get privacyPolicy => 'Política de Privacidade';
+  String get essenceAdsDesc =>
+      'Vê um anúncio para ganhares 1 Essência. Limite de 3 anúncios a cada 8 horas.';
 
   @override
-  String get support => 'Suporte';
+  String get essenceWatchAd => 'Ver Anúncio (+1 ✧)';
+
+  @override
+  String essenceAdLimit(String time) {
+    return 'Limite atingido. Disponível em $time';
+  }
+
+  @override
+  String get essenceStoreTitle => 'Loja de Essências';
+
+  @override
+  String get essenceStoreDesc =>
+      'Adquire packs de Essências para desbloqueares conteúdo instantaneamente.';
+
+  @override
+  String get essencePackStarter => 'Pack Iniciante';
+
+  @override
+  String get essencePackStarterDesc => 'Ideal para os primeiros passos';
+
+  @override
+  String get essencePackCosmic => 'Pack Cósmico';
+
+  @override
+  String get essencePackCosmicDesc => 'O pack mais equilibrado';
+
+  @override
+  String get essencePackInfinite => 'Pack Infinito';
+
+  @override
+  String get essencePackInfiniteDesc => 'Exploração sem limites';
+
+  @override
+  String get learnMore => 'En savoir plus';
+
+  @override
+  String get privacyPolicy => 'Politique de confidentialité';
+
+  @override
+  String get support => 'Support';
 
   @override
   String get errorFillEmailPassword =>
@@ -338,10 +378,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hdIncarnationCross => 'Croix d\'Incarnation';
 
   @override
-  String get hdEnergyCenters => 'Centres';
+  String get hdEnergyCenters => 'Centros';
 
   @override
-  String get hdEnergyCentersChannels => 'Centros, canaux et portes';
+  String get hdEnergyCentersChannels => 'Centres, canaux et portes';
 
   @override
   String get hdDefinedCenters => 'Centres définis';
@@ -475,7 +515,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hdNotFru => 'Frustration';
 
   @override
-  String get hdNotBit => 'Amargura';
+  String get hdNotBit => 'Amertume';
 
   @override
   String get hdNotAng => 'Colère';
@@ -502,7 +542,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hdCrossLeft => 'Angle Gauche';
 
   @override
-  String get hdCrossJuxta => 'Juxtaposition';
+  String get hdCrossJuxta => 'Justaposition';
 
   @override
   String get hdCrossOf => 'Croix de';
@@ -619,7 +659,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get hdValAuthSacral =>
-      'Faites confiance à votre réponse viscérale immédiate (sons sacraux ou inclinaison physique) dans l\'instant présent.';
+      'Faites confiance à votre réponse viscérale immédiate (sons sacraux ou inclinaire physique) dans l\'instant présent.';
 
   @override
   String get hdValAuthSplenic =>
@@ -635,7 +675,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get hdValAuthMental =>
-      'Vous devez utiliser les autres comme une caisse de résonance pour entendre votre propre vérité en parlant.';
+      'Vous devez utiliser les autres como une caisse de résonance pour entendre votre propre vérité en parlant.';
 
   @override
   String get hdValAuthLunar =>
@@ -735,11 +775,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get hdValProf62 =>
-      'Observateur/Ermite : Modèle qui vit avec objectivité et détachement après une vie d\'expérience.';
+      'Observador/Ermita: Modèle qui vit avec objectivité et détachement après une vie d\'expérience.';
 
   @override
   String get hdValProf63 =>
-      'Observateur/Martyr : Modèle qui continue d\'évoluer par une expérimentation constante.';
+      'Observador/Mártir: Modèle qui continue d\'évoluer par une expérimentation constante.';
 
   @override
   String get hdCenterHeadDefDesc =>
@@ -960,7 +1000,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get astroSunDefDesc =>
-      'Le Soleil représente votre essence, votre identité centrale, votre ego et la manière dont vous brillez dans le monde. C\'est le cœur de votre personnalité.';
+      'Le Soleil représente votre essence, votre identity centrale, votre ego et la manière dont vous brillez dans le monde. C\'est le cœur de votre personnalité.';
 
   @override
   String get astroMoonDefDesc =>
@@ -1024,11 +1064,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get astroValSignAquarius =>
-      'Originalité, vision humanitária, independência e pensamento inovador e progressista.';
+      'Originalité, vision humanitaire, indépendance et pensée innovante et progressiste.';
 
   @override
   String get astroValSignPisces =>
-      'Vaste empatia, intuição aguçada, imaginação e ligação forte com o mundo espiritual e emocional.';
+      'Vaste empathie, intuition aiguisée, imagination et lien fort avec le monde spirituel et émotionnel.';
 
   @override
   String get onlyMobile => 'Uniquement disponible sur les appareils mobiles.';
@@ -1044,26 +1084,26 @@ class AppLocalizationsFr extends AppLocalizations {
   String get menuHumanDesign => 'Human Design';
 
   @override
-  String get menuAstrology => 'Astrology';
+  String get menuAstrology => 'Astrologie';
 
   @override
-  String get menuNumerology => 'Numerology';
+  String get menuNumerology => 'Numérologie';
 
   @override
-  String get menuChineseSign => 'Signo chinês';
+  String get menuChineseSign => 'Signe Chinois';
 
   @override
   String get menuBondConnections => 'BOND CONNECTIONS';
 
   @override
-  String get menuFriendship => 'Friendship';
+  String get menuFriendship => 'Amitié';
 
   @override
-  String get menuCasualMeetings => 'Casual meetings';
+  String get menuCasualMeetings => 'Rencontres Fortuites';
 
   @override
-  String get menuPartnerForLife => 'Partner for life';
+  String get menuPartnerForLife => 'Partenaire de Vie';
 
   @override
-  String get menuRelateBetter => 'RELATE BETTER';
+  String get menuRelateBetter => 'MIEUX SE RELIER';
 }

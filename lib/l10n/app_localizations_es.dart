@@ -67,7 +67,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get termsContent =>
-      'Política de Privacidad - Human Match\n\nEsta Política de Privacidad describe cómo Human Match, una aplicación móvil que genera informes personalizados de Diseño Humano, Astrologia y Numerología basados en el nombre completo, la fecha y el lugar de nacimiento de los usuarios, recopila, utiliza y protege sus datos personales. Estamos comprometidos con la protección de su privacidad de acuerdo con el Reglamento General de Protección de Datos (RGPD) de la Unión Europea y la legislación aplicável en Portugal.\n\nDatos Recopilados\nRecopilamos solo los datos estrictamente necesarios para prestar el servicio:\n\nNombre completo;\n\nFecha de nacimiento;\n\nLugar de nacimiento.\n\nEstos datos se utilizan exclusivamente para calcular y generar sus informes personalizados de Diseño Humano, Astrología y Numerología. No recopilamos datos sensibles adicionales, como direcciones de correo electrónico o información financiera, a menos que se proporcionen voluntariamente para soporte o registro de cuenta.\n\nFinalidades do Tratamiento\nLos datos se tratan para:\n\nGenerar informes precisos basados en las entradas proporcionadas;\n\nMejorar la precisión de los cálculos astrológicos y de diseño humano;\n\nPermitir el almacenamiento opcional de informes para acceso futuro (con su consentimiento explícito).\n\nEl tratamiento es lícito basado en su consentimiento libre e informado, obtenido en el momento del envío de los datos.\n\nIntercambio de Datos\nNo compartimos sus datos personales con terceros, excepto:\n\nProveedores de servicios técnicos esenciales (ej.: servidores en la nube seguros en la UE) bajo acuerdos de procesamiento de datos que garantizan la confidencialidad;\n\nCuando lo exija la ley o las autoridades competentes.\n\nLos informes generados son privados y no se venden ni se utilizan para marketing.\n​\n\nAlmacenamiento y Seguridad\nLos datos se almacenan en servidores seguros ubicados en la Unión Europea, con medidas técnicas como cifrado (AES-256), seudonimización y controles de acceso. Conservamos los datos solo el tiempo necesario para el servicio (generalmente hasta 30 dias después del último acceso, a menos que se dé el consentimiento para un almacenamiento prolongado). Procedemos a la eliminación segura automática después de este período.\n\nSus Derechos\nPue de ejercer sus derechos RGPD en cualquier momento:\n\nAcceso a los datos;\n\nRectificación o corrección;\n\nSupresión (\"derecho al olvido\");\n\nOposición ao tratamento;\n\nLimitación del tratamiento;\n\nPortabilidad de los datos.\n\nPara solicitar la eliminación de su cuenta y de todos los datos asociados, puede hacerlo a través del siguiente enlace: https://humanmatch.app/delete-account o enviando un correo electrónico a support@humanmatch.app.\n\nConsentimiento e Cambios\nAl usar la aplicación, usted acepta esta política. Puede revocar su consentimiento en cualquier momento, lo que impedirá el acceso a los informes existentes. Actualizaremos esta política según sea necesario, notificando a los usuarios a través de la aplicación.';
+      'Política de Privacidad - Human Match\n\nEsta Política de Privacidad describe cómo Human Match, una aplicación móvil que genera informes personalizados de Diseño Humano, Astrologia y Numerología basados en el nombre completo, la fecha y el lugar de nacimiento de los usuarios, recopila, utiliza y protege sus datos personales. Estamos comprometidos con la protección de su privacidad de acuerdo con el Reglamento General de Protección de Datos (RGPD) de la Unión Europea y la legislación aplicável en Portugal.\n\nDatos Recopilados\nRecolhemos solo los datos estrictamente necesarios para prestar el servicio:\n\nNombre completo;\n\nFecha de nacimiento;\n\nLugar de nacimiento.\n\nEstos datos se utilizan exclusivamente para calcular y generar sus informes personalizados de Diseño Humano, Astrología y Numerología. No recopilamos datos sensibles adicionales, como direcciones de correo electrónico o información financiera, a menos que se proporcionen voluntariamente para soporte ou registro de cuenta.\n\nFinalidades do Tratamiento\nLos datos se tratan para:\n\nGenerar informes precisos basados en las entradas proporcionadas;\n\nMejorar la precisión de los cálculos astrológicos y de diseño humano;\n\nPermitir el almacenamiento opcional de informes para acceso futuro (con su consentimiento explícito).\n\nEl tratamiento es lícito basado en su consentimiento libre e informado, obtenido en el momento del envío de los datos.\n\nIntercambio de Datos\nNo compartimos sus datos personales con terceros, excepto:\n\nProveedores de servicios técnicos esenciales (ej.: servidores en la nube seguros en la UE) bajo acuerdos de procesamiento de datos que garantizan la confidencialidad;\n\nCuando lo exija la ley o las autoridades competentes.\n\nLos informes generados son privados y no se venden ni se utilizan para marketing.\n​\n\nAlmacenamiento y Seguridad\nLos datos se almacenan en servidores seguros ubicados en la Unión Europea, con medidas técnicas como cifrado (AES-256), seudonimización y controles de acceso. Conservamos los datos solo el tiempo necesario para el servicio (generalmente hasta 30 dias después del último acceso, a menos que se dé el consentimiento para un almacenamiento prolongado). Procedemos a la eliminación segura automática después de este período.\n\nSus Derechos\nPue de ejercer sus derechos RGPD en cualquier momento:\n\nAcceso a los datos;\n\nRectificación o corrección;\n\nSupresión (\"derecho al olvido\");\n\nOposición ao tratamento;\n\nLimitación del tratamiento;\n\nPortabilidad de los datos.\n\nPara solicitar la eliminación de su cuenta y de todos los datos asociados, puede hacerlo a través del siguiente enlace: https://humanmatch.app/delete-account o enviando un correo electrónico a support@humanmatch.app.\n\nConsentimiento e Cambios\nAl usar la aplicación, usted acepta esta política. Puede revocar su consentimiento en cualquier momento, lo que impedirá el acceso a los informes existentes. Actualizaremos esta política según sea necesario, notificando a los usuarios a través de la aplicación.';
 
   @override
   String get processing => 'Procesando...';
@@ -223,13 +223,53 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get learnMore => 'Saber mais';
+  String get essenceAdsTitle => 'Essências Gratuitas';
 
   @override
-  String get privacyPolicy => 'Política de Privacidade';
+  String get essenceAdsDesc =>
+      'Vê um anúncio para ganhares 1 Essência. Limite de 3 anúncios a cada 8 horas.';
 
   @override
-  String get support => 'Suporte';
+  String get essenceWatchAd => 'Ver Anúncio (+1 ✧)';
+
+  @override
+  String essenceAdLimit(String time) {
+    return 'Limite atingido. Disponível em $time';
+  }
+
+  @override
+  String get essenceStoreTitle => 'Loja de Essências';
+
+  @override
+  String get essenceStoreDesc =>
+      'Adquire packs de Essências para desbloqueares conteúdo instantaneamente.';
+
+  @override
+  String get essencePackStarter => 'Pack Iniciante';
+
+  @override
+  String get essencePackStarterDesc => 'Ideal para os primeiros passos';
+
+  @override
+  String get essencePackCosmic => 'Pack Cósmico';
+
+  @override
+  String get essencePackCosmicDesc => 'O pack mais equilibrado';
+
+  @override
+  String get essencePackInfinite => 'Pack Infinito';
+
+  @override
+  String get essencePackInfiniteDesc => 'Exploração sem limites';
+
+  @override
+  String get learnMore => 'Saber más';
+
+  @override
+  String get privacyPolicy => 'Política de Privacidad';
+
+  @override
+  String get support => 'Soporte';
 
   @override
   String get errorFillEmailPassword =>
@@ -612,7 +652,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get hdValAuthEmotional =>
-      'La claridad no sucede en el ahora. Espera a que tu ola emocional se estabilice antes de decidir.';
+      'La claridad no sucede en el ahora. Espera a que tu ola emocional se estabilize antes de decidir.';
 
   @override
   String get hdValAuthSacral =>
@@ -636,7 +676,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get hdValAuthLunar =>
-      'Como Reflector, tu decisión madura a lo largo de 28 días en sintonía con el ciclo de la Luna.';
+      'Como Reflector, tu decisión madura a lo largo de 28 dias en sintonía con el ciclo de la Luna.';
 
   @override
   String get hdValStrRespond =>
@@ -656,7 +696,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get hdValStrLunar =>
-      'Decisiones importantes deben ser tomadas solo después de un ciclo lunar completo (aproximadamente 28 días).';
+      'Decisiones importantes deben ser tomadas solo después de un ciclo lunar completo (aproximadamente 28 dias).';
 
   @override
   String get hdValSigSatisfaction =>
@@ -720,7 +760,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get hdValProf41 =>
-      'Oportunista/Investigador: Sigue un camino fijo y único con base en fundaciones muy sólidas.';
+      'Oportunista/Investigador: Sigue un caminho fijo y único con base en fundaciones muy sólidas.';
 
   @override
   String get hdValProf51 =>
@@ -796,11 +836,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get hdCenterSacralDefDesc =>
-      'Fuente inagotable de energía vital y persistencia para el trabajo que amas.';
+      'Fuente inagotable de energía vital e persistencia para o trabalho que amas.';
 
   @override
   String get hdCenterSacralUndDesc =>
-      'Necesitas descansar cuando la energía se agota; no tienes un motor vital constante.';
+      'Necesitas descansar quando a energia se esgota; não tens um motor vital constante.';
 
   @override
   String get hdCenterRootDefDesc =>
@@ -857,14 +897,14 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get errorInvalidCredentials =>
-      'Credenciales incorrectas o cuenta inexistente.';
+      'Credenciais incorretas ou conta inexistente.';
 
   @override
   String get errorUserDisabled => 'Cuenta desactivada.';
 
   @override
   String get errorTooManyRequests =>
-      'Bloqueado temporariamente por exceso de intentos.';
+      'Bloqueado temporariamente por excesso de intentos.';
 
   @override
   String get errorAccountExistsGoogle =>
@@ -890,7 +930,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String authError(Object error) {
-    return 'Error de Autenticación: $error';
+    return 'Error de Autenticação: $error';
   }
 
   @override
@@ -898,7 +938,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String loadProfileError(String error) {
-    return 'Error al cargar perfil: $error';
+    return 'Error al carregar perfil: $error';
   }
 
   @override
@@ -923,7 +963,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get astroNorthNode => 'Nodo Norte';
 
   @override
-  String get astroSouthNode => 'Nodo Sul';
+  String get astroSouthNode => 'Nodo Sur';
 
   @override
   String get astroHouses => 'Casas Astrológicas';
@@ -950,7 +990,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get astroMCNodes => '🎯 MC y Nodos Lunares';
 
   @override
-  String get hdIndicators => 'Indicadores principales';
+  String get hdIndicators => 'Indicadores principais';
 
   @override
   String get hdBodygraph => 'Mapa del cuerpo';
@@ -981,11 +1021,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get astroValSignAries =>
-      'Energía pioneira, valiente y llena de iniciativa. Le gusta liderar y enfrentar nuevos desafíos.';
+      'Energia pioneira, valente e cheia de iniciativa. Le gusta liderar e enfrentar novos desafios.';
 
   @override
   String get astroValSignTaurus =>
-      'Enfoque en la estabilidad, el placer sensorial y la persistencia. Valora la seguridad y el confort material.';
+      'Enfoque na estabilidade, prazer sensorial e persistência. Valora a segurança e o conforto material.';
 
   @override
   String get astroValSignGemini =>
@@ -993,7 +1033,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get astroValSignCancer =>
-      'Sensibilidad profunda, nutrición emocional y fuerte conexión con las raíces y la familia.';
+      'Sensibilidade profunda, nutrição emocional e forte ligação às raízes e à família.';
 
   @override
   String get astroValSignLeo =>
@@ -1001,31 +1041,31 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get astroValSignVirgo =>
-      'Análise detalhado, busca de la perfección, organización y deseo de ser útil y práctico.';
+      'Análise detalhado, busca de la perfección, organização e desejo de ser útil e prático.';
 
   @override
   String get astroValSignLibra =>
-      'Equilíbrio, armonía en las relaciones, diplomacia y un fuerte sentido estético y de justicia.';
+      'Equilíbrio, armonía nas relações, diplomacia e um forte sentido estético e de justiça.';
 
   @override
   String get astroValSignScorpio =>
-      'Intensidad profunda, pasión, transformación y un poderoso magnetismo emocional.';
+      'Intensidade profunda, paixão, transformação e um poderoso magnetismo emocional.';
 
   @override
   String get astroValSignSagittarius =>
-      'Expansión, busca de significado, optimismo y amor por la libertad y la aventura intelectual.';
+      'Expansão, busca de significado, otimismo e amor pela liberdade e aventura intelectual.';
 
   @override
   String get astroValSignCapricorn =>
-      'Responsabilidade, ambição, disciplina y un enfoque estructurado para alcanzar el éxito.';
+      'Responsabilidade, ambição, disciplina e uma abordagem estruturada para alcançar o sucesso.';
 
   @override
   String get astroValSignAquarius =>
-      'Originalidade, visão humanitária, independência y um pensamiento inovador e progressista.';
+      'Originalidade, visão humanitária, independência e um pensamento inovador e progressista.';
 
   @override
   String get astroValSignPisces =>
-      'Empatia vasta, intuição aguda, imaginação e uma forte conexão com o mundo espiritual e emocional.';
+      'Empatia vasta, intuição aguda, imaginação e uma forte ligação ao mundo espiritual e emocional.';
 
   @override
   String get onlyMobile => 'Solo disponible en dispositivos móviles.';

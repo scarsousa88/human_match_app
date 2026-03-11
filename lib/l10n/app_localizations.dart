@@ -219,7 +219,7 @@ abstract class AppLocalizations {
   /// No description provided for @termsContent.
   ///
   /// In pt, this message translates to:
-  /// **'Política de Privacidade - Human Match\n\nEsta Política de Privacidade descreve como a Human Match, uma aplicação móvel que gera relatórios personalizados de Human Design, Astrologia e Numerologia com base no nome completo, data e local de nascimento dos utilizadores, recolhe, utiliza e protege os seus dados pessoais. Estamos comprometidos com a proteção da sua privacidade em conformidade com o Regulamento Geral de Proteção de Dados (RGPD) da União Europeia e legislação aplicável em Portugal.\n\nDados Recolhidos\nRecolhemos apenas os dados estritamente necessários para fornecer o serviço:\n\nNome completo;\n\nData de nascimento;\n\nLocal de nascimento.\n\nEstes dados são usados exclusivamente para calcular e gerar os seus relatórios personalizados de Human Design, Astrologia e Numerologia. Não recolhemos dados sensíveis adicionais, como endereço de email ou informações financeiras, a menos que sejam voluntariamente fornecidos para suporte ou registo de conta.\n\nFinalidades do Tratamento\nOs dados são tratados para:\n\nGerar relatórios precisos baseados nos inputs fornecidos;\n\nMelhorar a precisão dos cálculos astrológicos e de design humano;\n\nPermitir o armazenamento opcional de relatórios para acesso futuro (com o seu consentimento explícito).\n\nO tratamento é lícito com base no seu consentimento livre e informado, obtido no momento da submissão dos dados.\n\nPartilha de Dados\nNão partilhamos os seus dados pessoais com terceiros, exceto:\n\nPrestadores de serviços técnicos essenciais (ex.: servidores de cloud seguros na UE) sob acordos de processamento de dados que garantisent confidencialidade;\n\nQuando exigido por lei ou autoridades competentes.\n\nOs relatórios gerados são privados e não são vendidos ou usados para marketing.\n​\n\nArmazenamento e Segurança\nDados são armazenados em servidores seguros localizados na União Europeia, com medidas técnicas como encriptação (AES-256), pseudonimização e controlos de acesso. Retemos os dados apenas pelo tempo necessário para o serviço (geralmente até 30 dias após o último acesso, salvo consentimento para armazenamento prolongado). Procedemos à eliminação segura automática após esse período.\n\nOs Seus Direitos\nPode exercer os seus direitos RGPD a qualquer momento:\n\nAcesso aos dados;\n\nRectificação ou correção;\n\nApagamento (\"direito ao esquecimento\");\n\nOposição ao tratamento;\n\nLimitação do tratamento;\n\nPortabilidade dos dados.\n\nPara solicitar a eliminação da sua conta e de todos os dados associados, poderá fazê-lo através do seguinte link: https://humanmatch.app/delete-account ou enviando um email para support@humanmatch.app.\n\nConsentement e Alterações\nAo usar a app, você consente com esta política. Pode revogar o consentimento a qualquer momento, o que impedirá o acesso a relatórios existentes. Atualizaremos esta política conforme necessário, notificando os utilizadores via app.'**
+  /// **'Política de Privacidade - Human Match\n\nEsta Política de Privacidade descreve como a Human Match, uma aplicação móvel que gera relatórios personalizados de Human Design, Astrologia e Numerologia com base no nome completo, data e local de nascimento dos utilizadores, recolhe, utiliza e protege os seus dados pessoais. Estamos comprometidos com a proteção da sua privacidade em conformidade com o Regulamento Geral de Proteção de Dados (RGPD) da União Europeia e legislação aplicável em Portugal.\n\nDados Recolhidos\nRecolhemos apenas os dados estritamente necessários para fornecer o serviço:\n\nNome completo;\n\nData de nascimento;\n\nLocal de nascimento.\n\nEstes dados são usados exclusivamente para calcular e gerar os seus relatórios personalizados de Human Design, Astrologia e Numerologia. Não recolhemos dados sensíveis adicionais, como endereço de email ou informações financeiras, a menos que se forneçam voluntariamente para suporte ou registo de conta.\n\nFinalidades do Tratamento\nOs dados são tratados para:\n\nGerar relatórios precisos baseados nos inputs fornecidos;\n\nMelhorar a precisão dos cálculos astrológicos e de design humano;\n\nPermitir o armazenamento opcional de relatórios para acesso futuro (com o seu consentimento explícito).\n\nO tratamento é lícito com base no seu consentimento livre e informado, obtido no momento da submissão dos dados.\n\nPartilha de Dados\nNão partilhamos os seus dados pessoais com terceiros, exceto:\n\nPrestadores de serviços técnicos essenciais (ex.: servidores de cloud seguros na UE) sob acordos de processamento de dados que garantisent confidencialidade;\n\nQuando exigido por lei ou autoridades competentes.\n\nOs relatórios gerados são privados e não são vendidos ou usados para marketing.\n​\n\nArmazenamento e Segurança\nDados são armazenados em servidores seguros localizados na União Europeia, com medidas técnicas como encriptação (AES-256), pseudonimização e controlos de acesso. Retemos os dados apenas pelo tempo necessário para o serviço (geralmente até 30 dias após o último acesso, salvo consentimento para armazenamento prolongado). Procedemos à eliminação segura automática após esse período.\n\nOs Seus Direitos\nPode exercer os seus direitos RGPD a qualquer momento:\n\nAcesso aos dados;\n\nRectificação ou correção;\n\nApagamento (\"direito ao esquecimento\");\n\nOposição ao tratamento;\n\nLimitação do tratamento;\n\nPortabilidade dos dados.\n\nPara solicitar a eliminação da sua conta e de todos os dados associados, poderá fazê-lo através do seguinte link: https://humanmatch.app/delete-account ou enviando um email para support@humanmatch.app.\n\nConsentement e Alterações\nAo usar a app, você consente com esta política. Pode revogar o consentimento a qualquer momento, o que impedirá o acesso a relatórios existentes. Atualizaremos esta política conforme necessário, notificando os utilizadores via app.'**
   String get termsContent;
 
   /// No description provided for @processing.
@@ -497,6 +497,78 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Desbloquear com {price} ✧'**
   String unlockWithEssence(int price);
+
+  /// No description provided for @essenceAdsTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Essências Gratuitas'**
+  String get essenceAdsTitle;
+
+  /// No description provided for @essenceAdsDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Vê um anúncio para ganhares 1 Essência. Limite de 3 anúncios a cada 8 horas.'**
+  String get essenceAdsDesc;
+
+  /// No description provided for @essenceWatchAd.
+  ///
+  /// In pt, this message translates to:
+  /// **'Ver Anúncio (+1 ✧)'**
+  String get essenceWatchAd;
+
+  /// No description provided for @essenceAdLimit.
+  ///
+  /// In pt, this message translates to:
+  /// **'Limite atingido. Disponível em {time}'**
+  String essenceAdLimit(String time);
+
+  /// No description provided for @essenceStoreTitle.
+  ///
+  /// In pt, this message translates to:
+  /// **'Loja de Essências'**
+  String get essenceStoreTitle;
+
+  /// No description provided for @essenceStoreDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Adquire packs de Essências para desbloqueares conteúdo instantaneamente.'**
+  String get essenceStoreDesc;
+
+  /// No description provided for @essencePackStarter.
+  ///
+  /// In pt, this message translates to:
+  /// **'Pack Iniciante'**
+  String get essencePackStarter;
+
+  /// No description provided for @essencePackStarterDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Ideal para os primeiros passos'**
+  String get essencePackStarterDesc;
+
+  /// No description provided for @essencePackCosmic.
+  ///
+  /// In pt, this message translates to:
+  /// **'Pack Cósmico'**
+  String get essencePackCosmic;
+
+  /// No description provided for @essencePackCosmicDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'O pack mais equilibrado'**
+  String get essencePackCosmicDesc;
+
+  /// No description provided for @essencePackInfinite.
+  ///
+  /// In pt, this message translates to:
+  /// **'Pack Infinito'**
+  String get essencePackInfinite;
+
+  /// No description provided for @essencePackInfiniteDesc.
+  ///
+  /// In pt, this message translates to:
+  /// **'Exploração sem limites'**
+  String get essencePackInfiniteDesc;
 
   /// No description provided for @learnMore.
   ///
@@ -1611,7 +1683,7 @@ abstract class AppLocalizations {
   /// No description provided for @errorEmailAlreadyRegistered.
   ///
   /// In pt, this message translates to:
-  /// **'Este email já está registado. Tente fazer LOGIN em vez de criar conta.'**
+  /// **'Este email já está registado. Tenta fazer login em vez de criar conta.'**
   String get errorEmailAlreadyRegistered;
 
   /// No description provided for @errorInvalidCredentials.
@@ -1629,13 +1701,13 @@ abstract class AppLocalizations {
   /// No description provided for @errorTooManyRequests.
   ///
   /// In pt, this message translates to:
-  /// **'Bloqueado temporariamente por excesso de tentativas.'**
+  /// **'Temporariamente bloqueado por excesso de tentativas.'**
   String get errorTooManyRequests;
 
   /// No description provided for @errorAccountExistsGoogle.
   ///
   /// In pt, this message translates to:
-  /// **'Já existe uma conta com este email vinculada ao Google. Use \"Continuar com Google\".'**
+  /// **'Já existe uma conta com este email associada ao Google. Usa \"Continuar com Google\".'**
   String get errorAccountExistsGoogle;
 
   /// No description provided for @errorUnexpected.
@@ -1653,7 +1725,7 @@ abstract class AppLocalizations {
   /// No description provided for @errorResetPassword.
   ///
   /// In pt, this message translates to:
-  /// **'Erro ao resetar: {error}'**
+  /// **'Erro no reset: {error}'**
   String errorResetPassword(Object error);
 
   /// No description provided for @close.
@@ -1743,7 +1815,7 @@ abstract class AppLocalizations {
   /// No description provided for @astroAspects.
   ///
   /// In pt, this message translates to:
-  /// **'Aspetos Planetários'**
+  /// **'Aspetos Astrológicos'**
   String get astroAspects;
 
   /// No description provided for @astroBig3.
@@ -1779,19 +1851,19 @@ abstract class AppLocalizations {
   /// No description provided for @hdBodygraph.
   ///
   /// In pt, this message translates to:
-  /// **'Mapa do Corpo (Bodygraph)'**
+  /// **'Bodygraph'**
   String get hdBodygraph;
 
   /// No description provided for @astroSunDefDesc.
   ///
   /// In pt, this message translates to:
-  /// **'O Sol representa a tua essência, a tua identidade central, o teu ego e a forma como brilhas no mundo. É o núcleo da tua personalidade.'**
+  /// **'O Sol representa a tua essência, a tua identidade central, o teu ego e como brilhas no mundo. É o núcleo da tua personalidade.'**
   String get astroSunDefDesc;
 
   /// No description provided for @astroMoonDefDesc.
   ///
   /// In pt, this message translates to:
-  /// **'A Lua rege as tuas emoções, o teu mundo interior, as tuas necessidades subconscientes e como te sentes seguro e nutrido.'**
+  /// **'A Lua rege as tuas emoções, o teu mundo interior, as tuas necessidades subconscientes e a forma como te sentes seguro e nutrido.'**
   String get astroMoonDefDesc;
 
   /// No description provided for @astroAscendantDefDesc.
@@ -1803,13 +1875,13 @@ abstract class AppLocalizations {
   /// No description provided for @astroMercuryDefDesc.
   ///
   /// In pt, this message translates to:
-  /// **'Mercúrio rege a tua mente, a tua forma de comunicar, de processar informação, a tua curiosidade intelectual e aprendizagem.'**
+  /// **'Mercúrio rege a tua mente, a tua forma de comunicar, processar informação, a tua curiosidade intelectual e a aprendizagem.'**
   String get astroMercuryDefDesc;
 
   /// No description provided for @astroVenusDefDesc.
   ///
   /// In pt, this message translates to:
-  /// **'Vénus representa como amas, o que valorizas, a tua estética e a forma como te relacionas, dás valor e atrais harmonia.'**
+  /// **'Vénus representa a forma como amas, o que valorizas, a tua estética e a forma como te relacionas, dás valor e atrais harmonia.'**
   String get astroVenusDefDesc;
 
   /// No description provided for @astroMarsDefDesc.
@@ -1821,7 +1893,7 @@ abstract class AppLocalizations {
   /// No description provided for @astroValSignAries.
   ///
   /// In pt, this message translates to:
-  /// **'Energia pioneira, corajosa e cheia de iniciativa. Gosta de liderar e de novos desafios.'**
+  /// **'Energia pioneira, corajosa e cheia de iniciativa. Gosta de liderar e assumir novos desafios.'**
   String get astroValSignAries;
 
   /// No description provided for @astroValSignTaurus.
@@ -1839,13 +1911,13 @@ abstract class AppLocalizations {
   /// No description provided for @astroValSignCancer.
   ///
   /// In pt, this message translates to:
-  /// **'Sensibilidade profunda, nutrição emocional e forte ligação às raízes e à família.'**
+  /// **'Sensibilidade profunda, nutrição emocional e uma forte ligação às raízes e à família.'**
   String get astroValSignCancer;
 
   /// No description provided for @astroValSignLeo.
   ///
   /// In pt, this message translates to:
-  /// **'Expressão criativa, confiança, calor e brilho pessoal. Procura reconhecimento e ser autêntico.'**
+  /// **'Expressão criativa, confiança, calorosidade e brilho pessoal. Procura reconhecimento e autenticidade.'**
   String get astroValSignLeo;
 
   /// No description provided for @astroValSignVirgo.
@@ -1857,7 +1929,7 @@ abstract class AppLocalizations {
   /// No description provided for @astroValSignLibra.
   ///
   /// In pt, this message translates to:
-  /// **'Equilíbrio, harmonia nas relações, diplomacia e um forte senso estético e de justiça.'**
+  /// **'Equilíbrio, harmonia nos relacionamentos, diplomacia e um forte sentido de estética e justiça.'**
   String get astroValSignLibra;
 
   /// No description provided for @astroValSignScorpio.
@@ -1869,7 +1941,7 @@ abstract class AppLocalizations {
   /// No description provided for @astroValSignSagittarius.
   ///
   /// In pt, this message translates to:
-  /// **'Expansão, busca por significado, otimismo e amor pela liberdade e aventura intelectual.'**
+  /// **'Expansão, busca por significado, otimismo e um amor pela liberdade e aventura intelectual.'**
   String get astroValSignSagittarius;
 
   /// No description provided for @astroValSignCapricorn.
@@ -1881,13 +1953,13 @@ abstract class AppLocalizations {
   /// No description provided for @astroValSignAquarius.
   ///
   /// In pt, this message translates to:
-  /// **'Originalidade, visão humanitária, independência e um pensamento inovador e progressista.'**
+  /// **'Originalidade, visão humanitária, independência e pensamento inovador e progressista.'**
   String get astroValSignAquarius;
 
   /// No description provided for @astroValSignPisces.
   ///
   /// In pt, this message translates to:
-  /// **'Empatia vasta, intuição aguçada, imaginação e uma forte ligação ao mundo espiritual e emocional.'**
+  /// **'Empatia vasta, intuição apurada, imaginação e uma forte ligação ao mundo espiritual e emocional.'**
   String get astroValSignPisces;
 
   /// No description provided for @onlyMobile.
@@ -1905,7 +1977,7 @@ abstract class AppLocalizations {
   /// No description provided for @menuCosmicDNA.
   ///
   /// In pt, this message translates to:
-  /// **'COSMIC DNA'**
+  /// **'ADN CÓSMICO'**
   String get menuCosmicDNA;
 
   /// No description provided for @menuHumanDesign.
@@ -1917,19 +1989,19 @@ abstract class AppLocalizations {
   /// No description provided for @menuAstrology.
   ///
   /// In pt, this message translates to:
-  /// **'Astrology'**
+  /// **'Astrologia'**
   String get menuAstrology;
 
   /// No description provided for @menuNumerology.
   ///
   /// In pt, this message translates to:
-  /// **'Numerology'**
+  /// **'Numerologia'**
   String get menuNumerology;
 
   /// No description provided for @menuChineseSign.
   ///
   /// In pt, this message translates to:
-  /// **'Signo chinês'**
+  /// **'Signo Chinês'**
   String get menuChineseSign;
 
   /// No description provided for @menuBondConnections.
@@ -1941,25 +2013,25 @@ abstract class AppLocalizations {
   /// No description provided for @menuFriendship.
   ///
   /// In pt, this message translates to:
-  /// **'Friendship'**
+  /// **'Amizade'**
   String get menuFriendship;
 
   /// No description provided for @menuCasualMeetings.
   ///
   /// In pt, this message translates to:
-  /// **'Casual meetings'**
+  /// **'Encontros casuais'**
   String get menuCasualMeetings;
 
   /// No description provided for @menuPartnerForLife.
   ///
   /// In pt, this message translates to:
-  /// **'Partner for life'**
+  /// **'Parceiro para a vida'**
   String get menuPartnerForLife;
 
   /// No description provided for @menuRelateBetter.
   ///
   /// In pt, this message translates to:
-  /// **'RELATE BETTER'**
+  /// **'RELACIONA-TE MELHOR'**
   String get menuRelateBetter;
 }
 

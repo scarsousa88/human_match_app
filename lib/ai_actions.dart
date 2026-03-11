@@ -167,4 +167,16 @@ class AiActions {
       }
     });
   }
+
+  Future<void> watchAdForEssence() async {
+    await _showRewardedAdAndRun(() async {
+      try {
+        await _call('claimEssenceFromAd');
+        _toast('Essence claimed! ✧');
+      } catch (e) {
+        debugPrint('Error watchAdForEssence: $e');
+        _toast('Error claiming essence.');
+      }
+    });
+  }
 }

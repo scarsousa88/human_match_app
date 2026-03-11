@@ -1,7 +1,7 @@
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { defineSecret } from "firebase-functions/params";
 import { initializeApp } from "firebase-admin/app";
-import { getFirestore, FieldValue } from "firebase-admin/firestore";
+import { getFirestore, FieldValue, Timestamp } from "firebase-admin/firestore";
 import { getAuth } from "firebase-admin/auth";
 import OpenAI from "openai";
 
@@ -80,7 +80,7 @@ async function callOpenAI_JSON(apiKey: string, prompt: string, language: string 
   const client = new OpenAI({ apiKey });
 
   const completion = await client.chat.completions.create({
-    model: "gpt-4-turbo-preview", // Updated from non-existent gpt-5-nano
+    model: "gpt-5-nano",
     messages: [
       { role: "system", content: systemPrompt(language) },
       { role: "user", content: prompt }
@@ -145,16 +145,15 @@ export const deleteUserAccountAndData = onCall(async (request) => {
 
     await userRef.delete();
 
-    // 2. Delete the Auth User - This is crucial
+    // 2. Delete the Auth User
     await auth.deleteUser(uid);
 
     return { success: true };
   } catch (error: any) {
     console.error("Delete user error:", error);
-    // Even if firestore delete fails, we might want to try auth delete
     try {
         await auth.deleteUser(uid);
-    } catch(e) { /* ignore if already deleted */ }
+    } catch(e) { /* ignore */ }
 
     throw new HttpsError("internal", error.message);
   }
@@ -193,6 +192,43 @@ export const unlockAiContent = onCall(async (request) => {
   }
 
   throw new HttpsError("invalid-argument", "Invalid type.");
+});
+
+export const claimEssenceFromAd = onCall(async (request) => {
+  if (!request.auth?.uid) throw new HttpsError("unauthenticated", "Not authenticated.");
+  const uid = request.auth.uid;
+  const userRef = db.collection("users").doc(uid);
+
+  return await db.runTransaction(async (transaction) => {
+    const userDoc = await transaction.get(userRef);
+    if (!userDoc.exists) throw new HttpsError("not-found", "User not found.");
+
+    const data = userDoc.data() || {};
+    const adStats = data.essenceAdStats || { timestamps: [] };
+    const now = new Date();
+    const eightHoursAgo = new Date(now.getTime() - 8 * 60 * 60 * 1000);
+
+    // Filter timestamps in the last 8 hours
+    const recentAds = adStats.timestamps.filter((ts: any) => {
+      const date = ts instanceof Timestamp ? ts.toDate() : new Date(ts);
+      return date > eightHoursAgo;
+    });
+
+    if (recentAds.length >= 3) {
+      throw new HttpsError("resource-exhausted", "Ad limit reached. Try again later.");
+    }
+
+    recentAds.push(Timestamp.now());
+
+    transaction.update(userRef, {
+      essenceBalance: FieldValue.increment(1),
+      essenceAdStats: {
+        timestamps: recentAds
+      }
+    });
+
+    return { success: true, newBalance: (data.essenceBalance || 0) + 1 };
+  });
 });
 
 export const generateDailyTipIfNeeded = onCall(
@@ -270,7 +306,7 @@ TAREFAS ANALÍTICAS:
 
 2. ASTROLOGIA:
    - Interpreta o Sol (${astro.sunSign}), Lua (infere das ativações: ${JSON.stringify(hd.activations)}) e Ascendente (${astro.ascendantSign}) como a tríade central de identidade, emoção e crescimento da consciência.
-   - Observa equilíbrios elementares e padrões gerais do mapa para descrever o temperamento, ciclos de crescimento e temas existenciais.
+   - Observa equilíbrios elementares e padrões gerais do mapa para descrever o temperamento, ciclos de crescimento e temas energia.
 
 3. NUMEROLOGIA:
    - Analisa os números principais (Caminho de Vida: ${num.lifePath}, Expressão: ${num.expression}, Alma: ${num.soul}, Personality: ${num.personality}) para revelar motivação interna, expressão externa e lições da alma.

@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../l10n/app_localizations.dart';
 import '../profile/profile_summary_screen.dart';
 import '../profile/profile_input_screen.dart';
+import '../profile/essence_screen.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -41,6 +42,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     const _PlaceholderTab(textKey: 'communitySoon'),
     const _PlaceholderTab(textKey: 'compareSoon'),
   ];
+
+  void _goToEssence() {
+    Navigator.push(context, MaterialPageRoute(builder: (_) => const EssenceScreen()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,29 +82,32 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               final data = snapshot.data?.data();
               final balance = data?['essenceBalance'] ?? 0;
               return Center(
-                child: Container(
-                  height: 32,
-                  margin: const EdgeInsets.only(left: 4),
-                  padding: const EdgeInsets.only(left: 4, right: 12),
-                  decoration: BoxDecoration(
-                    color: appPurple,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.white10),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SvgPicture.asset('assets/icon/essence.svg', width: 24, height: 24),
-                      const SizedBox(width: 8),
-                      Text(
-                        '$balance',
-                        style: const TextStyle(
-                          color: Colors.white, 
-                          fontWeight: FontWeight.w900,
-                          fontSize: 14,
+                child: GestureDetector(
+                  onTap: _goToEssence,
+                  child: Container(
+                    height: 32,
+                    margin: const EdgeInsets.only(left: 4),
+                    padding: const EdgeInsets.only(left: 4, right: 12),
+                    decoration: BoxDecoration(
+                      color: appPurple,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.white10),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset('assets/icon/essence.svg', width: 24, height: 24),
+                        const SizedBox(width: 8),
+                        Text(
+                          '$balance',
+                          style: const TextStyle(
+                            color: Colors.white, 
+                            fontWeight: FontWeight.w900,
+                            fontSize: 14,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -163,6 +171,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                   
                   _drawerTile(null, l10n.getMoreEssence, () {
                     Navigator.pop(context);
+                    _goToEssence();
                   }, iconWidget: SvgPicture.asset('assets/icon/essence.svg', width: 22, height: 22)),
 
                   const Divider(color: Colors.white10, height: 24),
